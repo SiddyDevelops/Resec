@@ -18,6 +18,7 @@ import com.vmadalin.easypermissions.EasyPermissions
 import com.vmadalin.easypermissions.dialogs.SettingsDialog
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.catch
+import java.lang.ref.WeakReference
 
 
 class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
@@ -28,6 +29,8 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
     private lateinit var saveBtn: Button
 
     private lateinit var dataStoreManager: DataStoreManager
+
+    private var application = Application()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,6 +49,8 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
             dataStoreManager.getFromDataStore().catch { e->
                 e.printStackTrace()
             }.collect { user->
+                setMyUser(user.userId,user.userPin)
+                //application.setMyUser(user.userId,user.userPin)
                 if(user.userId.isNotEmpty()) {
                     withContext(Dispatchers.Main) {
                         userId.setText(user.userId)
@@ -53,11 +58,14 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
                         saveBtn.visibility = View.GONE
                     }
                 }
+                Log.d("UserCreds", getMyUser().toString())
             }
         }
 
         saveBtn.setOnClickListener {
             if(userId.text.toString().isNotEmpty() && userPin.text.toString().isNotEmpty()) {
+                //application.setMyUser(userId.text.toString(),userPin.text.toString())
+                setMyUser(userId.text.toString(),userPin.text.toString())
                 GlobalScope.launch(Dispatchers.IO) {
                     dataStoreManager.savetoDataStore(User(userId.text.toString(),userPin.text.toString()))
                     withContext(Dispatchers.Main) {
@@ -158,6 +166,26 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
 
     companion object {
         private const val REQUEST_PERMISSION_CODE = 1
+
+        private lateinit var weakSelf: WeakReference<MainActivity>
+
+        @JvmStatic
+        fun get(): MainActivity {
+            return weakSelf.get()!!
+        }
+
+        private var user: User? = null
+
+        fun setMyUser(userId: String,userPin: String) {
+            user = User(userId,userPin)
+        }
+
+        fun getMyUser() = get().userId.text
+
+    }
+
+    init {
+        weakSelf = WeakReference(this)
     }
 
 }

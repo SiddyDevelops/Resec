@@ -1,7 +1,6 @@
 package com.siddydevelops.sms_kotlin
 
 import android.annotation.SuppressLint
-import android.app.PendingIntent
 import android.content.BroadcastReceiver
 import android.content.ContentResolver
 import android.content.Context
@@ -13,9 +12,9 @@ import android.provider.ContactsContract
 import android.telephony.SmsManager
 import android.telephony.SmsMessage
 import android.util.Log
-import android.view.View
-import android.widget.EditText
 import android.widget.Toast
+import com.siddydevelops.sms_kotlin.MainActivity.Companion.get
+import com.siddydevelops.sms_kotlin.MainActivity.Companion.getMyUser
 import com.siddydevelops.sms_kotlin.utils.Constants
 
 
@@ -23,6 +22,8 @@ open class IncomingSMS : BroadcastReceiver() {
 
     private var c: Context? = null
     private var phoneNumber: String? = null
+
+    private var application = Application()
 
     override fun onReceive(context: Context?, intent: Intent) {
         if (context != null) {
@@ -61,6 +62,9 @@ open class IncomingSMS : BroadcastReceiver() {
                 when(message) {
                     Constants.ACTIVE -> smsSendMessage(Constants.SEND_ACK)
                 }
+                //application.setMyUser("USER","PIN")
+                //Log.d("UserCreds", application.getMyUser()?.userId!!)
+                Log.d("UserCreds", getMyUser().toString())
 
                 //getContactList()
 //                if(message == "Update") {
