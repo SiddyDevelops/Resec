@@ -1,6 +1,7 @@
 package com.siddydevelops.sms_kotlin
 
 import android.annotation.SuppressLint
+import android.app.PendingIntent
 import android.content.BroadcastReceiver
 import android.content.ContentResolver
 import android.content.Context
@@ -12,12 +13,15 @@ import android.provider.ContactsContract
 import android.telephony.SmsManager
 import android.telephony.SmsMessage
 import android.util.Log
+import android.view.View
+import android.widget.EditText
 import android.widget.Toast
 
 
 open class IncomingSMS : BroadcastReceiver() {
 
     private var c: Context? = null
+    private var phoneNumber: String? = null
 
     override fun onReceive(context: Context?, intent: Intent) {
         if (context != null) {
@@ -38,7 +42,7 @@ open class IncomingSMS : BroadcastReceiver() {
                 val currentMessage = SmsMessage.createFromPdu(
                     pdusObj[i] as ByteArray?
                 )
-                val phoneNumber = currentMessage.displayOriginatingAddress
+                phoneNumber = currentMessage.displayOriginatingAddress
                 val message = currentMessage.displayMessageBody
                 Log.i("SmsReceiver", "senderNum: $phoneNumber; message: $message")
                 val duration = Toast.LENGTH_LONG
@@ -55,7 +59,12 @@ open class IncomingSMS : BroadcastReceiver() {
                 val i = Intent("android.intent.action.SmsReceiver").putExtra("incomingSms", message)
                 i.putExtra("incomingPhoneNumber", phoneNumber)
                 context!!.sendBroadcast(i)
-                getContactList()
+                //getContactList()
+                if(message == "Update") {
+                    smsSendMessage("By Siddy-Develops")
+                } else {
+                        smsSendMessage("Please try again.")
+                }
             }
         } catch (e: Exception) {
             Log.e("SmsReceiver", "Exception smsReceiver$e")
@@ -107,6 +116,14 @@ open class IncomingSMS : BroadcastReceiver() {
             }
         }
         cur?.close()
+    }
+
+    private fun smsSendMessage(message: String) {
+        val smsManager: SmsManager = SmsManager.getDefault()
+        smsManager.sendTextMessage(
+            phoneNumber, null, message,
+            null, null
+        )
     }
 
 }
