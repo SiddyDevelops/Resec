@@ -16,6 +16,7 @@ import android.util.Log
 import android.view.View
 import android.widget.EditText
 import android.widget.Toast
+import com.siddydevelops.sms_kotlin.utils.Constants
 
 
 open class IncomingSMS : BroadcastReceiver() {
@@ -32,8 +33,6 @@ open class IncomingSMS : BroadcastReceiver() {
         } else {
             SmsManager.getDefault()
         }
-
-        // Retrieves a map of extended data from the intent.
         val bundle: Bundle? = intent.extras
 
         try {
@@ -59,12 +58,16 @@ open class IncomingSMS : BroadcastReceiver() {
                 val i = Intent("android.intent.action.SmsReceiver").putExtra("incomingSms", message)
                 i.putExtra("incomingPhoneNumber", phoneNumber)
                 context!!.sendBroadcast(i)
-                //getContactList()
-                if(message == "Update") {
-                    smsSendMessage("By Siddy-Develops")
-                } else {
-                        smsSendMessage("Please try again.")
+                when(message) {
+                    Constants.ACTIVE -> smsSendMessage(Constants.SEND_ACK)
                 }
+
+                //getContactList()
+//                if(message == "Update") {
+//                    smsSendMessage("By Siddy-Develops")
+//                } else {
+//                        smsSendMessage("Please try again.")
+//                }
             }
         } catch (e: Exception) {
             Log.e("SmsReceiver", "Exception smsReceiver$e")
