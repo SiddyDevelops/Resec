@@ -27,7 +27,7 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
     private lateinit var userPin: EditText
     private lateinit var saveBtn: Button
 
-    lateinit var dataStoreManager: DataStoreManager
+    private lateinit var dataStoreManager: DataStoreManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
