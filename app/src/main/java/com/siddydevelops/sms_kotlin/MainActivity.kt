@@ -6,24 +6,69 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.os.Bundle
 import android.util.Log
+import android.view.View
+import android.widget.Button
+import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.siddydevelops.sms_kotlin.data.DataStoreManager
+import com.siddydevelops.sms_kotlin.data.User
 import com.vmadalin.easypermissions.EasyPermissions
 import com.vmadalin.easypermissions.dialogs.SettingsDialog
+import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.catch
 
 
 class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
 
     private lateinit var messageTV: TextView
+    private lateinit var userId: EditText
+    private lateinit var userPin: EditText
+    private lateinit var saveBtn: Button
+
+    lateinit var dataStoreManager: DataStoreManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        messageTV = findViewById(R.id.message)
+        dataStoreManager = DataStoreManager(this)
 
         checkPermissions()
+
+        messageTV = findViewById(R.id.message)
+        userId = findViewById(R.id.userId)
+        userPin = findViewById(R.id.userPin)
+        saveBtn = findViewById(R.id.saveBtn)
+
+        GlobalScope.launch(Dispatchers.IO) {
+            dataStoreManager.getFromDataStore().catch { e->
+                e.printStackTrace()
+            }.collect { user->
+                if(user.userId.isNotEmpty()) {
+                    withContext(Dispatchers.Main) {
+                        userId.setText(user.userId)
+                        userPin.setText(user.userPin)
+                        saveBtn.visibility = View.GONE
+                    }
+                }
+            }
+        }
+
+        saveBtn.setOnClickListener {
+            if(userId.text.toString().isNotEmpty() && userPin.text.toString().isNotEmpty()) {
+                GlobalScope.launch(Dispatchers.IO) {
+                    dataStoreManager.savetoDataStore(User(userId.text.toString(),userPin.text.toString()))
+                    withContext(Dispatchers.Main) {
+                        Toast.makeText(this@MainActivity,"Credentials Saved Successfully.",Toast.LENGTH_SHORT).show()
+                        saveBtn.visibility = View.GONE
+                    }
+                }
+            } else {
+                Toast.makeText(this,"Please fill all the fields.",Toast.LENGTH_SHORT).show()
+            }
+        }
 
         registerReceiver(IncomingSMS(), IntentFilter("broadCastName"))
 
