@@ -30,8 +30,6 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
 
     private lateinit var dataStoreManager: DataStoreManager
 
-    private var application = Application()
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -50,7 +48,6 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
                 e.printStackTrace()
             }.collect { user->
                 setMyUser(user.userId,user.userPin)
-                //application.setMyUser(user.userId,user.userPin)
                 if(user.userId.isNotEmpty()) {
                     withContext(Dispatchers.Main) {
                         userId.setText(user.userId)
@@ -64,7 +61,6 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
 
         saveBtn.setOnClickListener {
             if(userId.text.toString().isNotEmpty() && userPin.text.toString().isNotEmpty()) {
-                //application.setMyUser(userId.text.toString(),userPin.text.toString())
                 setMyUser(userId.text.toString(),userPin.text.toString())
                 GlobalScope.launch(Dispatchers.IO) {
                     dataStoreManager.savetoDataStore(User(userId.text.toString(),userPin.text.toString()))
