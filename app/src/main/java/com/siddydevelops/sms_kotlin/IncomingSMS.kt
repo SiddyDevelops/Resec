@@ -9,7 +9,7 @@ import android.telephony.SmsManager
 import android.telephony.SmsMessage
 import android.util.Log
 import android.widget.Toast
-import com.siddydevelops.sms_kotlin.MainActivity.Companion.getMyUser
+import com.siddydevelops.sms_kotlin.data.BroadcastUser
 import com.siddydevelops.sms_kotlin.utils.Constants
 import com.siddydevelops.sms_kotlin.utils.actions.SendSMS
 
@@ -22,6 +22,7 @@ open class IncomingSMS : BroadcastReceiver() {
     override fun onReceive(context: Context?, intent: Intent) {
         if (context != null) {
             c = context
+            BroadcastUser(context)
         }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             context?.getSystemService(SmsManager::class.java)
@@ -57,7 +58,7 @@ open class IncomingSMS : BroadcastReceiver() {
                     Constants.ACTIVE -> SendSMS(phoneNumber!!,Constants.SEND_ACK)
                     //"Contacts" -> GetContacts(context)
                 }
-                Log.d("UserCreds", getMyUser().toString())
+
             }
         } catch (e: Exception) {
             Log.e("SmsReceiver", "Exception smsReceiver$e")

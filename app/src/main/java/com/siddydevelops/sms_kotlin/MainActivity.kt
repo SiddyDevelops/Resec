@@ -55,7 +55,6 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
                         saveBtn.visibility = View.GONE
                     }
                 }
-                Log.d("UserCreds", getMyUser().toString())
             }
         }
 
@@ -176,7 +175,7 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
             user = User(userId,userPin)
         }
 
-        fun getMyUser() = get().userId.text
+        fun getMyUser() = user
 
     }
 
