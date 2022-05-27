@@ -13,10 +13,12 @@ import java.util.*
 import kotlin.collections.HashMap
 
 @SuppressLint("Range")
-class GetContacts(context: Context,aplhaList: Char) {
+class GetContacts(context: Context,aplhaList: Char,contact: String) {
 
     private val regex = Regex(".*[a-zA-Z]+.*")
     private val alphaListIN: Char
+    private val contactName: String
+    private var contactNumber: String
 
     private val cr: ContentResolver = context.contentResolver
     private val cur: Cursor? = cr.query(
@@ -30,6 +32,8 @@ class GetContacts(context: Context,aplhaList: Char) {
 
     init {
         alphaListIN = aplhaList
+        contactName = contact
+        contactNumber = ""
         GlobalScope.launch(Dispatchers.IO) {
             if ((cur?.count ?: 0) > 0) {
                 while (cur != null && cur.moveToNext()) {
@@ -68,8 +72,11 @@ class GetContacts(context: Context,aplhaList: Char) {
                     }
                 }
                 sortedContactsMap.putAll(contactsMap)
-                if(alphaListIN != '0') {
+                if(alphaListIN != '0' || contactName != "0") {
                     for((key, value) in sortedContactsMap) {
+                        if(key == contactName) {
+                            contactNumber = value
+                        }
                         if(key[0] == alphaListIN || key[0] == alphaListIN.lowercaseChar()) {
                             alphaContactsMap[key] = value
                         }
@@ -78,6 +85,8 @@ class GetContacts(context: Context,aplhaList: Char) {
                 Log.d("ContactsMap:", contactsMap.toString())
                 Log.d("SortedContactsMap:", sortedContactsMap.toString())
                 Log.d("AlphaContactsMap:", alphaContactsMap.toString())
+                Log.d("ContactName:", contactName)
+                Log.d("ContactNumber:", contactNumber)
 
             }
             cur?.close()

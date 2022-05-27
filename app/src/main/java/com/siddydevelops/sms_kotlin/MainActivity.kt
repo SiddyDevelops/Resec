@@ -39,6 +39,8 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
 
         checkPermissions()
 
+        GetContacts(this,'0',"0")
+
         messageTV = findViewById(R.id.message)
         userId = findViewById(R.id.userId)
         userPin = findViewById(R.id.userPin)
