@@ -50,7 +50,7 @@ class BroadcastUser(contextIn: Context, messageIn: String, phoneNumberIn: String
             if (message.contains("Resec.Contact")) {
                 Log.d("UserDetails", MainActivity.getMyUser().toString())
                 if (message == "Resec.Contact<${MainActivity.getMyUser()?.userId}><${MainActivity.getMyUser()?.userPin}>") {
-                    GetContacts(context)
+                    GetContacts(context,'0')
                 } else {
                     SendSMS(phoneNumber, Constants.INVALID_CREDS)
                 }
