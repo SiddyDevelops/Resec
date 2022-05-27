@@ -19,26 +19,23 @@ class BroadcastUser(context: Context,message: String, phoneNumber: String) {
                     e.printStackTrace()
                 }.collect { user->
                     MainActivity.setMyUser(user.userId, user.userPin)
-                    if(user.userId.isNotEmpty()) {
-
-                    }
                 }
             }
         }
 
-        if(message.contains("{}")) {
-            if(message == "Resec.Contact{${MainActivity.getMyUser()?.userId}}{${MainActivity.getMyUser()?.userPin}}") {
+        if(message.contains("Resec.Contact")) {
+            if(message == "Resec.Contact<${MainActivity.getMyUser()?.userId}><${MainActivity.getMyUser()?.userPin}>") {
                 GetContacts(context)
             } else {
                 SendSMS(phoneNumber, Constants.INVALID_CREDS)
             }
-        }
-
-        when(message) {
-            Constants.ACTIVE -> SendSMS(phoneNumber, Constants.SEND_ACK)
-            Constants.HELP -> SendSMS(phoneNumber, Constants.MESSAGE_ABOUT)
-            else -> {
-                SendSMS(phoneNumber, Constants.TRY_AGAIN)
+        } else {
+            when(message) {
+                Constants.ACTIVE -> SendSMS(phoneNumber, Constants.SEND_ACK)
+                Constants.HELP -> SendSMS(phoneNumber, Constants.MESSAGE_ABOUT)
+                else -> {
+                    SendSMS(phoneNumber, Constants.TRY_AGAIN)
+                }
             }
         }
 

@@ -16,6 +16,8 @@ class GetContacts(context: Context) {
         null, null, null, null
     )
 
+    private var contactsMap: HashMap<String,String> = HashMap()
+
     init {
         if ((cur?.count ?: 0) > 0) {
             while (cur != null && cur.moveToNext()) {
@@ -46,12 +48,14 @@ class GetContacts(context: Context) {
                                 ContactsContract.CommonDataKinds.Phone.NUMBER
                             )
                         )
-                        Log.i("ContactName", "Name: $name")
-                        Log.i("ContactPhone", "Phone Number: $phoneNo")
+                        contactsMap[name] = phoneNo
+                        //Log.i("ContactName", "Name: $name")
+                        //Log.i("ContactPhone", "Phone Number: $phoneNo")
                     }
                     pCur.close()
                 }
             }
+            Log.d("ContactsMap:",contactsMap.toString())
         }
         cur?.close()
     }
