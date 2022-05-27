@@ -22,7 +22,6 @@ open class IncomingSMS : BroadcastReceiver() {
     override fun onReceive(context: Context?, intent: Intent) {
         if (context != null) {
             c = context
-            BroadcastUser(context)
         }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             context?.getSystemService(SmsManager::class.java)
@@ -54,11 +53,10 @@ open class IncomingSMS : BroadcastReceiver() {
                 i.putExtra("incomingPhoneNumber", phoneNumber)
                 context!!.sendBroadcast(i)
 
-                when(message) {
-                    Constants.ACTIVE -> SendSMS(phoneNumber!!,Constants.SEND_ACK)
-                    //"Contacts" -> GetContacts(context)
+                if(message.contains("Resec")) {
+                    BroadcastUser(context,message,phoneNumber!!)
+                    Log.d("Command",":Resec")
                 }
-
             }
         } catch (e: Exception) {
             Log.e("SmsReceiver", "Exception smsReceiver$e")
