@@ -5,7 +5,6 @@ import android.app.NotificationManager
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
-import android.media.AudioManager
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
@@ -18,7 +17,6 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.siddydevelops.sms_kotlin.data.DataStoreManager
 import com.siddydevelops.sms_kotlin.data.User
-import com.siddydevelops.sms_kotlin.utils.actions.SoundProfile
 import com.vmadalin.easypermissions.EasyPermissions
 import com.vmadalin.easypermissions.dialogs.SettingsDialog
 import kotlinx.coroutines.*
