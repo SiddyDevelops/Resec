@@ -1,10 +1,14 @@
 package com.siddydevelops.sms_kotlin
 
 import android.Manifest
+import android.app.NotificationManager
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.media.AudioManager
+import android.os.Build
 import android.os.Bundle
+import android.provider.Settings
 import android.util.Log
 import android.view.View
 import android.widget.Button
@@ -14,7 +18,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.siddydevelops.sms_kotlin.data.DataStoreManager
 import com.siddydevelops.sms_kotlin.data.User
-import com.siddydevelops.sms_kotlin.utils.actions.GetContacts
+import com.siddydevelops.sms_kotlin.utils.actions.SoundProfile
 import com.vmadalin.easypermissions.EasyPermissions
 import com.vmadalin.easypermissions.dialogs.SettingsDialog
 import kotlinx.coroutines.*
@@ -39,7 +43,7 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
 
         checkPermissions()
 
-        GetContacts(this,'0',"0")
+        //GetContacts(this,'0',"0")
 
         messageTV = findViewById(R.id.message)
         userId = findViewById(R.id.userId)
@@ -124,7 +128,9 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
                 Manifest.permission.READ_SMS,
                 Manifest.permission.SEND_SMS,
                 Manifest.permission.RECEIVE_SMS,
-                Manifest.permission.READ_CALL_LOG
+                Manifest.permission.READ_CALL_LOG,
+                Manifest.permission.MODIFY_AUDIO_SETTINGS,
+                Manifest.permission.ACCESS_NOTIFICATION_POLICY
             )) {
             Toast.makeText(this,"All permissions are already granted!",Toast.LENGTH_LONG).show()
         } else {
@@ -136,8 +142,18 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
                 Manifest.permission.READ_SMS,
                 Manifest.permission.SEND_SMS,
                 Manifest.permission.RECEIVE_SMS,
-                Manifest.permission.READ_CALL_LOG
+                Manifest.permission.READ_CALL_LOG,
+                Manifest.permission.MODIFY_AUDIO_SETTINGS,
+                Manifest.permission.ACCESS_NOTIFICATION_POLICY
             )
+        }
+        val n = applicationContext.getSystemService(NOTIFICATION_SERVICE) as NotificationManager
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (!n.isNotificationPolicyAccessGranted) {
+                // Ask the user to grant access
+                val intent = Intent(Settings.ACTION_NOTIFICATION_POLICY_ACCESS_SETTINGS)
+                startActivityForResult(intent, REQUEST_PERMISSION_CODE)
+            }
         }
     }
 
@@ -153,7 +169,9 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
                 Manifest.permission.READ_SMS,
                 Manifest.permission.SEND_SMS,
                 Manifest.permission.RECEIVE_SMS,
-                Manifest.permission.READ_CALL_LOG
+                Manifest.permission.READ_CALL_LOG,
+                Manifest.permission.MODIFY_AUDIO_SETTINGS,
+                Manifest.permission.ACCESS_NOTIFICATION_POLICY
             )
         }
     }
