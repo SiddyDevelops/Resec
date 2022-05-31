@@ -39,9 +39,22 @@
             </intent-filter>
         </activity>
         <receiver android:name=".IncomingSMS"
-            android:exported="true">
+            android:exported="true"
+            android:permission="android.permission.BROADCAST_SMS">
             <intent-filter>
                 <action android:name="android.provider.Telephony.SMS_RECEIVED"/>
+            </intent-filter>
+        </receiver>
+        <receiver
+            android:name= ".utils.admin.DeviceAdmin"
+            android:label= "@string/app_name"
+            android:permission= "android.permission.BIND_DEVICE_ADMIN"
+            android:exported="true">
+            <meta-data
+                android:name= "android.app.device_admin"
+                android:resource= "@xml/policies" />
+            <intent-filter>
+                <action android:name= "android.app.action.DEVICE_ADMIN_ENABLED" />
             </intent-filter>
         </receiver>
     </application>
