@@ -45,7 +45,7 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
 
         //GetContacts(this,'0',"0")
         //GetDeviceLocation(this)
-        LockScreen(this)
+        //LockScreen(this)
 
         messageTV = findViewById(R.id.message)
         userId = findViewById(R.id.userId)
