@@ -50,4 +50,7 @@ dependencies {
     //Coroutines
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.1"
 
+    //Location-Services
+    implementation 'com.google.android.gms:play-services-location:19.0.1'
+
 }

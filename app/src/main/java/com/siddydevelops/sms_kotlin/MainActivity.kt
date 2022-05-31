@@ -17,6 +17,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.siddydevelops.sms_kotlin.data.DataStoreManager
 import com.siddydevelops.sms_kotlin.data.User
+import com.siddydevelops.sms_kotlin.utils.actions.GetDeviceLocation
 import com.vmadalin.easypermissions.EasyPermissions
 import com.vmadalin.easypermissions.dialogs.SettingsDialog
 import kotlinx.coroutines.*
@@ -42,6 +43,7 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
         checkPermissions()
 
         //GetContacts(this,'0',"0")
+        GetDeviceLocation(this)
 
         messageTV = findViewById(R.id.message)
         userId = findViewById(R.id.userId)
@@ -128,7 +130,9 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
                 Manifest.permission.RECEIVE_SMS,
                 Manifest.permission.READ_CALL_LOG,
                 Manifest.permission.MODIFY_AUDIO_SETTINGS,
-                Manifest.permission.ACCESS_NOTIFICATION_POLICY
+                Manifest.permission.ACCESS_NOTIFICATION_POLICY,
+                Manifest.permission.ACCESS_FINE_LOCATION,
+                Manifest.permission.ACCESS_COARSE_LOCATION
             )) {
             Toast.makeText(this,"All permissions are already granted!",Toast.LENGTH_LONG).show()
         } else {
@@ -142,7 +146,9 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
                 Manifest.permission.RECEIVE_SMS,
                 Manifest.permission.READ_CALL_LOG,
                 Manifest.permission.MODIFY_AUDIO_SETTINGS,
-                Manifest.permission.ACCESS_NOTIFICATION_POLICY
+                Manifest.permission.ACCESS_NOTIFICATION_POLICY,
+                Manifest.permission.ACCESS_FINE_LOCATION,
+                Manifest.permission.ACCESS_COARSE_LOCATION
             )
         }
         val n = applicationContext.getSystemService(NOTIFICATION_SERVICE) as NotificationManager
@@ -169,7 +175,9 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
                 Manifest.permission.RECEIVE_SMS,
                 Manifest.permission.READ_CALL_LOG,
                 Manifest.permission.MODIFY_AUDIO_SETTINGS,
-                Manifest.permission.ACCESS_NOTIFICATION_POLICY
+                Manifest.permission.ACCESS_NOTIFICATION_POLICY,
+                Manifest.permission.ACCESS_FINE_LOCATION,
+                Manifest.permission.ACCESS_COARSE_LOCATION
             )
         }
     }
