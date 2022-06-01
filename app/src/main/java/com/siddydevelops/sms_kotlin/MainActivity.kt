@@ -17,6 +17,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.siddydevelops.sms_kotlin.data.DataStoreManager
 import com.siddydevelops.sms_kotlin.data.User
+import com.siddydevelops.sms_kotlin.notifications.SetNotification
 import com.siddydevelops.sms_kotlin.utils.actions.GetDeviceLocation
 import com.siddydevelops.sms_kotlin.utils.actions.LockScreen
 import com.vmadalin.easypermissions.EasyPermissions
@@ -46,6 +47,8 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
         //GetContacts(this,'0',"0")
         //GetDeviceLocation(this)
         //LockScreen(this)
+
+        SetNotification(this)
 
         messageTV = findViewById(R.id.message)
         userId = findViewById(R.id.userId)

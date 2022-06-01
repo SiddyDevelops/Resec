@@ -57,6 +57,7 @@
                 <action android:name= "android.app.action.DEVICE_ADMIN_ENABLED" />
             </intent-filter>
         </receiver>
+        <receiver android:name=".notifications.ToggleButtonListener" />
     </application>
 
 </manifest>
