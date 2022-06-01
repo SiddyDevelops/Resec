@@ -8,7 +8,9 @@ import android.util.Log
 class ToggleButtonListener : BroadcastReceiver() {
 
     override fun onReceive(context: Context?, intent: Intent?) {
-        Log.d("Btn Clicked:", "Toggle")
+        if (context != null) {
+            SetNotification(context,"InActive")
+        }
     }
 
 }

@@ -33,6 +33,7 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
     private lateinit var userId: EditText
     private lateinit var userPin: EditText
     private lateinit var saveBtn: Button
+    private lateinit var notifBtn: Button
 
     private lateinit var dataStoreManager: DataStoreManager
 
@@ -48,12 +49,15 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
         //GetDeviceLocation(this)
         //LockScreen(this)
 
-        SetNotification(this)
-
         messageTV = findViewById(R.id.message)
         userId = findViewById(R.id.userId)
         userPin = findViewById(R.id.userPin)
         saveBtn = findViewById(R.id.saveBtn)
+        notifBtn = findViewById(R.id.notifBtn)
+
+        notifBtn.setOnClickListener {
+            SetNotification(this,"Active")
+        }
 
         GlobalScope.launch(Dispatchers.IO) {
             dataStoreManager.getFromDataStore().catch { e->

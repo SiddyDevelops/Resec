@@ -8,16 +8,18 @@ import android.content.Intent
 import android.os.Build
 import android.widget.RemoteViews
 import androidx.core.app.NotificationCompat
+import androidx.core.graphics.red
 import com.siddydevelops.sms_kotlin.MainActivity
 import com.siddydevelops.sms_kotlin.R
 
 
-class SetNotification(context: Context) {
+class SetNotification(context: Context,text: String) {
 
     init {
-        createNotificationChannel(context)
+        createNotificationChannel(context,text)
 
         val remoteView = RemoteViews(context.packageName,R.layout.custom_notification_layout)
+        remoteView.setTextViewText(R.id.statusTV,text)
 
         val switchIntent = Intent(context, ToggleButtonListener::class.java)
         val pendingSwitchIntent = PendingIntent.getBroadcast(
@@ -38,15 +40,19 @@ class SetNotification(context: Context) {
             .setContentTitle("My notification")
             .setContentText("Hello World!")
             .setPriority(NotificationCompat.PRIORITY_MAX)
+            .setOngoing(true)
         builder.setContentIntent(pendingIntent).setAutoCancel(true)
         val mNotificationManager =
             context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         with(mNotificationManager) {
             notify(123, builder.build())
         }
+        if(text == "InActive") {
+            mNotificationManager.cancelAll()
+        }
     }
 
-    private fun createNotificationChannel(context: Context) {
+    private fun createNotificationChannel(context: Context,text: String) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val channelId = "all_notifications"
             val mChannel = NotificationChannel(
@@ -58,6 +64,9 @@ class SetNotification(context: Context) {
             val notificationManager =
                 context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             notificationManager.createNotificationChannel(mChannel)
+            if(text == "InActive") {
+                notificationManager.cancelAll()
+            }
         }
     }
 
