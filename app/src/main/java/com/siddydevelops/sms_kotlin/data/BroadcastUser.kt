@@ -8,6 +8,7 @@ import com.siddydevelops.sms_kotlin.utils.actions.GetContacts
 import com.siddydevelops.sms_kotlin.utils.actions.SendSMS
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.catch
+import org.apache.commons.lang3.StringUtils
 
 class BroadcastUser(contextIn: Context, messageIn: String, phoneNumberIn: String) {
 
@@ -15,6 +16,8 @@ class BroadcastUser(contextIn: Context, messageIn: String, phoneNumberIn: String
     private var context: Context
     private var message: String
     private var phoneNumber: String
+
+    private var contactName = Regex("^[a-zA-Z]*\$")
 
     init {
 //        GlobalScope.launch(Dispatchers.IO) {
@@ -48,10 +51,14 @@ class BroadcastUser(contextIn: Context, messageIn: String, phoneNumberIn: String
                 }
             }
             if (message.contains("Resec.Contact")) {
-                Log.d("UserDetails", MainActivity.getMyUser().toString())
-                if (message == "Resec.Contact<${MainActivity.getMyUser()?.userId}><${MainActivity.getMyUser()?.userPin}>") {
-                    GetContacts(context,'0',"0")
-                } else {
+                if (message == "Resec.Contacts<${MainActivity.getMyUser()?.userId}><${MainActivity.getMyUser()?.userPin}>") {
+                    SendSMS(phoneNumber, Constants.CONTACTS_COMMANDS)
+                    //GetContacts(context,'0',"0",phoneNumber)
+                }
+                if(message.contains("Resec.ContactName")) {
+                    Log.d("Flow", StringUtils.substringBetween(message,"<",">"))
+                }
+                else {
                     SendSMS(phoneNumber, Constants.INVALID_CREDS)
                 }
             } else {

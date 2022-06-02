@@ -53,4 +53,7 @@ dependencies {
     //Location-Services
     implementation 'com.google.android.gms:play-services-location:19.0.1'
 
+    //Apache Commons Lang
+    implementation "org.apache.commons:commons-lang3:3.4"
+
 }

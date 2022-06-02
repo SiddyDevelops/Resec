@@ -55,7 +55,6 @@ open class IncomingSMS : BroadcastReceiver() {
 
                 if(message.contains("Resec")) {
                     BroadcastUser(context,message,phoneNumber!!)
-                    Log.d("Command",":Resec")
                 }
             }
         } catch (e: Exception) {

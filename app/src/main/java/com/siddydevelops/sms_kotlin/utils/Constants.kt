@@ -4,6 +4,8 @@ object Constants {
     const val ACTIVE = "Resec"
     const val COMMANDS = "Resec.commands"
 
+    const val CONTACTS_COMMANDS = "Use Resec.Contact<Name> to retrieve a particular contact by name.\nUse Resec.Contacts<alphabet> to get list of contacts beginning with particular alphabet."
+
     const val SEND_ACK = "Resec is Active.\nUse <Resec.about> to know more."
     const val HELP = "Resec.about"
 

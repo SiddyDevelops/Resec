@@ -13,7 +13,7 @@ import java.util.*
 import kotlin.collections.HashMap
 
 @SuppressLint("Range")
-class GetContacts(context: Context,aplhaList: Char,contact: String) {
+class GetContacts(context: Context,aplhaList: Char,contact: String,phoneNumber: String) {
 
     private val regex = Regex(".*[a-zA-Z]+.*")
     private val alphaListIN: Char
