@@ -16,15 +16,10 @@ import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.siddydevelops.sms_kotlin.data.DataStoreManager
 import com.siddydevelops.sms_kotlin.data.User
 import com.siddydevelops.sms_kotlin.notifications.SetNotification
-import com.siddydevelops.sms_kotlin.utils.actions.GetDeviceLocation
-import com.siddydevelops.sms_kotlin.utils.actions.LockScreen
 import com.vmadalin.easypermissions.EasyPermissions
 import com.vmadalin.easypermissions.dialogs.SettingsDialog
-import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.catch
 import java.lang.ref.WeakReference
 
 
