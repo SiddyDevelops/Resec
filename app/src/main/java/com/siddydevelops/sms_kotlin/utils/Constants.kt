@@ -7,6 +7,8 @@ object Constants {
     const val SOUND_PROFILE_STATUS = "Resec.SoundStatus"
     const val SOUND_PROFILE_NORMAL = "Resec.SoundNormal"
 
+    const val LOCATION_COMMAND = "Resec.Location"
+
     const val CONTACTS_COMMANDS = "Use Resec.ContactName<Name> to retrieve a particular contact by name.\nUse Resec.Contacts<alphabet> to get list of contacts beginning with particular alphabet."
 
     const val SEND_ACK = "Resec is Active.\nUse <Resec.about> to know more."

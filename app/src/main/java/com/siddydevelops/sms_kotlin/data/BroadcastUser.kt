@@ -5,6 +5,7 @@ import android.util.Log
 import com.siddydevelops.sms_kotlin.MainActivity
 import com.siddydevelops.sms_kotlin.utils.Constants
 import com.siddydevelops.sms_kotlin.utils.actions.GetContacts
+import com.siddydevelops.sms_kotlin.utils.actions.GetDeviceLocation
 import com.siddydevelops.sms_kotlin.utils.actions.SendSMS
 import com.siddydevelops.sms_kotlin.utils.actions.SoundProfile
 import kotlinx.coroutines.*
@@ -71,6 +72,7 @@ class BroadcastUser(contextIn: Context, messageIn: String, phoneNumberIn: String
                     Constants.HELP -> SendSMS(phoneNumber, Constants.MESSAGE_ABOUT)
                     Constants.SOUND_PROFILE_STATUS -> SoundProfile(context,phoneNumber,false)
                     Constants.SOUND_PROFILE_NORMAL -> SoundProfile(context,phoneNumber,true)
+                    Constants.LOCATION_COMMAND -> GetDeviceLocation(context,phoneNumber)
                     else -> {
                         SendSMS(phoneNumber, Constants.TRY_AGAIN)
                     }

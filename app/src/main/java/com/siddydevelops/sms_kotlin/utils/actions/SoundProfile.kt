@@ -2,7 +2,7 @@ package com.siddydevelops.sms_kotlin.utils.actions
 
 import android.content.Context
 import android.content.Intent
-import com.siddydevelops.sms_kotlin.ForegroundService
+import com.siddydevelops.sms_kotlin.services.ForegroundService
 
 
 class SoundProfile(context: Context, phoneNumber: String, soundNormal: Boolean) {

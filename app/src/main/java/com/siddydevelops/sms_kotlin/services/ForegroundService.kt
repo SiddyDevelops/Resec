@@ -1,4 +1,4 @@
-package com.siddydevelops.sms_kotlin
+package com.siddydevelops.sms_kotlin.services
 
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -11,6 +11,8 @@ import android.os.Build
 import android.os.IBinder
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
+import com.siddydevelops.sms_kotlin.MainActivity
+import com.siddydevelops.sms_kotlin.R
 import com.siddydevelops.sms_kotlin.utils.actions.SendSMS
 
 class ForegroundService : Service() {
