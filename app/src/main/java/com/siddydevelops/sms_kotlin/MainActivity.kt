@@ -5,6 +5,7 @@ import android.app.NotificationManager
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.content.SharedPreferences
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
@@ -35,19 +36,14 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
     private lateinit var saveBtn: Button
     private lateinit var notifBtn: Button
 
-    private lateinit var dataStoreManager: DataStoreManager
+
+    private lateinit var  sharedPreferences: SharedPreferences
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        dataStoreManager = DataStoreManager(this)
-
         checkPermissions()
-
-        //GetContacts(this,'0',"0")
-        //GetDeviceLocation(this)
-        //LockScreen(this)
 
         messageTV = findViewById(R.id.message)
         userId = findViewById(R.id.userId)
@@ -59,31 +55,27 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
             SetNotification(this,"Active")
         }
 
-        GlobalScope.launch(Dispatchers.IO) {
-            dataStoreManager.getFromDataStore().catch { e->
-                e.printStackTrace()
-            }.collect { user->
-                setMyUser(user.userId,user.userPin)
-                if(user.userId.isNotEmpty()) {
-                    withContext(Dispatchers.Main) {
-                        userId.setText(user.userId)
-                        userPin.setText(user.userPin)
-                        saveBtn.visibility = View.GONE
-                    }
-                }
-            }
+        sharedPreferences = getSharedPreferences("USER_STORE", Context.MODE_PRIVATE)
+
+        if(sharedPreferences.contains("UserID")) {
+            setMyUser(sharedPreferences.getString("UserID","default")!!,sharedPreferences.getString("UserPin","default")!!)
+        }
+
+        if(user?.userId?.isNotEmpty() == true) {
+            userId.setText(user?.userId)
+            userPin.setText(user?.userPin)
+            saveBtn.visibility = View.GONE
         }
 
         saveBtn.setOnClickListener {
             if(userId.text.toString().isNotEmpty() && userPin.text.toString().isNotEmpty()) {
                 setMyUser(userId.text.toString(),userPin.text.toString())
-                GlobalScope.launch(Dispatchers.IO) {
-                    dataStoreManager.savetoDataStore(User(userId.text.toString(),userPin.text.toString()))
-                    withContext(Dispatchers.Main) {
-                        Toast.makeText(this@MainActivity,"Credentials Saved Successfully.",Toast.LENGTH_SHORT).show()
-                        saveBtn.visibility = View.GONE
-                    }
-                }
+                val editor = sharedPreferences.edit()
+                editor.putString("UserID",userId.text.toString())
+                editor.putString("UserPin",userPin.text.toString())
+                editor.apply()
+                Toast.makeText(this@MainActivity,"Credentials Saved Successfully.",Toast.LENGTH_SHORT).show()
+                saveBtn.visibility = View.GONE
             } else {
                 Toast.makeText(this,"Please fill all the fields.",Toast.LENGTH_SHORT).show()
             }
