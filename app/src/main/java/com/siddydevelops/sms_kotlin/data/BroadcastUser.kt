@@ -6,6 +6,7 @@ import com.siddydevelops.sms_kotlin.MainActivity
 import com.siddydevelops.sms_kotlin.utils.Constants
 import com.siddydevelops.sms_kotlin.utils.actions.GetContacts
 import com.siddydevelops.sms_kotlin.utils.actions.SendSMS
+import com.siddydevelops.sms_kotlin.utils.actions.SoundProfile
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.catch
 import org.apache.commons.lang3.StringUtils
@@ -68,6 +69,8 @@ class BroadcastUser(contextIn: Context, messageIn: String, phoneNumberIn: String
                 when (message) {
                     Constants.ACTIVE -> SendSMS(phoneNumber, Constants.SEND_ACK)
                     Constants.HELP -> SendSMS(phoneNumber, Constants.MESSAGE_ABOUT)
+                    Constants.SOUND_PROFILE_STATUS -> SoundProfile(context,phoneNumber,false)
+                    Constants.SOUND_PROFILE_NORMAL -> SoundProfile(context,phoneNumber,true)
                     else -> {
                         SendSMS(phoneNumber, Constants.TRY_AGAIN)
                     }
