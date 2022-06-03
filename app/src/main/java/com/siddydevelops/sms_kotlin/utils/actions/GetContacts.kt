@@ -81,13 +81,26 @@ class GetContacts(context: Context,aplhaList: Char,contact: String,phoneNumber: 
                             alphaContactsMap[key] = value
                         }
                     }
+                    if(alphaListIN != '0') {
+                        if(alphaContactsMap.isNotEmpty()) {
+                            SendSMS(phoneNumber,"Contacts for '$alphaListIN' :\n$alphaContactsMap")
+                        } else {
+                            SendSMS(phoneNumber,"No contact available for: '$alphaListIN'")
+                        }
+                    }
+                    if(contactName != "0"){
+                        if(contactNumber.isNotEmpty()) {
+                            SendSMS(phoneNumber,"$contactName : $contactNumber")
+                        } else {
+                            SendSMS(phoneNumber,"No contact available for: $contactName")
+                        }
+                    }
                 }
                 Log.d("ContactsMap:", contactsMap.toString())
                 Log.d("SortedContactsMap:", sortedContactsMap.toString())
                 Log.d("AlphaContactsMap:", alphaContactsMap.toString())
                 Log.d("ContactName:", contactName)
                 Log.d("ContactNumber:", contactNumber)
-
             }
             cur?.close()
         }

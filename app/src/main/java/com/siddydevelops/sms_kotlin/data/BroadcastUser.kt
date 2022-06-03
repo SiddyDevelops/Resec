@@ -56,7 +56,10 @@ class BroadcastUser(contextIn: Context, messageIn: String, phoneNumberIn: String
                     //GetContacts(context,'0',"0",phoneNumber)
                 }
                 if(message.contains("Resec.ContactName")) {
-                    Log.d("Flow", StringUtils.substringBetween(message,"<",">"))
+                    GetContacts(context,'0',StringUtils.substringBetween(message,"<",">"),phoneNumber)
+                }
+                if(message.contains("Resec.Contacts")) {
+                    GetContacts(context,message[15],"0",phoneNumber)
                 }
                 else {
                     SendSMS(phoneNumber, Constants.INVALID_CREDS)
