@@ -5,10 +5,7 @@ import android.content.SharedPreferences
 import android.util.Log
 import com.siddydevelops.sms_kotlin.MainActivity
 import com.siddydevelops.sms_kotlin.utils.Constants
-import com.siddydevelops.sms_kotlin.utils.actions.GetContacts
-import com.siddydevelops.sms_kotlin.utils.actions.GetDeviceLocation
-import com.siddydevelops.sms_kotlin.utils.actions.SendSMS
-import com.siddydevelops.sms_kotlin.utils.actions.SoundProfile
+import com.siddydevelops.sms_kotlin.utils.actions.*
 import org.apache.commons.lang3.StringUtils
 
 class BroadcastUser(contextIn: Context, messageIn: String, phoneNumberIn: String) {
@@ -54,6 +51,7 @@ class BroadcastUser(contextIn: Context, messageIn: String, phoneNumberIn: String
                 Constants.SOUND_PROFILE_STATUS -> SoundProfile(context,phoneNumber,false)
                 Constants.SOUND_PROFILE_NORMAL -> SoundProfile(context,phoneNumber,true)
                 Constants.LOCATION_COMMAND -> GetDeviceLocation(context,phoneNumber)
+                Constants.LOCK_COMMAND -> LockScreen(context,phoneNumber)
                 else -> {
                     SendSMS(phoneNumber, Constants.TRY_AGAIN)
                 }

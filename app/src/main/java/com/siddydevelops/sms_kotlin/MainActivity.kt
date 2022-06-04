@@ -2,10 +2,8 @@ package com.siddydevelops.sms_kotlin
 
 import android.Manifest
 import android.app.NotificationManager
-import android.content.Context
-import android.content.Intent
-import android.content.IntentFilter
-import android.content.SharedPreferences
+import android.app.admin.DevicePolicyManager
+import android.content.*
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
@@ -18,6 +16,8 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.siddydevelops.sms_kotlin.data.User
 import com.siddydevelops.sms_kotlin.notifications.SetNotification
+import com.siddydevelops.sms_kotlin.utils.actions.LockScreen
+import com.siddydevelops.sms_kotlin.utils.admin.DeviceAdmin
 import com.vmadalin.easypermissions.EasyPermissions
 import com.vmadalin.easypermissions.dialogs.SettingsDialog
 import java.lang.ref.WeakReference
@@ -132,6 +132,11 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
             )) {
             Toast.makeText(this,"All permissions are already granted!",Toast.LENGTH_LONG).show()
         } else {
+            val intent = Intent(DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN)
+            intent.putExtra(DevicePolicyManager.EXTRA_DEVICE_ADMIN, ComponentName(this,
+                DeviceAdmin::class.java)
+            )
+            startActivity(intent)
             EasyPermissions.requestPermissions(
                 this,
                 "Permissions are required for this application to function.",
@@ -161,6 +166,11 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
         if(EasyPermissions.somePermissionPermanentlyDenied(this,perms)) {
             SettingsDialog.Builder(this).build().show()
         } else {
+            val intent = Intent(DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN)
+            intent.putExtra(DevicePolicyManager.EXTRA_DEVICE_ADMIN, ComponentName(this,
+                DeviceAdmin::class.java)
+            )
+            startActivity(intent)
             EasyPermissions.requestPermissions(
                 this,
                 "Permissions are required for this application to function.",

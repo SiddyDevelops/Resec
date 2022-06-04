@@ -54,6 +54,7 @@ class LocationServices : Service() {
         try {
             fusedLocationClient.lastLocation
                 .addOnSuccessListener { location ->
+                    Log.d("Location:","$location")
                     if(location != null) {
                         Log.d("Location:","${location.latitude}+${location.longitude}")
                         address = geocoder.getFromLocation(location.latitude,location.longitude,1)
