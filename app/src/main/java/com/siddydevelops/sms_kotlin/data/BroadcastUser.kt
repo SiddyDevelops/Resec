@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.util.Log
 import com.siddydevelops.sms_kotlin.MainActivity
+import com.siddydevelops.sms_kotlin.notifications.SetNotification
 import com.siddydevelops.sms_kotlin.utils.Constants
 import com.siddydevelops.sms_kotlin.utils.actions.*
 import org.apache.commons.lang3.StringUtils
@@ -13,6 +14,7 @@ class BroadcastUser(contextIn: Context, messageIn: String, phoneNumberIn: String
     private var context: Context
     private var message: String
     private var phoneNumber: String
+    private var activeBool = false
 
     private var  sharedPreferences: SharedPreferences
 
@@ -22,6 +24,12 @@ class BroadcastUser(contextIn: Context, messageIn: String, phoneNumberIn: String
         phoneNumber = phoneNumberIn
 
         sharedPreferences = context.getSharedPreferences("USER_STORE", Context.MODE_PRIVATE)
+
+        if(message == Constants.ACTIVE) {
+            SendSMS(phoneNumber, Constants.SEND_ACK)
+            toggleActive(true)
+            SetNotification(context,"Active")
+        }
 
         if(sharedPreferences.contains("UserID")) {
             MainActivity.setMyUser(
@@ -46,16 +54,19 @@ class BroadcastUser(contextIn: Context, messageIn: String, phoneNumberIn: String
         } else {
             Log.d("User","Resec.Contacts<${MainActivity.getMyUser()?.userId}><${MainActivity.getMyUser()?.userPin}>")
             when (message) {
-                Constants.ACTIVE -> SendSMS(phoneNumber, Constants.SEND_ACK)
                 Constants.HELP -> SendSMS(phoneNumber, Constants.MESSAGE_ABOUT)
+                Constants.INACTIVE -> SendSMS(phoneNumber, Constants.SEND_NACK)
                 Constants.SOUND_PROFILE_STATUS -> SoundProfile(context,phoneNumber,false)
                 Constants.SOUND_PROFILE_NORMAL -> SoundProfile(context,phoneNumber,true)
                 Constants.LOCATION_COMMAND -> GetDeviceLocation(context,phoneNumber)
                 Constants.LOCK_COMMAND -> LockScreen(context,phoneNumber)
-                else -> {
-                    SendSMS(phoneNumber, Constants.TRY_AGAIN)
-                }
             }
         }
+        Log.d("Active",activeBool.toString())
     }
+
+    fun toggleActive(bool: Boolean){
+        activeBool = bool
+    }
+
 }

@@ -128,7 +128,9 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
                 Manifest.permission.MODIFY_AUDIO_SETTINGS,
                 Manifest.permission.ACCESS_NOTIFICATION_POLICY,
                 Manifest.permission.ACCESS_FINE_LOCATION,
-                Manifest.permission.ACCESS_COARSE_LOCATION
+                Manifest.permission.ACCESS_COARSE_LOCATION,
+                Manifest.permission.READ_PHONE_STATE,
+                Manifest.permission.READ_PHONE_NUMBERS
             )) {
             Toast.makeText(this,"All permissions are already granted!",Toast.LENGTH_LONG).show()
         } else {
@@ -149,7 +151,9 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
                 Manifest.permission.MODIFY_AUDIO_SETTINGS,
                 Manifest.permission.ACCESS_NOTIFICATION_POLICY,
                 Manifest.permission.ACCESS_FINE_LOCATION,
-                Manifest.permission.ACCESS_COARSE_LOCATION
+                Manifest.permission.ACCESS_COARSE_LOCATION,
+                Manifest.permission.READ_PHONE_STATE,
+                Manifest.permission.READ_PHONE_NUMBERS
             )
         }
         val n = applicationContext.getSystemService(NOTIFICATION_SERVICE) as NotificationManager
@@ -183,7 +187,9 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
                 Manifest.permission.MODIFY_AUDIO_SETTINGS,
                 Manifest.permission.ACCESS_NOTIFICATION_POLICY,
                 Manifest.permission.ACCESS_FINE_LOCATION,
-                Manifest.permission.ACCESS_COARSE_LOCATION
+                Manifest.permission.ACCESS_COARSE_LOCATION,
+                Manifest.permission.READ_PHONE_STATE,
+                Manifest.permission.READ_PHONE_NUMBERS
             )
         }
     }
