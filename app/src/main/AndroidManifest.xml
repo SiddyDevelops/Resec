@@ -60,7 +60,6 @@
             </intent-filter>
         </receiver>
         <receiver android:name=".notifications.ToggleButtonListener" />
-        <service android:name=".services.ForegroundService" />
         <service android:name=".services.LocationServices" />
     </application>
 
