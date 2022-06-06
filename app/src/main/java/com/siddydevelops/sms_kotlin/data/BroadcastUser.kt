@@ -33,6 +33,12 @@ class BroadcastUser(contextIn: Context, messageIn: String, phoneNumberIn: String
             )
         }
 
+        if(message == Constants.ACTIVE) {
+            SendSMS(phoneNumber, Constants.SEND_ACK)
+            toggleActive(true)
+            SetNotification(context,"Active")
+        }
+
         if(activeBool) {
             smsCommands()
         } else {
@@ -66,11 +72,6 @@ class BroadcastUser(contextIn: Context, messageIn: String, phoneNumberIn: String
                     SendSMS(phoneNumber, Constants.MESSAGE_COMMANDS5)
                 }
                 Constants.HELP -> SendSMS(phoneNumber, Constants.MESSAGE_ABOUT)
-                Constants.ACTIVE -> {
-                    SendSMS(phoneNumber, Constants.SEND_ACK)
-                    toggleActive(true)
-                    SetNotification(context,"Active")
-                }
                 Constants.INACTIVE -> SendSMS(phoneNumber, Constants.SEND_NACK)
                 Constants.SOUND_PROFILE_STATUS -> SoundProfile(context,phoneNumber,false)
                 Constants.SOUND_PROFILE_NORMAL -> SoundProfile(context,phoneNumber,true)
