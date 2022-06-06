@@ -41,7 +41,9 @@ class BroadcastUser(contextIn: Context, messageIn: String, phoneNumberIn: String
 
         if(activeBool) {
             smsCommands()
-        } else {
+        } else if(message == Constants.INACTIVE) {
+            SendSMS(phoneNumber, Constants.SEND_NACK)
+        } else{
             SendSMS(phoneNumber,Constants.SEND_NACK)
         }
 
@@ -51,6 +53,7 @@ class BroadcastUser(contextIn: Context, messageIn: String, phoneNumberIn: String
         if (message.contains("Resec.Contact")) {
             if (message == "Resec.Contacts<${MainActivity.getMyUser()?.userId}><${MainActivity.getMyUser()?.userPin}>") {
                 SendSMS(phoneNumber, Constants.CONTACTS_COMMANDS)
+                toggleContact(true)
             }
             if(message.contains("Resec.ContactName")) {
                 GetContacts(context,'0',StringUtils.substringBetween(message,"<",">"),phoneNumber)
@@ -72,7 +75,6 @@ class BroadcastUser(contextIn: Context, messageIn: String, phoneNumberIn: String
                     SendSMS(phoneNumber, Constants.MESSAGE_COMMANDS5)
                 }
                 Constants.HELP -> SendSMS(phoneNumber, Constants.MESSAGE_ABOUT)
-                Constants.INACTIVE -> SendSMS(phoneNumber, Constants.SEND_NACK)
                 Constants.SOUND_PROFILE_STATUS -> SoundProfile(context,phoneNumber,false)
                 Constants.SOUND_PROFILE_NORMAL -> SoundProfile(context,phoneNumber,true)
                 Constants.LOCATION_COMMAND -> GetDeviceLocation(context,phoneNumber)
@@ -84,6 +86,9 @@ class BroadcastUser(contextIn: Context, messageIn: String, phoneNumberIn: String
 
     fun toggleActive(bool: Boolean){
         activeBool = bool
+    }
+
+    fun toggleContact(bool: Boolean){
         contactBool = bool
     }
 

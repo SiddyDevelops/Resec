@@ -15,9 +15,11 @@ class ToggleButtonListener : BroadcastReceiver() {
     override fun onReceive(context: Context?, intent: Intent?) {
         if (context != null) {
             val tMgr = context.getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
-            BroadcastUser(context,Constants.INACTIVE,
+            val bu = BroadcastUser(context,Constants.INACTIVE,
                 tMgr.line1Number
-            ).toggleActive(false)
+            )
+            bu.toggleActive(false)
+            bu.toggleContact(false)
             SetNotification(context,"InActive")
         }
     }
