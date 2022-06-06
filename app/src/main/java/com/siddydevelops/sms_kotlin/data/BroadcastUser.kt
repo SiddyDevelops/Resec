@@ -55,10 +55,10 @@ class BroadcastUser(contextIn: Context, messageIn: String, phoneNumberIn: String
                 SendSMS(phoneNumber, Constants.CONTACTS_COMMANDS)
                 toggleContact(true)
             }
-            if(message.contains("Resec.ContactName")) {
+            if(message.contains("Resec.ContactName") && contactBool) {
                 GetContacts(context,'0',StringUtils.substringBetween(message,"<",">"),phoneNumber)
             }
-            if(message.contains("Resec.Contacts")) {
+            if(message.contains("Resec.Contacts") && contactBool) {
                 GetContacts(context,message[15],"0",phoneNumber)
             }
             else {
