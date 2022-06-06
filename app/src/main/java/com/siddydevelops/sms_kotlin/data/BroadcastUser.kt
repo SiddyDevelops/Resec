@@ -15,6 +15,7 @@ class BroadcastUser(contextIn: Context, messageIn: String, phoneNumberIn: String
     private var message: String
     private var phoneNumber: String
     private var activeBool = false
+    private var contactBool = false
 
     private var  sharedPreferences: SharedPreferences
 
@@ -25,12 +26,6 @@ class BroadcastUser(contextIn: Context, messageIn: String, phoneNumberIn: String
 
         sharedPreferences = context.getSharedPreferences("USER_STORE", Context.MODE_PRIVATE)
 
-        if(message == Constants.ACTIVE) {
-            SendSMS(phoneNumber, Constants.SEND_ACK)
-            toggleActive(true)
-            SetNotification(context,"Active")
-        }
-
         if(sharedPreferences.contains("UserID")) {
             MainActivity.setMyUser(
                 sharedPreferences.getString("UserID", "default")!!,
@@ -38,6 +33,15 @@ class BroadcastUser(contextIn: Context, messageIn: String, phoneNumberIn: String
             )
         }
 
+        if(activeBool) {
+            smsCommands()
+        } else {
+            SendSMS(phoneNumber,Constants.SEND_NACK)
+        }
+
+    }
+
+    private fun smsCommands() {
         if (message.contains("Resec.Contact")) {
             if (message == "Resec.Contacts<${MainActivity.getMyUser()?.userId}><${MainActivity.getMyUser()?.userPin}>") {
                 SendSMS(phoneNumber, Constants.CONTACTS_COMMANDS)
@@ -52,21 +56,34 @@ class BroadcastUser(contextIn: Context, messageIn: String, phoneNumberIn: String
                 SendSMS(phoneNumber, Constants.INVALID_CREDS)
             }
         } else {
-            Log.d("User","Resec.Contacts<${MainActivity.getMyUser()?.userId}><${MainActivity.getMyUser()?.userPin}>")
             when (message) {
+                Constants.COMMANDS -> {
+                    SendSMS(phoneNumber, Constants.MESSAGE_COMMANDS0)
+                    SendSMS(phoneNumber, Constants.MESSAGE_COMMANDS1)
+                    SendSMS(phoneNumber, Constants.MESSAGE_COMMANDS2)
+                    SendSMS(phoneNumber, Constants.MESSAGE_COMMANDS3)
+                    SendSMS(phoneNumber, Constants.MESSAGE_COMMANDS4)
+                    SendSMS(phoneNumber, Constants.MESSAGE_COMMANDS5)
+                }
                 Constants.HELP -> SendSMS(phoneNumber, Constants.MESSAGE_ABOUT)
+                Constants.ACTIVE -> {
+                    SendSMS(phoneNumber, Constants.SEND_ACK)
+                    toggleActive(true)
+                    SetNotification(context,"Active")
+                }
                 Constants.INACTIVE -> SendSMS(phoneNumber, Constants.SEND_NACK)
                 Constants.SOUND_PROFILE_STATUS -> SoundProfile(context,phoneNumber,false)
                 Constants.SOUND_PROFILE_NORMAL -> SoundProfile(context,phoneNumber,true)
                 Constants.LOCATION_COMMAND -> GetDeviceLocation(context,phoneNumber)
                 Constants.LOCK_COMMAND -> LockScreen(context,phoneNumber)
+                else -> SendSMS(phoneNumber, Constants.TRY_AGAIN)
             }
         }
-        Log.d("Active",activeBool.toString())
     }
 
     fun toggleActive(bool: Boolean){
         activeBool = bool
+        contactBool = bool
     }
 
 }
