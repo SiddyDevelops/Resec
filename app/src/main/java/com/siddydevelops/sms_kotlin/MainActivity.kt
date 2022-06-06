@@ -2,13 +2,16 @@ package com.siddydevelops.sms_kotlin
 
 import android.Manifest
 import android.app.NotificationManager
+import android.app.PendingIntent.getActivity
 import android.app.admin.DevicePolicyManager
 import android.content.*
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
 import android.util.Log
 import android.view.View
+import android.view.Window
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
@@ -16,11 +19,11 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.siddydevelops.sms_kotlin.data.User
 import com.siddydevelops.sms_kotlin.notifications.SetNotification
-import com.siddydevelops.sms_kotlin.utils.actions.LockScreen
 import com.siddydevelops.sms_kotlin.utils.admin.DeviceAdmin
 import com.vmadalin.easypermissions.EasyPermissions
 import com.vmadalin.easypermissions.dialogs.SettingsDialog
 import java.lang.ref.WeakReference
+import kotlin.properties.Delegates
 
 
 class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
@@ -30,9 +33,15 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
     private lateinit var userPin: EditText
     private lateinit var saveBtn: Button
     private lateinit var notifBtn: Button
+    private lateinit var brightBtn: Button
 
+    private var brightness: Int = 0
+    private lateinit var cResolver: ContentResolver
+    private lateinit var w: Window
 
-    private lateinit var  sharedPreferences: SharedPreferences
+    private var brightPermission = false
+
+    private lateinit var sharedPreferences: SharedPreferences
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,34 +54,42 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
         userPin = findViewById(R.id.userPin)
         saveBtn = findViewById(R.id.saveBtn)
         notifBtn = findViewById(R.id.notifBtn)
+        brightBtn = findViewById(R.id.brightBtn)
 
         notifBtn.setOnClickListener {
-            SetNotification(this,"Active")
+            SetNotification(this, "Active")
         }
 
         sharedPreferences = getSharedPreferences("USER_STORE", Context.MODE_PRIVATE)
 
-        if(sharedPreferences.contains("UserID")) {
-            setMyUser(sharedPreferences.getString("UserID","default")!!,sharedPreferences.getString("UserPin","default")!!)
+        if (sharedPreferences.contains("UserID")) {
+            setMyUser(
+                sharedPreferences.getString("UserID", "default")!!,
+                sharedPreferences.getString("UserPin", "default")!!
+            )
         }
 
-        if(user?.userId?.isNotEmpty() == true) {
+        if (user?.userId?.isNotEmpty() == true) {
             userId.setText(user?.userId)
             userPin.setText(user?.userPin)
             saveBtn.visibility = View.GONE
         }
 
         saveBtn.setOnClickListener {
-            if(userId.text.toString().isNotEmpty() && userPin.text.toString().isNotEmpty()) {
-                setMyUser(userId.text.toString(),userPin.text.toString())
+            if (userId.text.toString().isNotEmpty() && userPin.text.toString().isNotEmpty()) {
+                setMyUser(userId.text.toString(), userPin.text.toString())
                 val editor = sharedPreferences.edit()
-                editor.putString("UserID",userId.text.toString())
-                editor.putString("UserPin",userPin.text.toString())
+                editor.putString("UserID", userId.text.toString())
+                editor.putString("UserPin", userPin.text.toString())
                 editor.apply()
-                Toast.makeText(this@MainActivity,"Credentials Saved Successfully.",Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    this@MainActivity,
+                    "Credentials Saved Successfully.",
+                    Toast.LENGTH_SHORT
+                ).show()
                 saveBtn.visibility = View.GONE
             } else {
-                Toast.makeText(this,"Please fill all the fields.",Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Please fill all the fields.", Toast.LENGTH_SHORT).show()
             }
         }
 
@@ -81,6 +98,46 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
         val message = intent.getStringExtra("SMS_IC")
         messageTV.text = message
 
+        w = window
+        cResolver = contentResolver
+
+        if (brightPermission) {
+            try {
+                // To handle the auto
+                Settings.System.putInt(
+                    cResolver,
+                    Settings.System.SCREEN_BRIGHTNESS_MODE,
+                    Settings.System.SCREEN_BRIGHTNESS_MODE_MANUAL
+                )
+                // Get the current system brightness
+                brightness = Settings.System.getInt(
+                    cResolver, Settings.System.SCREEN_BRIGHTNESS
+                )
+            } catch (e: Settings.SettingNotFoundException) {
+                // Throw an error case it couldn't be retrieved
+                Log.e("Error", "Cannot access system brightness")
+                e.printStackTrace()
+            }
+        } else {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                brightPermission = Settings.System.canWrite(this)
+            }
+        }
+
+
+        brightBtn.setOnClickListener {
+            setBrightness(50)
+        }
+
+    }
+
+    private fun setBrightness(brightness: Int) {
+        Settings.System.putInt(
+            cResolver, Settings.System.SCREEN_BRIGHTNESS, brightness
+        )
+        val layoutPars = w.attributes
+        layoutPars.screenBrightness = brightness / 255f
+        w.attributes = layoutPars
     }
 
     override fun onPause() {
@@ -104,7 +161,7 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
             val IncomingSms = intent.getStringExtra("incomingSms") //
 
             val phoneNumber = intent.getStringExtra("incomingPhoneNumber")
-            Log.d("DATA->","${IncomingSms},$phoneNumber")
+            Log.d("DATA->", "${IncomingSms},$phoneNumber")
         }
     }
 
@@ -114,11 +171,11 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
         grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        EasyPermissions.onRequestPermissionsResult(requestCode,permissions,grantResults,this)
+        EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this)
     }
 
     private fun checkPermissions() {
-        if(EasyPermissions.hasPermissions(
+        if (EasyPermissions.hasPermissions(
                 this,
                 Manifest.permission.READ_CONTACTS,
                 Manifest.permission.READ_SMS,
@@ -131,12 +188,19 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
                 Manifest.permission.ACCESS_COARSE_LOCATION,
                 Manifest.permission.READ_PHONE_STATE,
                 Manifest.permission.READ_PHONE_NUMBERS
-            )) {
-            Toast.makeText(this,"All permissions are already granted!",Toast.LENGTH_LONG).show()
+            )
+        ) {
+            Toast.makeText(this, "All permissions are already granted!", Toast.LENGTH_LONG).show()
         } else {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                brightPermission = Settings.System.canWrite(this)
+            }
             val intent = Intent(DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN)
-            intent.putExtra(DevicePolicyManager.EXTRA_DEVICE_ADMIN, ComponentName(this,
-                DeviceAdmin::class.java)
+            intent.putExtra(
+                DevicePolicyManager.EXTRA_DEVICE_ADMIN, ComponentName(
+                    this,
+                    DeviceAdmin::class.java
+                )
             )
             startActivity(intent)
             EasyPermissions.requestPermissions(
@@ -157,7 +221,7 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
             )
         }
         val n = applicationContext.getSystemService(NOTIFICATION_SERVICE) as NotificationManager
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (!n.isNotificationPolicyAccessGranted) {
                 // Ask the user to grant access
                 val intent = Intent(Settings.ACTION_NOTIFICATION_POLICY_ACCESS_SETTINGS)
@@ -167,12 +231,15 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
     }
 
     override fun onPermissionsDenied(requestCode: Int, perms: List<String>) {
-        if(EasyPermissions.somePermissionPermanentlyDenied(this,perms)) {
+        if (EasyPermissions.somePermissionPermanentlyDenied(this, perms)) {
             SettingsDialog.Builder(this).build().show()
         } else {
             val intent = Intent(DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN)
-            intent.putExtra(DevicePolicyManager.EXTRA_DEVICE_ADMIN, ComponentName(this,
-                DeviceAdmin::class.java)
+            intent.putExtra(
+                DevicePolicyManager.EXTRA_DEVICE_ADMIN, ComponentName(
+                    this,
+                    DeviceAdmin::class.java
+                )
             )
             startActivity(intent)
             EasyPermissions.requestPermissions(
@@ -195,7 +262,7 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
     }
 
     override fun onPermissionsGranted(requestCode: Int, perms: List<String>) {
-        Toast.makeText(this,"All permissions are granted!",Toast.LENGTH_LONG).show()
+        Toast.makeText(this, "All permissions are granted!", Toast.LENGTH_LONG).show()
     }
 
     companion object {
@@ -210,8 +277,8 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
 
         private var user: User? = null
 
-        fun setMyUser(userId: String,userPin: String) {
-            user = User(userId,userPin)
+        fun setMyUser(userId: String, userPin: String) {
+            user = User(userId, userPin)
         }
 
         fun getMyUser() = user
