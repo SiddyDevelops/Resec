@@ -14,5 +14,7 @@
     <color name="bluish">#364C96</color>
     <color name="white_shade">#F2F8FD</color>
     <color name="sky_blue">#2196F3</color>
+    <color name="green">#69AB3D</color>
+    <color name="red">#F54768</color>
 
 </resources>

@@ -23,7 +23,7 @@ object Constants {
     const val CONTACTS_COMMANDS = "Use Resec.ContactName<Name> to retrieve a particular contact by name.\nUse Resec.Contacts<alphabet> to get list of contacts beginning with particular alphabet."
 
     const val SEND_ACK = "Resec is Active.\nUse <Resec.About> to know more."
-    const val SEND_NACK = "Resec is InActive.\nUse <Resec> to activate."
+    const val SEND_NACK = "Resec is InActive.\nUse <Resec> to activate or from application toggle resec state."
     const val HELP = "Resec.About"
 
     const val TRY_AGAIN = "Could not understand your request.Please try again."

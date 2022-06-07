@@ -28,7 +28,7 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
     private lateinit var userId: EditText
     private lateinit var userPin: EditText
     private lateinit var saveBtn: Button
-    private lateinit var notifBtn: Button
+    private lateinit var stateBtn: Button
     private lateinit var brightBtn: Button
     private lateinit var volumeSeekBar: SeekBar
     private lateinit var pin_visibility: ImageView
@@ -51,12 +51,12 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
         userId = findViewById(R.id.userId)
         userPin = findViewById(R.id.userPin)
         saveBtn = findViewById(R.id.saveBtn)
-        notifBtn = findViewById(R.id.notifBtn)
+        stateBtn = findViewById(R.id.stateBtn)
         brightBtn = findViewById(R.id.brightBtn)
         volumeSeekBar = findViewById(R.id.volumeSeekBar)
         pin_visibility = findViewById(R.id.pin_visibility)
 
-        notifBtn.setOnClickListener {
+        stateBtn.setOnClickListener {
             SetNotification(this, "Active")
         }
 

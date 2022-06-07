@@ -4,5 +4,9 @@
     <string name="enter_userpin">Enter UserPin</string>
     <string name="save">Save</string>
     <string name="edit">Edit</string>
+    <string name="toggle">Turn Active</string>
     <string name="user_credentials">User-Credentials</string>
+    <string name="resec_state_active">Resec is Active.</string>
+    <string name="resec_state_inactive">Resec is Inactive.</string>
+    <string name="resec_des">Resec is an offline service assistant which helps to operate services remotely through SMS. You can access contacts, get device location, change sound profile and much more through some SMS.</string>
 </resources>
