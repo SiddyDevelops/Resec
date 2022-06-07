@@ -6,6 +6,7 @@
         <entry key="app/src/main/res/drawable/bg_et.xml" value="0.1985" />
         <entry key="app/src/main/res/drawable/ic_user.xml" value="0.1985" />
         <entry key="app/src/main/res/drawable/ic_visibility.xml" value="0.1985" />
+        <entry key="app/src/main/res/drawable/ic_visibility_off.xml" value="0.1985" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.264" />
         <entry key="app/src/main/res/layout/custom_notification_layout.xml" value="0.264" />
         <entry key="app/src/main/res/xml/policies.xml" value="0.17572463768115942" />

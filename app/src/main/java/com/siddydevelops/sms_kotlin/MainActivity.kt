@@ -8,8 +8,9 @@ import android.media.AudioManager
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
+import android.text.InputType
+import android.text.method.PasswordTransformationMethod
 import android.util.Log
-import android.view.View
 import android.view.Window
 import android.widget.*
 import android.widget.SeekBar.OnSeekBarChangeListener
@@ -30,6 +31,7 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
     private lateinit var notifBtn: Button
     private lateinit var brightBtn: Button
     private lateinit var volumeSeekBar: SeekBar
+    private lateinit var pin_visibility: ImageView
 
     private var brightness: Int = 0
     private lateinit var cResolver: ContentResolver
@@ -52,6 +54,7 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
         notifBtn = findViewById(R.id.notifBtn)
         brightBtn = findViewById(R.id.brightBtn)
         volumeSeekBar = findViewById(R.id.volumeSeekBar)
+        pin_visibility = findViewById(R.id.pin_visibility)
 
         notifBtn.setOnClickListener {
             SetNotification(this, "Active")
@@ -110,6 +113,18 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
         }
 
         registerReceiver(IncomingSMS(), IntentFilter("broadCastName"))
+
+        pin_visibility.setOnClickListener {
+            if(pin_visibility.tag == "visi") {
+                pin_visibility.setImageDrawable(getDrawable(R.drawable.ic_visibility_off))
+                pin_visibility.tag = "invisi"
+                userPin.transformationMethod = null
+            } else {
+                pin_visibility.setImageDrawable(getDrawable(R.drawable.ic_visibility))
+                pin_visibility.tag = "visi"
+                userPin.transformationMethod = PasswordTransformationMethod()
+            }
+        }
 
         w = window
         cResolver = contentResolver
