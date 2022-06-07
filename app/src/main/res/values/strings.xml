@@ -3,7 +3,7 @@
     <string name="enter_userid">Enter UserID</string>
     <string name="enter_userpin">Enter UserPin</string>
     <string name="save">Save</string>
-    <string name="edit">Edit</string>
+    <string name="edit">Change Credentials</string>
     <string name="toggle">Turn Active</string>
     <string name="user_credentials">User-Credentials</string>
     <string name="resec_state_active">Resec is Active</string>
