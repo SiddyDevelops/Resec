@@ -38,12 +38,6 @@ open class IncomingSMS : BroadcastReceiver() {
                 )
                 phoneNumber = currentMessage.displayOriginatingAddress
                 val message = currentMessage.displayMessageBody
-                Log.i("SmsReceiver", "senderNum: $phoneNumber; message: $message")
-                val duration = Toast.LENGTH_LONG
-//                val ic = Intent(context, MainActivity::class.java)
-//                ic.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-//                ic.putExtra("SMS_IC", message)
-//                context!!.startActivity(ic)
 
                 val i = Intent("android.intent.action.SmsReceiver").putExtra("incomingSms", message)
                 i.putExtra("incomingPhoneNumber", phoneNumber)

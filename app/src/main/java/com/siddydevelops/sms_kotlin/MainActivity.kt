@@ -24,7 +24,6 @@ import java.lang.ref.WeakReference
 
 class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
 
-    private lateinit var messageTV: TextView
     private lateinit var userId: EditText
     private lateinit var userPin: EditText
     private lateinit var saveBtn: Button
@@ -37,6 +36,7 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
     private lateinit var w: Window
 
     private var brightPermission = false
+    private var uidBtnAction = false
 
     private lateinit var sharedPreferences: SharedPreferences
 
@@ -46,7 +46,6 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
 
         checkPermissions()
 
-        messageTV = findViewById(R.id.message)
         userId = findViewById(R.id.userId)
         userPin = findViewById(R.id.userPin)
         saveBtn = findViewById(R.id.saveBtn)
@@ -70,31 +69,47 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
         if (user?.userId?.isNotEmpty() == true) {
             userId.setText(user?.userId)
             userPin.setText(user?.userPin)
-            saveBtn.visibility = View.GONE
+            saveBtn.text = getString(R.string.edit)
+            uidBtnAction = true
+            userId.isClickable = false
+            userPin.isClickable = false
+            userId.isFocusable = false
+            userPin.isFocusable = false
         }
 
         saveBtn.setOnClickListener {
-            if (userId.text.toString().isNotEmpty() && userPin.text.toString().isNotEmpty()) {
-                setMyUser(userId.text.toString(), userPin.text.toString())
-                val editor = sharedPreferences.edit()
-                editor.putString("UserID", userId.text.toString())
-                editor.putString("UserPin", userPin.text.toString())
-                editor.apply()
-                Toast.makeText(
-                    this@MainActivity,
-                    "Credentials Saved Successfully.",
-                    Toast.LENGTH_SHORT
-                ).show()
-                saveBtn.visibility = View.GONE
+            if(!uidBtnAction) {
+                if (userId.text.toString().isNotEmpty() && userPin.text.toString().isNotEmpty()) {
+                    setMyUser(userId.text.toString(), userPin.text.toString())
+                    val editor = sharedPreferences.edit()
+                    editor.putString("UserID", userId.text.toString())
+                    editor.putString("UserPin", userPin.text.toString())
+                    editor.apply()
+                    Toast.makeText(
+                        this@MainActivity,
+                        "Credentials Saved Successfully.",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    uidBtnAction = true
+                    saveBtn.text = getString(R.string.edit)
+                    userId.isClickable = false
+                    userPin.isClickable = false
+                    userId.isFocusable = false
+                    userPin.isFocusable = false
+                } else {
+                    Toast.makeText(this, "Please fill all the fields.", Toast.LENGTH_SHORT).show()
+                }
             } else {
-                Toast.makeText(this, "Please fill all the fields.", Toast.LENGTH_SHORT).show()
+                uidBtnAction = false
+                saveBtn.text = getString(R.string.save)
+                userId.text.clear()
+                userPin.text.clear()
+                userId.isFocusableInTouchMode = true
+                userPin.isFocusableInTouchMode = true
             }
         }
 
         registerReceiver(IncomingSMS(), IntentFilter("broadCastName"))
-
-        val message = intent.getStringExtra("SMS_IC")
-        messageTV.text = message
 
         w = window
         cResolver = contentResolver

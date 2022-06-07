@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">RESEC</string>
+    <string name="enter_userid">Enter UserID</string>
+    <string name="enter_userpin">Enter UserPin</string>
+    <string name="save">Save</string>
+    <string name="edit">Edit</string>
+    <string name="user_credentials">User-Credentials</string>
 </resources>
