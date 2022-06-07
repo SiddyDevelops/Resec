@@ -4,6 +4,7 @@ import android.Manifest
 import android.app.NotificationManager
 import android.app.admin.DevicePolicyManager
 import android.content.*
+import android.graphics.Color
 import android.media.AudioManager
 import android.os.Build
 import android.os.Bundle
@@ -11,6 +12,7 @@ import android.provider.Settings
 import android.text.InputType
 import android.text.method.PasswordTransformationMethod
 import android.util.Log
+import android.view.View
 import android.view.Window
 import android.widget.*
 import android.widget.SeekBar.OnSeekBarChangeListener
@@ -32,6 +34,7 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
     private lateinit var brightBtn: Button
     private lateinit var volumeSeekBar: SeekBar
     private lateinit var pin_visibility: ImageView
+    private lateinit var stateTV: TextView
 
     private var brightness: Int = 0
     private lateinit var cResolver: ContentResolver
@@ -55,10 +58,13 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
         brightBtn = findViewById(R.id.brightBtn)
         volumeSeekBar = findViewById(R.id.volumeSeekBar)
         pin_visibility = findViewById(R.id.pin_visibility)
+        stateTV = findViewById(R.id.stateTV)
 
         stateBtn.setOnClickListener {
             SetNotification(this, getString(R.string.resec_state_active))
-
+            stateTV.text = getString(R.string.resec_state_active)
+            stateTV.setTextColor(resources.getColor(R.color.green))
+            stateBtn.visibility = View.GONE
         }
 
         sharedPreferences = getSharedPreferences("USER_STORE", Context.MODE_PRIVATE)
