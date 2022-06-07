@@ -45,35 +45,73 @@
                         android:includeFontPadding="false"
                         android:text="@string/user_credentials"/>
 
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:background="@drawable/bg_et"
+                    android:layout_marginTop="8dp"
+                    android:gravity="start"
+                    android:orientation="horizontal">
+
                     <EditText
                         android:id="@+id/userId"
-                        android:layout_width="match_parent"
-                        android:layout_marginTop="5dp"
-                        android:layout_height="50dp"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="match_parent"
                         android:layout_gravity="center"
+                        android:background="@null"
                         android:fontFamily="@font/poppins_semi_bold"
                         android:includeFontPadding="false"
                         android:gravity="center"
                         android:textColor="@color/black_shade"
-                        android:background="@drawable/bg_et"
                         android:hint="@string/enter_userid"
                         android:inputType="text"
                         android:importantForAutofill="no" />
 
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginEnd="10dp"
+                        android:src="@drawable/ic_user"
+                        tools:ignore="ContentDescription" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:background="@drawable/bg_et"
+                    android:layout_marginTop="8dp"
+                    android:gravity="start"
+                    android:orientation="horizontal">
+
                     <EditText
                         android:id="@+id/userPin"
-                        android:layout_width="match_parent"
-                        android:layout_height="50dp"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="match_parent"
+                        android:background="@null"
                         android:fontFamily="@font/poppins_semi_bold"
                         android:includeFontPadding="false"
-                        android:background="@drawable/bg_et"
                         android:textColor="@color/black_shade"
                         android:layout_gravity="center"
                         android:gravity="center"
-                        android:layout_marginTop="10dp"
                         android:hint="@string/enter_userpin"
                         android:inputType="numberPassword"
                         android:importantForAutofill="no" />
+
+                    <ImageView
+                        android:id="@+id/pin_visibility"
+                        android:background="?attr/selectableItemBackground"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginEnd="10dp"
+                        android:src="@drawable/ic_visibility"
+                        tools:ignore="ContentDescription" />
+
+                </LinearLayout>
 
                     <Button
                         android:id="@+id/saveBtn"
