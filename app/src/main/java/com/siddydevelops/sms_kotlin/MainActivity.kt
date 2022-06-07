@@ -57,7 +57,8 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
         pin_visibility = findViewById(R.id.pin_visibility)
 
         stateBtn.setOnClickListener {
-            SetNotification(this, "Active")
+            SetNotification(this, getString(R.string.resec_state_active))
+
         }
 
         sharedPreferences = getSharedPreferences("USER_STORE", Context.MODE_PRIVATE)
