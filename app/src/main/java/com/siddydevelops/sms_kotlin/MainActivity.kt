@@ -2,20 +2,17 @@ package com.siddydevelops.sms_kotlin
 
 import android.Manifest
 import android.app.NotificationManager
-import android.app.PendingIntent.getActivity
 import android.app.admin.DevicePolicyManager
 import android.content.*
-import android.net.Uri
+import android.media.AudioManager
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
 import android.util.Log
 import android.view.View
 import android.view.Window
-import android.widget.Button
-import android.widget.EditText
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
+import android.widget.SeekBar.OnSeekBarChangeListener
 import androidx.appcompat.app.AppCompatActivity
 import com.siddydevelops.sms_kotlin.data.User
 import com.siddydevelops.sms_kotlin.notifications.SetNotification
@@ -23,7 +20,6 @@ import com.siddydevelops.sms_kotlin.utils.admin.DeviceAdmin
 import com.vmadalin.easypermissions.EasyPermissions
 import com.vmadalin.easypermissions.dialogs.SettingsDialog
 import java.lang.ref.WeakReference
-import kotlin.properties.Delegates
 
 
 class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
@@ -34,6 +30,7 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
     private lateinit var saveBtn: Button
     private lateinit var notifBtn: Button
     private lateinit var brightBtn: Button
+    private lateinit var volumeSeekBar: SeekBar
 
     private var brightness: Int = 0
     private lateinit var cResolver: ContentResolver
@@ -55,6 +52,7 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
         saveBtn = findViewById(R.id.saveBtn)
         notifBtn = findViewById(R.id.notifBtn)
         brightBtn = findViewById(R.id.brightBtn)
+        volumeSeekBar = findViewById(R.id.volumeSeekBar)
 
         notifBtn.setOnClickListener {
             SetNotification(this, "Active")
@@ -124,6 +122,16 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
             }
         }
 
+        val audioManager: AudioManager = getSystemService(Context.AUDIO_SERVICE) as AudioManager
+        volumeSeekBar.max = audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC)
+
+        volumeSeekBar.setOnSeekBarChangeListener(object : OnSeekBarChangeListener {
+            override fun onProgressChanged(seekBar: SeekBar?, newVolume: Int, b: Boolean) {
+                audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, newVolume, 0)
+            }
+            override fun onStartTrackingTouch(seekBar: SeekBar) {}
+            override fun onStopTrackingTouch(seekBar: SeekBar) {}
+        })
 
         brightBtn.setOnClickListener {
             setBrightness(50)
