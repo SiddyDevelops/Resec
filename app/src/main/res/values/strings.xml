@@ -10,4 +10,8 @@
     <string name="resec_state_inactive">Resec is Inactive</string>
     <string name="resec_des">Resec is an offline service assistant which helps to operate services remotely through SMS. You can access contacts, get device location, change sound profile and much more through some SMS.</string>
     <string name="status">Status</string>
+    <string name="sound">Sound</string>
+    <string name="normal">NORMAL</string>
+    <string name="vibrate">VIBRATE</string>
+    <string name="silent">SILENT</string>
 </resources>

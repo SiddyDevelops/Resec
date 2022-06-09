@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="5dp"
+    android:elevation="5dp"
+    android:padding="10dp"
+    app:cardBackgroundColor="@color/white_shade"
+    app:cardCornerRadius="10dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:fontFamily="@font/poppins_semi_bold"
+            android:includeFontPadding="false"
+            android:text="@string/sound"
+            android:textColor="@color/black_shade"
+            android:textSize="18sp" />
+
+        <RadioGroup
+            style="@style/Widget.AppCompat.CompoundButton.RadioButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/sound_normal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableTop="@drawable/ic_sound_normal"
+                android:padding="5dp"
+                android:fontFamily="@font/poppins_medium"
+                android:includeFontPadding="false"
+                android:textColor="@color/black_shade"
+                android:text="@string/normal" />
+
+            <RadioButton
+                android:id="@+id/sound_vibrate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableTop="@drawable/ic_sound_vibrate"
+                android:padding="5dp"
+                android:fontFamily="@font/poppins_medium"
+                android:includeFontPadding="false"
+                android:textColor="@color/black_shade"
+                android:text="@string/vibrate" />
+
+            <RadioButton
+                android:id="@+id/sound_silent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableTop="@drawable/ic_sound_mute"
+                android:padding="5dp"
+                android:fontFamily="@font/poppins_medium"
+                android:includeFontPadding="false"
+                android:textColor="@color/black_shade"
+                android:text="@string/silent" />
+
+        </RadioGroup>
+
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>
