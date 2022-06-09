@@ -45,7 +45,7 @@ dependencies {
     implementation 'com.vmadalin:easypermissions-ktx:1.0.0'
 
     //Preference DataStore
-    implementation "androidx.datastore:datastore-preferences:1.0.0"
+    implementation 'androidx.datastore:datastore-preferences:1.0.0'
 
     //Coroutines
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.1"
