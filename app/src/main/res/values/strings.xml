@@ -22,4 +22,5 @@
     <string name="save_settings">Save Settings</string>
     <string name="select_time">Start Time</string>
     <string name="add_pref">Add Pref</string>
+    <string name="end_time">End Time</string>
 </resources>

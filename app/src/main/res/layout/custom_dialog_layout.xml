@@ -161,9 +161,9 @@
             android:orientation="horizontal">
 
             <Button
-                android:id="@+id/timePickerBtn"
+                android:id="@+id/startTimeBtn"
                 android:layout_width="wrap_content"
-                android:drawableLeft="@drawable/ic_time"
+                android:drawableLeft="@drawable/ic_timelapse"
                 android:layout_marginStart="10dp"
                 android:layout_marginEnd="10dp"
                 android:layout_height="wrap_content"
@@ -172,17 +172,28 @@
                 android:text="@string/select_time" />
 
             <Button
-                android:id="@+id/saveSettingsBtn"
+                android:id="@+id/endTimeBtn"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:drawableLeft="@drawable/ic_add"
+                android:drawableLeft="@drawable/ic_time"
                 android:layout_marginStart="10dp"
                 android:layout_marginEnd="10dp"
+                android:layout_height="wrap_content"
                 android:textSize="12sp"
                 android:layout_gravity="center"
-                android:text="@string/add_pref" />
+                android:text="@string/end_time" />
 
         </LinearLayout>
+
+        <Button
+            android:id="@+id/saveSettingsBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableLeft="@drawable/ic_add"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:textSize="12sp"
+            android:layout_gravity="center"
+            android:text="@string/add_pref" />
 
     </LinearLayout>
 
