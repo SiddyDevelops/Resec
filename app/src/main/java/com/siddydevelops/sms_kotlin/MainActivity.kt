@@ -2,6 +2,7 @@ package com.siddydevelops.sms_kotlin
 
 import android.Manifest
 import android.app.NotificationManager
+import android.app.Service
 import android.app.admin.DevicePolicyManager
 import android.content.*
 import android.media.AudioManager
@@ -20,6 +21,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.siddydevelops.sms_kotlin.data.User
 import com.siddydevelops.sms_kotlin.notifications.SetNotification
+import com.siddydevelops.sms_kotlin.utils.actions.SendSMS
 import com.siddydevelops.sms_kotlin.utils.admin.DeviceAdmin
 import com.vmadalin.easypermissions.EasyPermissions
 import com.vmadalin.easypermissions.dialogs.SettingsDialog
@@ -67,6 +69,20 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
             val builder: AlertDialog.Builder = AlertDialog.Builder(this)
             val viewGroup = findViewById<ViewGroup>(android.R.id.content)
             val dialogView: View = LayoutInflater.from(this).inflate(R.layout.custom_dialog_layout, viewGroup, false)
+
+            val soundNormal = dialogView.findViewById<RadioButton>(R.id.sound_normal)
+            val soundVibrate = dialogView.findViewById<RadioButton>(R.id.sound_vibrate)
+            val soundSilent = dialogView.findViewById<RadioButton>(R.id.sound_silent)
+
+            // Initializing view properties
+            val audioManager: AudioManager = getSystemService(Service.AUDIO_SERVICE) as AudioManager
+            when (audioManager.ringerMode) {
+                AudioManager.RINGER_MODE_SILENT -> soundSilent.isChecked = true
+                AudioManager.RINGER_MODE_VIBRATE -> soundVibrate.isChecked = true
+                AudioManager.RINGER_MODE_NORMAL -> soundNormal.isChecked = true
+            }
+
+
             builder.setView(dialogView)
             val alertDialog: AlertDialog = builder.create()
             alertDialog.show()
