@@ -22,7 +22,6 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.slider.Slider
 import com.siddydevelops.sms_kotlin.data.User
 import com.siddydevelops.sms_kotlin.notifications.SetNotification
-import com.siddydevelops.sms_kotlin.utils.actions.SendSMS
 import com.siddydevelops.sms_kotlin.utils.admin.DeviceAdmin
 import com.vmadalin.easypermissions.EasyPermissions
 import com.vmadalin.easypermissions.dialogs.SettingsDialog
@@ -38,7 +37,7 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
     private lateinit var brightBtn: Button
     private lateinit var addPrefSetting: Button
     private lateinit var volumeSeekBar: SeekBar
-    private lateinit var pin_visibility: ImageView
+    private lateinit var pinVisibility: ImageView
     private lateinit var stateTV: TextView
 
     private var brightness: Int = 0
@@ -62,7 +61,7 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
         stateBtn = findViewById(R.id.stateBtn)
         brightBtn = findViewById(R.id.brightBtn)
         volumeSeekBar = findViewById(R.id.volumeSeekBar)
-        pin_visibility = findViewById(R.id.pin_visibility)
+        pinVisibility = findViewById(R.id.pin_visibility)
         stateTV = findViewById(R.id.stateTV)
         addPrefSetting = findViewById(R.id.addPrefSetting)
 
@@ -165,14 +164,14 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
 
         registerReceiver(IncomingSMS(), IntentFilter("broadCastName"))
 
-        pin_visibility.setOnClickListener {
-            if(pin_visibility.tag == "visi") {
-                pin_visibility.setImageDrawable(getDrawable(R.drawable.ic_visibility_off))
-                pin_visibility.tag = "invisi"
+        pinVisibility.setOnClickListener {
+            if(pinVisibility.tag == "visi") {
+                pinVisibility.setImageDrawable(getDrawable(R.drawable.ic_visibility_off))
+                pinVisibility.tag = "invisi"
                 userPin.transformationMethod = null
             } else {
-                pin_visibility.setImageDrawable(getDrawable(R.drawable.ic_visibility))
-                pin_visibility.tag = "visi"
+                pinVisibility.setImageDrawable(getDrawable(R.drawable.ic_visibility))
+                pinVisibility.tag = "visi"
                 userPin.transformationMethod = PasswordTransformationMethod()
             }
         }
