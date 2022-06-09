@@ -4,18 +4,19 @@ import android.Manifest
 import android.app.NotificationManager
 import android.app.admin.DevicePolicyManager
 import android.content.*
-import android.graphics.Color
 import android.media.AudioManager
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
-import android.text.InputType
 import android.text.method.PasswordTransformationMethod
 import android.util.Log
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.view.Window
 import android.widget.*
 import android.widget.SeekBar.OnSeekBarChangeListener
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.siddydevelops.sms_kotlin.data.User
 import com.siddydevelops.sms_kotlin.notifications.SetNotification
@@ -32,6 +33,7 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
     private lateinit var saveBtn: Button
     private lateinit var stateBtn: Button
     private lateinit var brightBtn: Button
+    private lateinit var addPrefSetting: Button
     private lateinit var volumeSeekBar: SeekBar
     private lateinit var pin_visibility: ImageView
     private lateinit var stateTV: TextView
@@ -59,6 +61,16 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
         volumeSeekBar = findViewById(R.id.volumeSeekBar)
         pin_visibility = findViewById(R.id.pin_visibility)
         stateTV = findViewById(R.id.stateTV)
+        addPrefSetting = findViewById(R.id.addPrefSetting)
+
+        addPrefSetting.setOnClickListener {
+            val builder: AlertDialog.Builder = AlertDialog.Builder(this)
+            val viewGroup = findViewById<ViewGroup>(android.R.id.content)
+            val dialogView: View = LayoutInflater.from(this).inflate(R.layout.custom_dialog_layout, viewGroup, false)
+            builder.setView(dialogView)
+            val alertDialog: AlertDialog = builder.create()
+            alertDialog.show()
+        }
 
         stateBtn.setOnClickListener {
             SetNotification(this, getString(R.string.resec_state_active))

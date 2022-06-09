@@ -182,6 +182,17 @@
             </androidx.cardview.widget.CardView>
 
             <Button
+                android:id="@+id/addPrefSetting"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/preference_settings"
+                android:drawableLeft="@drawable/ic_add"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/cardView" />
+
+            <Button
                 android:id="@+id/brightBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -189,7 +200,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/cardView" />
+                app:layout_constraintTop_toBottomOf="@+id/addPrefSetting" />
 
             <SeekBar
                 android:id="@+id/volumeSeekBar"
