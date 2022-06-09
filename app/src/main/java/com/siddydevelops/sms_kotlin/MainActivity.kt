@@ -19,6 +19,7 @@ import android.widget.*
 import android.widget.SeekBar.OnSeekBarChangeListener
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.material.slider.Slider
 import com.siddydevelops.sms_kotlin.data.User
 import com.siddydevelops.sms_kotlin.notifications.SetNotification
 import com.siddydevelops.sms_kotlin.utils.actions.SendSMS
@@ -73,6 +74,10 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
             val soundNormal = dialogView.findViewById<RadioButton>(R.id.sound_normal)
             val soundVibrate = dialogView.findViewById<RadioButton>(R.id.sound_vibrate)
             val soundSilent = dialogView.findViewById<RadioButton>(R.id.sound_silent)
+            val ringSlider = dialogView.findViewById<Slider>(R.id.ringSlider)
+            val mediaSlider = dialogView.findViewById<Slider>(R.id.mediaSlider)
+            val notificationSlider = dialogView.findViewById<Slider>(R.id.notificationSlider)
+            val brightnessSlider = dialogView.findViewById<Slider>(R.id.brightnessSlider)
 
             // Initializing view properties
             val audioManager: AudioManager = getSystemService(Service.AUDIO_SERVICE) as AudioManager
@@ -81,7 +86,18 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
                 AudioManager.RINGER_MODE_VIBRATE -> soundVibrate.isChecked = true
                 AudioManager.RINGER_MODE_NORMAL -> soundNormal.isChecked = true
             }
+            ringSlider.valueTo = audioManager.getStreamMaxVolume(AudioManager.STREAM_RING).toFloat()
+            ringSlider.value = audioManager.getStreamVolume(AudioManager.STREAM_RING).toFloat()
 
+            mediaSlider.valueTo = audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC).toFloat()
+            mediaSlider.value = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC).toFloat()
+
+            notificationSlider.valueTo = audioManager.getStreamMaxVolume(AudioManager.STREAM_NOTIFICATION).toFloat()
+            notificationSlider.value = audioManager.getStreamVolume(AudioManager.STREAM_NOTIFICATION).toFloat()
+
+            brightnessSlider.value = Settings.System.getInt(
+                cResolver, Settings.System.SCREEN_BRIGHTNESS, 0
+            ).toFloat()
 
             builder.setView(dialogView)
             val alertDialog: AlertDialog = builder.create()
