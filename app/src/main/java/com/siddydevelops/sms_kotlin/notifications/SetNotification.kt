@@ -36,7 +36,7 @@ class SetNotification(context: Context,text: String) {
             channelId
         ) // Create notification with channel Id
             .setContent(remoteView)
-            .setSmallIcon(R.drawable.ic_baseline_notifications_24)
+            .setSmallIcon(R.drawable.ic_bird)
             .setContentTitle("My notification")
             .setContentText("Hello World!")
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
