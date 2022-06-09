@@ -14,4 +14,11 @@
     <string name="normal">NORMAL</string>
     <string name="vibrate">VIBRATE</string>
     <string name="silent">SILENT</string>
+    <string name="ringtone">Ringtone</string>
+    <string name="media">Media</string>
+    <string name="notifications">Notifications</string>
+    <string name="brightness">Brightness</string>
+    <string name="preference_settings">Preference Settings</string>
+    <string name="save_settings">Save Settings</string>
+    <string name="select_time">Start Time</string>
 </resources>

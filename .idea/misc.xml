@@ -4,6 +4,9 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="app/src/main/res/drawable/bg_et.xml" value="0.1985" />
+        <entry key="app/src/main/res/drawable/ic_sound_mute.xml" value="0.285" />
+        <entry key="app/src/main/res/drawable/ic_sound_normal.xml" value="0.285" />
+        <entry key="app/src/main/res/drawable/ic_sound_vibrate.xml" value="0.285" />
         <entry key="app/src/main/res/drawable/ic_user.xml" value="0.1985" />
         <entry key="app/src/main/res/drawable/ic_visibility.xml" value="0.1985" />
         <entry key="app/src/main/res/drawable/ic_visibility_off.xml" value="0.1985" />
