@@ -42,7 +42,7 @@ class LocationServices : Service() {
         val notification = NotificationCompat.Builder(this, CHANNEL_ID)
             .setContentTitle("Foreground Service Kotlin Example")
             .setContentText(input)
-            .setSmallIcon(R.drawable.ic_baseline_notifications_24)
+            .setSmallIcon(R.drawable.ic_bird)
             .setContentIntent(pendingIntent)
             .build()
         startForeground(1, notification)
