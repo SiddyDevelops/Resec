@@ -22,11 +22,18 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.slider.Slider
 import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat
+import com.siddydevelops.sms_kotlin.data.PreferenceSetting
+import com.siddydevelops.sms_kotlin.data.PreferenceSettingStore
 import com.siddydevelops.sms_kotlin.data.User
 import com.siddydevelops.sms_kotlin.notifications.SetNotification
 import com.siddydevelops.sms_kotlin.utils.admin.DeviceAdmin
 import com.vmadalin.easypermissions.EasyPermissions
 import com.vmadalin.easypermissions.dialogs.SettingsDialog
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.lang.ref.WeakReference
 
 class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
@@ -40,6 +47,7 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
     private lateinit var volumeSeekBar: SeekBar
     private lateinit var pinVisibility: ImageView
     private lateinit var stateTV: TextView
+    private lateinit var log: Button
 
     private lateinit var dialogView: View
     private lateinit var startTimeBtn: View
@@ -56,6 +64,7 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
     private var endTime: String? = null
 
     private lateinit var sharedPreferences: SharedPreferences
+    private lateinit var dataStore: PreferenceSettingStore
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -72,6 +81,7 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
         pinVisibility = findViewById(R.id.pin_visibility)
         stateTV = findViewById(R.id.stateTV)
         addPrefSetting = findViewById(R.id.addPrefSetting)
+        log = findViewById(R.id.log)
 
         addPrefSetting.setOnClickListener {
             val builder: AlertDialog.Builder = AlertDialog.Builder(this)
@@ -146,13 +156,21 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
                         Toast.makeText(this, "Please select end time.", Toast.LENGTH_SHORT).show()
                     }
                     else -> {
-                        Log.i("RingSlider", ringSlider.value.toString())
-                        Log.i("MediaSlider", mediaSlider.value.toString())
-                        Log.i("NotificationSlider", notificationSlider.value.toString())
-                        Log.i("BrightnessSlider", brightnessSlider.value.toString())
-                        Log.i("RadioButton", checkRadioButton?.text.toString())
-                        Log.i("StartTime", startTime.toString())
-                        Log.i("EndTime", endTime.toString())
+                        dataStore = PreferenceSettingStore(this,"STORE01")
+                        GlobalScope.launch(Dispatchers.IO) {
+                            dataStore.storeDate(PreferenceSetting(
+                                checkRadioButton?.text.toString(),
+                                ringSlider.value.toString(),
+                                mediaSlider.value.toString(),
+                                notificationSlider.value.toString(),
+                                brightnessSlider.value.toString(),
+                                startTime.toString(),
+                                endTime.toString()
+                            ))
+                            withContext(Dispatchers.Main) {
+                                Toast.makeText(applicationContext,"Settings saved successfully!",Toast.LENGTH_SHORT).show()
+                            }
+                        }
                     }
                 }
             }
@@ -160,6 +178,17 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
             builder.setView(dialogView)
             val alertDialog: AlertDialog = builder.create()
             alertDialog.show()
+        }
+
+        log.setOnClickListener {
+            dataStore = PreferenceSettingStore(this,"STORE01")
+            GlobalScope.launch(Dispatchers.IO) {
+                dataStore.getData().catch { e->
+                    e.printStackTrace()
+                }.collect { prefSetting->
+                    Log.i("STORE_DATA",prefSetting.toString())
+                }
+            }
         }
 
         stateBtn.setOnClickListener {
