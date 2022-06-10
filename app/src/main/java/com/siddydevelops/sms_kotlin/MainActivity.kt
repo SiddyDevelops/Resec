@@ -75,7 +75,7 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
             val viewGroup = findViewById<ViewGroup>(android.R.id.content)
             val dialogView: View =
                 LayoutInflater.from(this).inflate(R.layout.custom_dialog_layout, viewGroup, false)
-
+            val radioGroup = dialogView.findViewById<RadioGroup>(R.id.radioGroup)
             val soundNormal = dialogView.findViewById<RadioButton>(R.id.sound_normal)
             val soundVibrate = dialogView.findViewById<RadioButton>(R.id.sound_vibrate)
             val soundSilent = dialogView.findViewById<RadioButton>(R.id.sound_silent)
@@ -87,12 +87,25 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
             val endTimeBtn = dialogView.findViewById<Button>(R.id.endTimeBtn)
             val saveSettingsBtn = dialogView.findViewById<Button>(R.id.saveSettingsBtn)
 
+            var checkRadioButton: RadioButton? = null
+
             // Initializing view properties
+            startTime = null
+            endTime = null
             val audioManager: AudioManager = getSystemService(Service.AUDIO_SERVICE) as AudioManager
             when (audioManager.ringerMode) {
-                AudioManager.RINGER_MODE_SILENT -> soundSilent.isChecked = true
-                AudioManager.RINGER_MODE_VIBRATE -> soundVibrate.isChecked = true
-                AudioManager.RINGER_MODE_NORMAL -> soundNormal.isChecked = true
+                AudioManager.RINGER_MODE_SILENT -> {
+                    soundSilent.isChecked = true
+                    checkRadioButton = soundSilent
+                }
+                AudioManager.RINGER_MODE_VIBRATE -> {
+                    soundVibrate.isChecked = true
+                    checkRadioButton = soundVibrate
+                }
+                AudioManager.RINGER_MODE_NORMAL -> {
+                    soundNormal.isChecked = true
+                    checkRadioButton = soundNormal
+                }
             }
             ringSlider.valueTo = audioManager.getStreamMaxVolume(AudioManager.STREAM_RING).toFloat()
             ringSlider.value = audioManager.getStreamVolume(AudioManager.STREAM_RING).toFloat()
@@ -110,6 +123,10 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
                 cResolver, Settings.System.SCREEN_BRIGHTNESS, 0
             ).toFloat()
 
+            radioGroup.setOnCheckedChangeListener { p0, id ->
+                checkRadioButton = dialogView.findViewById(id)
+            }
+
             startTimeBtn.setOnClickListener {
                 setPickerTime("Select Start Time:")
             }
@@ -119,10 +136,23 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
             }
 
             saveSettingsBtn.setOnClickListener {
-                Log.i("RingSlider",ringSlider.value.toString())
-                Log.i("MediaSlider",mediaSlider.value.toString())
-                Log.i("NotificationSlider",notificationSlider.value.toString())
-                Log.i("BrightnessSlider",brightnessSlider.value.toString())
+                when {
+                    startTime == null -> {
+                        Toast.makeText(this,"Please select start time.",Toast.LENGTH_SHORT).show()
+                    }
+                    endTime == null -> {
+                        Toast.makeText(this,"Please select end time.",Toast.LENGTH_SHORT).show()
+                    }
+                    else -> {
+                        Log.i("RingSlider",ringSlider.value.toString())
+                        Log.i("MediaSlider",mediaSlider.value.toString())
+                        Log.i("NotificationSlider",notificationSlider.value.toString())
+                        Log.i("BrightnessSlider",brightnessSlider.value.toString())
+                        Log.i("RadioButton",checkRadioButton?.text.toString())
+                        Log.i("StartTime",startTime.toString())
+                        Log.i("EndTime",endTime.toString())
+                    }
+                }
             }
 
             builder.setView(dialogView)
