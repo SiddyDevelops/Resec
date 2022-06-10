@@ -13,5 +13,5 @@ data class SettingsItem(
     val preferenceSetting: PreferenceSetting
 ) {
     @PrimaryKey(autoGenerate = true)
-    var id: Int? = null
+    var id: Int = 0
 }

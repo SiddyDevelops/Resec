@@ -8,7 +8,8 @@ import com.siddydevelops.sms_kotlin.data.db.entity.SettingsItem
 
 @Database(
     entities = [SettingsItem::class],
-    version = 1
+    version = 1,
+    exportSchema = false
 )
 abstract class SettingsDatabase : RoomDatabase() {
 
@@ -16,17 +17,18 @@ abstract class SettingsDatabase : RoomDatabase() {
 
     companion object {
         @Volatile
-        private var instance: SettingsDatabase? = null
-        private val LOCK = Any()
+        private var INSTANCE: SettingsDatabase? = null
 
-        operator fun invoke(context: Context) = instance ?: synchronized(LOCK) {
-            instance ?: createDatabase(context).also {
-                instance = it
+        fun getDatabase(context: Context): SettingsDatabase {
+            return INSTANCE?: synchronized(this) {
+                val instance = Room.databaseBuilder(
+                    context.applicationContext,
+                    SettingsDatabase::class.java,
+                    "settings_database"
+                ).build()
+                INSTANCE = instance
+                instance
             }
         }
-        private fun createDatabase(context: Context) =
-            Room.databaseBuilder(context.applicationContext,
-                SettingsDatabase::class.java,"SettingsDB.db").build()
     }
-
 }
