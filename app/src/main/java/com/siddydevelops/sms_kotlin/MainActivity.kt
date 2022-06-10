@@ -42,6 +42,10 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
     private lateinit var pinVisibility: ImageView
     private lateinit var stateTV: TextView
 
+    private lateinit var dialogView: View
+    private lateinit var startTimeBtn: View
+    private lateinit var endTimeBtn: View
+
     private var brightness: Int = 0
     private lateinit var cResolver: ContentResolver
     private lateinit var w: Window
@@ -73,8 +77,7 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
         addPrefSetting.setOnClickListener {
             val builder: AlertDialog.Builder = AlertDialog.Builder(this)
             val viewGroup = findViewById<ViewGroup>(android.R.id.content)
-            val dialogView: View =
-                LayoutInflater.from(this).inflate(R.layout.custom_dialog_layout, viewGroup, false)
+            dialogView = LayoutInflater.from(this).inflate(R.layout.custom_dialog_layout, viewGroup, false)
             val radioGroup = dialogView.findViewById<RadioGroup>(R.id.radioGroup)
             val soundNormal = dialogView.findViewById<RadioButton>(R.id.sound_normal)
             val soundVibrate = dialogView.findViewById<RadioButton>(R.id.sound_vibrate)
@@ -83,8 +86,8 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
             val mediaSlider = dialogView.findViewById<Slider>(R.id.mediaSlider)
             val notificationSlider = dialogView.findViewById<Slider>(R.id.notificationSlider)
             val brightnessSlider = dialogView.findViewById<Slider>(R.id.brightnessSlider)
-            val startTimeBtn = dialogView.findViewById<Button>(R.id.startTimeBtn)
-            val endTimeBtn = dialogView.findViewById<Button>(R.id.endTimeBtn)
+            startTimeBtn = dialogView.findViewById<Button>(R.id.startTimeBtn)
+            endTimeBtn = dialogView.findViewById<Button>(R.id.endTimeBtn)
             val saveSettingsBtn = dialogView.findViewById<Button>(R.id.saveSettingsBtn)
 
             var checkRadioButton: RadioButton? = null
@@ -114,16 +117,16 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
                 audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC).toFloat()
             mediaSlider.value = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC).toFloat()
 
-            notificationSlider.valueTo =
+            notificationSlider?.valueTo =
                 audioManager.getStreamMaxVolume(AudioManager.STREAM_NOTIFICATION).toFloat()
-            notificationSlider.value =
+            notificationSlider?.value =
                 audioManager.getStreamVolume(AudioManager.STREAM_NOTIFICATION).toFloat()
 
-            brightnessSlider.value = Settings.System.getInt(
+            brightnessSlider?.value = Settings.System.getInt(
                 cResolver, Settings.System.SCREEN_BRIGHTNESS, 0
             ).toFloat()
 
-            radioGroup.setOnCheckedChangeListener { p0, id ->
+            radioGroup?.setOnCheckedChangeListener { p0, id ->
                 checkRadioButton = dialogView.findViewById(id)
             }
 
@@ -135,22 +138,22 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
                 setPickerTime("Select End Time:")
             }
 
-            saveSettingsBtn.setOnClickListener {
+            saveSettingsBtn?.setOnClickListener {
                 when {
                     startTime == null -> {
-                        Toast.makeText(this,"Please select start time.",Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this, "Please select start time.", Toast.LENGTH_SHORT).show()
                     }
                     endTime == null -> {
-                        Toast.makeText(this,"Please select end time.",Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this, "Please select end time.", Toast.LENGTH_SHORT).show()
                     }
                     else -> {
-                        Log.i("RingSlider",ringSlider.value.toString())
-                        Log.i("MediaSlider",mediaSlider.value.toString())
-                        Log.i("NotificationSlider",notificationSlider.value.toString())
-                        Log.i("BrightnessSlider",brightnessSlider.value.toString())
-                        Log.i("RadioButton",checkRadioButton?.text.toString())
-                        Log.i("StartTime",startTime.toString())
-                        Log.i("EndTime",endTime.toString())
+                        Log.i("RingSlider", ringSlider.value.toString())
+                        Log.i("MediaSlider", mediaSlider.value.toString())
+                        Log.i("NotificationSlider", notificationSlider.value.toString())
+                        Log.i("BrightnessSlider", brightnessSlider.value.toString())
+                        Log.i("RadioButton", checkRadioButton?.text.toString())
+                        Log.i("StartTime", startTime.toString())
+                        Log.i("EndTime", endTime.toString())
                     }
                 }
             }
@@ -278,6 +281,9 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
     }
 
     private fun setPickerTime(titleText: String) {
+        val startTimeTV = dialogView.findViewById<TextView>(R.id.startTimeTV)
+        val endTimeTV = dialogView.findViewById<TextView>(R.id.endTimeTV)
+
         val picker =
             MaterialTimePicker.Builder()
                 .setTimeFormat(TimeFormat.CLOCK_12H)
@@ -319,10 +325,17 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
                     }
                 }
             }
-            if(titleText == "Select Start Time:")
+            if (titleText == "Select Start Time:") {
                 startTime = formattedTime
-            else if(titleText == "Select End Time:")
+                startTimeTV.visibility = View.VISIBLE
+                startTimeTV.text = startTime.toString()
+                startTimeBtn.visibility = View.INVISIBLE
+            } else if (titleText == "Select End Time:") {
                 endTime = formattedTime
+                endTimeTV.visibility = View.VISIBLE
+                endTimeTV.text = endTime.toString()
+                endTimeBtn.visibility = View.INVISIBLE
+            }
         }
     }
 
