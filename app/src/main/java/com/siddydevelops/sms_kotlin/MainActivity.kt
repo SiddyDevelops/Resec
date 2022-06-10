@@ -20,6 +20,8 @@ import android.widget.SeekBar.OnSeekBarChangeListener
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.slider.Slider
+import com.google.android.material.timepicker.MaterialTimePicker
+import com.google.android.material.timepicker.TimeFormat
 import com.siddydevelops.sms_kotlin.data.User
 import com.siddydevelops.sms_kotlin.notifications.SetNotification
 import com.siddydevelops.sms_kotlin.utils.admin.DeviceAdmin
@@ -47,6 +49,9 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
     private var brightPermission = false
     private var uidBtnAction = false
 
+    private var startTime: String? = null
+    private var endTime: String? = null
+
     private lateinit var sharedPreferences: SharedPreferences
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -68,7 +73,8 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
         addPrefSetting.setOnClickListener {
             val builder: AlertDialog.Builder = AlertDialog.Builder(this)
             val viewGroup = findViewById<ViewGroup>(android.R.id.content)
-            val dialogView: View = LayoutInflater.from(this).inflate(R.layout.custom_dialog_layout, viewGroup, false)
+            val dialogView: View =
+                LayoutInflater.from(this).inflate(R.layout.custom_dialog_layout, viewGroup, false)
 
             val soundNormal = dialogView.findViewById<RadioButton>(R.id.sound_normal)
             val soundVibrate = dialogView.findViewById<RadioButton>(R.id.sound_vibrate)
@@ -77,6 +83,9 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
             val mediaSlider = dialogView.findViewById<Slider>(R.id.mediaSlider)
             val notificationSlider = dialogView.findViewById<Slider>(R.id.notificationSlider)
             val brightnessSlider = dialogView.findViewById<Slider>(R.id.brightnessSlider)
+            val startTimeBtn = dialogView.findViewById<Button>(R.id.startTimeBtn)
+            val endTimeBtn = dialogView.findViewById<Button>(R.id.endTimeBtn)
+            val saveSettingsBtn = dialogView.findViewById<Button>(R.id.saveSettingsBtn)
 
             // Initializing view properties
             val audioManager: AudioManager = getSystemService(Service.AUDIO_SERVICE) as AudioManager
@@ -88,15 +97,33 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
             ringSlider.valueTo = audioManager.getStreamMaxVolume(AudioManager.STREAM_RING).toFloat()
             ringSlider.value = audioManager.getStreamVolume(AudioManager.STREAM_RING).toFloat()
 
-            mediaSlider.valueTo = audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC).toFloat()
+            mediaSlider.valueTo =
+                audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC).toFloat()
             mediaSlider.value = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC).toFloat()
 
-            notificationSlider.valueTo = audioManager.getStreamMaxVolume(AudioManager.STREAM_NOTIFICATION).toFloat()
-            notificationSlider.value = audioManager.getStreamVolume(AudioManager.STREAM_NOTIFICATION).toFloat()
+            notificationSlider.valueTo =
+                audioManager.getStreamMaxVolume(AudioManager.STREAM_NOTIFICATION).toFloat()
+            notificationSlider.value =
+                audioManager.getStreamVolume(AudioManager.STREAM_NOTIFICATION).toFloat()
 
             brightnessSlider.value = Settings.System.getInt(
                 cResolver, Settings.System.SCREEN_BRIGHTNESS, 0
             ).toFloat()
+
+            startTimeBtn.setOnClickListener {
+                setPickerTime("Select Start Time:")
+            }
+
+            endTimeBtn.setOnClickListener {
+                setPickerTime("Select End Time:")
+            }
+
+            saveSettingsBtn.setOnClickListener {
+                Log.i("RingSlider",ringSlider.value.toString())
+                Log.i("MediaSlider",mediaSlider.value.toString())
+                Log.i("NotificationSlider",notificationSlider.value.toString())
+                Log.i("BrightnessSlider",brightnessSlider.value.toString())
+            }
 
             builder.setView(dialogView)
             val alertDialog: AlertDialog = builder.create()
@@ -131,7 +158,7 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
         }
 
         saveBtn.setOnClickListener {
-            if(!uidBtnAction) {
+            if (!uidBtnAction) {
                 if (userId.text.toString().isNotEmpty() && userPin.text.toString().isNotEmpty()) {
                     setMyUser(userId.text.toString(), userPin.text.toString())
                     val editor = sharedPreferences.edit()
@@ -165,7 +192,7 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
         registerReceiver(IncomingSMS(), IntentFilter("broadCastName"))
 
         pinVisibility.setOnClickListener {
-            if(pinVisibility.tag == "visi") {
+            if (pinVisibility.tag == "visi") {
                 pinVisibility.setImageDrawable(getDrawable(R.drawable.ic_visibility_off))
                 pinVisibility.tag = "invisi"
                 userPin.transformationMethod = null
@@ -209,6 +236,7 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
             override fun onProgressChanged(seekBar: SeekBar?, newVolume: Int, b: Boolean) {
                 audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, newVolume, 0)
             }
+
             override fun onStartTrackingTouch(seekBar: SeekBar) {}
             override fun onStopTrackingTouch(seekBar: SeekBar) {}
         })
@@ -217,6 +245,55 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
             setBrightness(50)
         }
 
+    }
+
+    private fun setPickerTime(titleText: String) {
+        val picker =
+            MaterialTimePicker.Builder()
+                .setTimeFormat(TimeFormat.CLOCK_12H)
+                .setHour(12)
+                .setMinute(10)
+                .setTitleText(titleText)
+                .build()
+        picker.show(supportFragmentManager, "TIME_PICKER")
+        picker.addOnPositiveButtonClickListener {
+            val pickedHour = picker.hour
+            val pickedMinute = picker.minute
+            val formattedTime = when {
+                pickedHour > 12 -> {
+                    if (pickedMinute < 10) {
+                        "${picker.hour - 12}:0${picker.minute} PM"
+                    } else {
+                        "${picker.hour - 12}:${picker.minute} PM"
+                    }
+                }
+                pickedHour == 12 -> {
+                    if (pickedMinute < 10) {
+                        "${picker.hour}:0${picker.minute} PM"
+                    } else {
+                        "${picker.hour}:${picker.minute} PM"
+                    }
+                }
+                pickedHour == 0 -> {
+                    if (pickedMinute < 10) {
+                        "${picker.hour + 12}:0${picker.minute} AM"
+                    } else {
+                        "${picker.hour + 12}:${picker.minute} AM"
+                    }
+                }
+                else -> {
+                    if (pickedMinute < 10) {
+                        "${picker.hour}:0${picker.minute} AM"
+                    } else {
+                        "${picker.hour}:${picker.minute} AM"
+                    }
+                }
+            }
+            if(titleText == "Select Start Time:")
+                startTime = formattedTime
+            else if(titleText == "Select End Time:")
+                endTime = formattedTime
+        }
     }
 
     private fun setBrightness(brightness: Int) {
