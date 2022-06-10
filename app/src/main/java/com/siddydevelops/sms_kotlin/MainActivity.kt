@@ -19,21 +19,18 @@ import android.widget.*
 import android.widget.SeekBar.OnSeekBarChangeListener
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.slider.Slider
 import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat
-import com.siddydevelops.sms_kotlin.data.PreferenceSetting
-import com.siddydevelops.sms_kotlin.data.PreferenceSettingStore
 import com.siddydevelops.sms_kotlin.data.User
+import com.siddydevelops.sms_kotlin.data.db.entity.SettingsItem
 import com.siddydevelops.sms_kotlin.notifications.SetNotification
+import com.siddydevelops.sms_kotlin.ui.SettingsViewModel
 import com.siddydevelops.sms_kotlin.utils.admin.DeviceAdmin
 import com.vmadalin.easypermissions.EasyPermissions
 import com.vmadalin.easypermissions.dialogs.SettingsDialog
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import java.lang.ref.WeakReference
 
 class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
@@ -64,7 +61,7 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
     private var endTime: String? = null
 
     private lateinit var sharedPreferences: SharedPreferences
-    private lateinit var dataStore: PreferenceSettingStore
+    private lateinit var viewModel: SettingsViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -83,10 +80,16 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
         addPrefSetting = findViewById(R.id.addPrefSetting)
         log = findViewById(R.id.log)
 
+        viewModel = ViewModelProvider(
+            this,
+            ViewModelProvider.AndroidViewModelFactory.getInstance(application)
+        )[SettingsViewModel::class.java]
+
         addPrefSetting.setOnClickListener {
             val builder: AlertDialog.Builder = AlertDialog.Builder(this)
             val viewGroup = findViewById<ViewGroup>(android.R.id.content)
-            dialogView = LayoutInflater.from(this).inflate(R.layout.custom_dialog_layout, viewGroup, false)
+            dialogView =
+                LayoutInflater.from(this).inflate(R.layout.custom_dialog_layout, viewGroup, false)
             val radioGroup = dialogView.findViewById<RadioGroup>(R.id.radioGroup)
             val soundNormal = dialogView.findViewById<RadioButton>(R.id.sound_normal)
             val soundVibrate = dialogView.findViewById<RadioButton>(R.id.sound_vibrate)
@@ -156,9 +159,9 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
                         Toast.makeText(this, "Please select end time.", Toast.LENGTH_SHORT).show()
                     }
                     else -> {
-                        dataStore = PreferenceSettingStore(this,"STORE01")
-                        GlobalScope.launch(Dispatchers.IO) {
-                            dataStore.storeDate(PreferenceSetting(
+                        viewModel.addSetting(
+                            SettingsItem(
+                                "STORE01",
                                 checkRadioButton?.text.toString(),
                                 ringSlider.value.toString(),
                                 mediaSlider.value.toString(),
@@ -166,11 +169,13 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
                                 brightnessSlider.value.toString(),
                                 startTime.toString(),
                                 endTime.toString()
-                            ))
-                            withContext(Dispatchers.Main) {
-                                Toast.makeText(applicationContext,"Settings saved successfully!",Toast.LENGTH_SHORT).show()
-                            }
-                        }
+                            )
+                        )
+                        Toast.makeText(
+                                    applicationContext,
+                                    "Settings saved successfully!",
+                                    Toast.LENGTH_SHORT
+                                ).show()
                     }
                 }
             }
@@ -181,14 +186,9 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
         }
 
         log.setOnClickListener {
-            dataStore = PreferenceSettingStore(this,"STORE01")
-            GlobalScope.launch(Dispatchers.IO) {
-                dataStore.getData().catch { e->
-                    e.printStackTrace()
-                }.collect { prefSetting->
-                    Log.i("STORE_DATA",prefSetting.toString())
-                }
-            }
+            viewModel.allSettings.observe(this, Observer { list ->
+                Log.i("STORE_DATA", list.toString())
+            })
         }
 
         stateBtn.setOnClickListener {

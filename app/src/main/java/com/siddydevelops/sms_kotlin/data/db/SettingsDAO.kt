@@ -15,6 +15,6 @@ interface SettingsDAO {
     @Delete
     suspend fun delete(settingsItem: SettingsItem)
 
-    @Query("Select * from preference_settings order by id ASC")
+    @Query("SELECT * FROM preference_settings")
     fun getAllSettings(): LiveData<List<SettingsItem>>
 }
