@@ -23,4 +23,9 @@
     <string name="select_time">Start Time</string>
     <string name="add_pref">Add Pref</string>
     <string name="end_time">End Time</string>
+    <string name="time_period">Time Period</string>
+    <string name="_colon">:</string>
+    <string name="sound_profile">Sound Profile :</string>
+    <string name="time_buffer">10:50 AM - 10:50 PM</string>
+    <string name="_0000">0000</string>
 </resources>
