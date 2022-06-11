@@ -2,9 +2,10 @@ package com.siddydevelops.sms_kotlin.data.db.entity
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
+import androidx.room.Index
 import androidx.room.PrimaryKey
 
-@Entity(tableName = "preference_settings")
+@Entity(tableName = "preference_settings", indices = [Index(value = ["item_start_time"], unique = true)])
 data class SettingsItem(
     @ColumnInfo(name = "item_name")
     val name: String,
