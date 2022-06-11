@@ -39,7 +39,7 @@
                         android:includeFontPadding="false"
                         android:text="@string/resec_des"
                         android:textColor="@color/black_shade"
-                        android:textSize="10sp" />
+                        android:textSize="11sp" />
 
                     <TextView
                         android:id="@+id/stateTV"
