@@ -25,6 +25,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.slider.Slider
 import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat
@@ -45,7 +46,7 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks, R
     private lateinit var userPin: EditText
     private lateinit var saveBtn: Button
     private lateinit var stateBtn: Button
-    private lateinit var addPrefSetting: Button
+    private lateinit var addPrefSetting: FloatingActionButton
     private lateinit var pinVisibility: ImageView
     private lateinit var stateTV: TextView
 
@@ -162,6 +163,10 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks, R
                 setPickerTime("Select End Time:")
             }
 
+            builder.setView(dialogView)
+            val alertDialog: AlertDialog = builder.create()
+            alertDialog.show()
+
             saveSettingsBtn?.setOnClickListener {
                 when {
                     startTime == null -> {
@@ -203,13 +208,10 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks, R
                                     "Settings saved successfully!",
                                     Toast.LENGTH_SHORT
                                 ).show()
+                        alertDialog.dismiss()
                     }
                 }
             }
-
-            builder.setView(dialogView)
-            val alertDialog: AlertDialog = builder.create()
-            alertDialog.show()
         }
 
         stateBtn.setOnClickListener {
