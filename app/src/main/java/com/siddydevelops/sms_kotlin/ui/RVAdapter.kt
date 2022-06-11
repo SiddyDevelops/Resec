@@ -4,6 +4,7 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.RecyclerView
@@ -36,22 +37,8 @@ class RVAdapter(
             allSettings[position].endTime
         )
 
-        holder.itemView.setOnLongClickListener {
-            val alert: AlertDialog.Builder = AlertDialog.Builder(context)
-            alert.setTitle("Delete Settings")
-            alert.setMessage("Are you sure you want to delete?")
-            alert.setPositiveButton(
-                android.R.string.yes
-            ) { _, _ ->
-                longClickDeleteInterface.onPressDelete(allSettings[position])
-            }
-            alert.setNegativeButton(
-                android.R.string.no
-            ) { dialog, _ ->
-                dialog.cancel()
-            }
-            alert.show()
-            return@setOnLongClickListener true
+        holder.deleteIV.setOnClickListener {
+            longClickDeleteInterface.onPressDelete(allSettings[position])
         }
     }
 
@@ -72,6 +59,7 @@ class RVAdapter(
         val brightnessTV: TextView = itemView.findViewById(R.id.brightnessTV)
         val timePeriodTV: TextView = itemView.findViewById(R.id.timePeriodTV)
         val soundProfileTV: TextView = itemView.findViewById(R.id.soundProfileTV)
+        val deleteIV: ImageView = itemView.findViewById(R.id.deleteIV)
     }
 
     interface LongClickDeleteInterface {

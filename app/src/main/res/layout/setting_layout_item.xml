@@ -23,60 +23,61 @@
 
             <androidx.appcompat.widget.SwitchCompat
                 android:id="@+id/settingSwitch"
-                android:layout_alignParentStart="true"
-                android:layout_marginStart="20dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_marginStart="10dp"
                 android:thumb="@drawable/ic_circle"
                 app:track="@drawable/switch_track" />
 
-            <ImageView
-                android:id="@+id/deleteIV"
-                android:layout_marginEnd="20dp"
-                android:layout_centerVertical="true"
-                android:layout_alignParentEnd="true"
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:fontFamily="@font/poppins_semi_bold"
+                    android:foregroundGravity="center"
+                    android:gravity="center"
+                    android:includeFontPadding="false"
+                    android:text="@string/sound_profile"
+                    android:textColor="@color/black_shade"
+                    android:textSize="13sp" />
+
+                <TextView
+                    android:id="@+id/soundProfileTV"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="10dp"
+                    android:fontFamily="@font/poppins_medium"
+                    android:foregroundGravity="center"
+                    android:gravity="center"
+                    android:includeFontPadding="false"
+                    android:text="@string/normal"
+                    android:textColor="@color/bluish"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+
+            <ImageView
+                android:id="@+id/deleteIV"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:paddingEnd="10dp"
                 android:background="?attr/selectableItemBackground"
                 android:src="@drawable/ic_baseline_delete_24" />
 
         </RelativeLayout>
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:gravity="center"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:fontFamily="@font/poppins_semi_bold"
-                android:foregroundGravity="center"
-                android:gravity="center"
-                android:includeFontPadding="false"
-                android:text="@string/sound_profile"
-                android:textColor="@color/black_shade"
-                android:textSize="13sp" />
-
-            <TextView
-                android:id="@+id/soundProfileTV"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginStart="10dp"
-                android:fontFamily="@font/poppins_medium"
-                android:foregroundGravity="center"
-                android:gravity="center"
-                android:includeFontPadding="false"
-                android:text="@string/normal"
-                android:textColor="@color/bluish"
-                android:textSize="14sp"
-                android:textStyle="bold" />
-
-        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
