@@ -1,12 +1,14 @@
 package com.siddydevelops.sms_kotlin.ui
 
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.widget.SwitchCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.siddydevelops.sms_kotlin.R
 import com.siddydevelops.sms_kotlin.data.db.entity.SettingsItem
@@ -14,7 +16,8 @@ import com.siddydevelops.sms_kotlin.data.db.entity.SettingsItem
 
 class RVAdapter(
     private val context: Context,
-    private val longClickDeleteInterface: LongClickDeleteInterface
+    private val longClickDeleteInterface: LongClickDeleteInterface,
+    private val initiateSettingsInterface: InitiateSettingsInterface
 ) : RecyclerView.Adapter<RVAdapter.ViewHolder>() {
 
     private val allSettings = ArrayList<SettingsItem>()
@@ -36,6 +39,14 @@ class RVAdapter(
             allSettings[position].startTime,
             allSettings[position].endTime
         )
+
+        holder.settingSwitch.setOnClickListener {
+            if(holder.settingSwitch.isChecked) {
+                initiateSettingsInterface.changePreferenceSettings(allSettings[position])
+            } else {
+                //Change to default here
+            }
+        }
 
         holder.deleteIV.setOnClickListener {
             longClickDeleteInterface.onPressDelete(allSettings[position])
@@ -60,9 +71,14 @@ class RVAdapter(
         val timePeriodTV: TextView = itemView.findViewById(R.id.timePeriodTV)
         val soundProfileTV: TextView = itemView.findViewById(R.id.soundProfileTV)
         val deleteIV: ImageView = itemView.findViewById(R.id.deleteIV)
+        val settingSwitch: SwitchCompat = itemView.findViewById(R.id.settingSwitch)
     }
 
     interface LongClickDeleteInterface {
         fun onPressDelete(settingsItem: SettingsItem)
+    }
+
+    interface InitiateSettingsInterface {
+        fun changePreferenceSettings(settingsItem: SettingsItem)
     }
 }

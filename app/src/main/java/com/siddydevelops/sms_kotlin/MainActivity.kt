@@ -6,6 +6,7 @@ import android.app.Service
 import android.app.admin.DevicePolicyManager
 import android.content.*
 import android.media.AudioManager
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
@@ -16,9 +17,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.Window
 import android.widget.*
-import android.widget.SeekBar.OnSeekBarChangeListener
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -36,15 +38,14 @@ import com.vmadalin.easypermissions.EasyPermissions
 import com.vmadalin.easypermissions.dialogs.SettingsDialog
 import java.lang.ref.WeakReference
 
-class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks, RVAdapter.LongClickDeleteInterface {
+
+class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks, RVAdapter.LongClickDeleteInterface, RVAdapter.InitiateSettingsInterface {
 
     private lateinit var userId: EditText
     private lateinit var userPin: EditText
     private lateinit var saveBtn: Button
     private lateinit var stateBtn: Button
-    private lateinit var brightBtn: Button
     private lateinit var addPrefSetting: Button
-    private lateinit var volumeSeekBar: SeekBar
     private lateinit var pinVisibility: ImageView
     private lateinit var stateTV: TextView
 
@@ -67,6 +68,7 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks, R
     private lateinit var sharedPreferences: SharedPreferences
     private lateinit var viewModel: SettingsViewModel
 
+    @RequiresApi(Build.VERSION_CODES.M)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -77,8 +79,6 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks, R
         userPin = findViewById(R.id.userPin)
         saveBtn = findViewById(R.id.saveBtn)
         stateBtn = findViewById(R.id.stateBtn)
-        brightBtn = findViewById(R.id.brightBtn)
-        volumeSeekBar = findViewById(R.id.volumeSeekBar)
         pinVisibility = findViewById(R.id.pin_visibility)
         stateTV = findViewById(R.id.stateTV)
         addPrefSetting = findViewById(R.id.addPrefSetting)
@@ -90,7 +90,7 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks, R
         )[SettingsViewModel::class.java]
 
         recyclerView.layoutManager = LinearLayoutManager(this)
-        val rvAdapter = RVAdapter(this,this)
+        val rvAdapter = RVAdapter(this,this,this)
         recyclerView.adapter = rvAdapter
 
         viewModel.allSettings.observe(this, Observer { list ->
@@ -171,18 +171,33 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks, R
                         Toast.makeText(this, "Please select end time.", Toast.LENGTH_SHORT).show()
                     }
                     else -> {
-                        viewModel.addSetting(
-                            SettingsItem(
-                                "STORE01",
-                                checkRadioButton?.text.toString(),
-                                ringSlider.value.toString(),
-                                mediaSlider.value.toString(),
-                                notificationSlider.value.toString(),
-                                brightnessSlider.value.toString(),
-                                startTime.toString(),
-                                endTime.toString()
+                        if(checkRadioButton?.text.toString() == "NORMAL") {
+                            viewModel.addSetting(
+                                SettingsItem(
+                                    "STORE01",
+                                    checkRadioButton?.text.toString(),
+                                    ringSlider.value.toString(),
+                                    mediaSlider.value.toString(),
+                                    notificationSlider.value.toString(),
+                                    brightnessSlider.value.toString(),
+                                    startTime.toString(),
+                                    endTime.toString()
+                                )
                             )
-                        )
+                        } else {
+                            viewModel.addSetting(
+                                SettingsItem(
+                                    "STORE01",
+                                    checkRadioButton?.text.toString(),
+                                    "0.00",
+                                    mediaSlider.value.toString(),
+                                    notificationSlider.value.toString(),
+                                    brightnessSlider.value.toString(),
+                                    startTime.toString(),
+                                    endTime.toString()
+                                )
+                            )
+                        }
                         Toast.makeText(
                                     applicationContext,
                                     "Settings saved successfully!",
@@ -273,7 +288,7 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks, R
         w = window
         cResolver = contentResolver
 
-        if (brightPermission) {
+        if (Settings.System.canWrite(this)) {
             try {
                 // To handle the auto
                 Settings.System.putInt(
@@ -292,26 +307,17 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks, R
             }
         } else {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                brightPermission = Settings.System.canWrite(this)
+                val intent = Intent(Settings.ACTION_MANAGE_WRITE_SETTINGS)
+                intent.data = Uri.parse("package:$packageName")
+                startActivityForResult(intent, MainActivity.REQUEST_PERMISSION_CODE)
+            } else {
+                ActivityCompat.requestPermissions(
+                    this,
+                    arrayOf(Manifest.permission.WRITE_SETTINGS),
+                    MainActivity.REQUEST_PERMISSION_CODE
+                )
             }
         }
-
-        val audioManager: AudioManager = getSystemService(Context.AUDIO_SERVICE) as AudioManager
-        volumeSeekBar.max = audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC)
-
-        volumeSeekBar.setOnSeekBarChangeListener(object : OnSeekBarChangeListener {
-            override fun onProgressChanged(seekBar: SeekBar?, newVolume: Int, b: Boolean) {
-                audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, newVolume, 0)
-            }
-
-            override fun onStartTrackingTouch(seekBar: SeekBar) {}
-            override fun onStopTrackingTouch(seekBar: SeekBar) {}
-        })
-
-        brightBtn.setOnClickListener {
-            setBrightness(50)
-        }
-
     }
 
     private fun setPickerTime(titleText: String) {
@@ -376,6 +382,35 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks, R
     override fun onPressDelete(settingsItem: SettingsItem) {
         viewModel.deleteSetting(settingsItem)
         Toast.makeText(this,"Settings has been deleted.",Toast.LENGTH_SHORT).show()
+    }
+
+    override fun changePreferenceSettings(settingsItem: SettingsItem) {
+        // Change Sound Profile
+        val audioManager: AudioManager = getSystemService(Service.AUDIO_SERVICE) as AudioManager
+        when(settingsItem.soundProfile) {
+            "NORMAL" -> {
+                audioManager.ringerMode = AudioManager.RINGER_MODE_NORMAL
+                // Change Volume
+                audioManager.setStreamVolume(AudioManager.STREAM_RING, settingsItem.volRing.toFloat().toInt(), 0)
+                audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, settingsItem.volMedia.toFloat().toInt(), 0)
+                audioManager.setStreamVolume(AudioManager.STREAM_NOTIFICATION, settingsItem.volNotification.toFloat().toInt(),0)
+            }
+            "VIBRATE" -> {
+                audioManager.ringerMode = AudioManager.RINGER_MODE_VIBRATE
+                // Change Volume
+                audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, settingsItem.volMedia.toFloat().toInt(), 0)
+                audioManager.setStreamVolume(AudioManager.STREAM_NOTIFICATION, settingsItem.volNotification.toFloat().toInt(),0)
+            }
+            "SILENT" -> {
+                audioManager.ringerMode = AudioManager.RINGER_MODE_SILENT
+                // Change Volume
+                audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, settingsItem.volMedia.toFloat().toInt(), 0)
+                audioManager.setStreamVolume(AudioManager.STREAM_NOTIFICATION, settingsItem.volNotification.toFloat().toInt(),0)
+            }
+        }
+
+        // Change Brightness
+        setBrightness(settingsItem.brightness.toFloat().toInt())
     }
 
     private fun setBrightness(brightness: Int) {
