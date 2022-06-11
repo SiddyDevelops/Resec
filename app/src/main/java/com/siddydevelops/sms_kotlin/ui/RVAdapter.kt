@@ -5,16 +5,22 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.RecyclerView
 import com.siddydevelops.sms_kotlin.R
 import com.siddydevelops.sms_kotlin.data.db.entity.SettingsItem
 
-class RVAdapter(private val context: Context, private val longClickDeleteInterface: LongClickDeleteInterface) : RecyclerView.Adapter<RVAdapter.ViewHolder>() {
+
+class RVAdapter(
+    private val context: Context,
+    private val longClickDeleteInterface: LongClickDeleteInterface
+) : RecyclerView.Adapter<RVAdapter.ViewHolder>() {
 
     private val allSettings = ArrayList<SettingsItem>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.setting_layout_item,parent,false)
+        val view =
+            LayoutInflater.from(parent.context).inflate(R.layout.setting_layout_item, parent, false)
         return ViewHolder(view)
     }
 
@@ -24,10 +30,27 @@ class RVAdapter(private val context: Context, private val longClickDeleteInterfa
         holder.mediaTV.text = allSettings[position].volMedia
         holder.notificationTV.text = allSettings[position].volNotification
         holder.brightnessTV.text = allSettings[position].brightness
-        holder.timePeriodTV.text = context.getString(R.string.time_period_text,allSettings[position].startTime,allSettings[position].endTime)
+        holder.timePeriodTV.text = context.getString(
+            R.string.time_period_text,
+            allSettings[position].startTime,
+            allSettings[position].endTime
+        )
 
         holder.itemView.setOnLongClickListener {
-            longClickDeleteInterface.onPressDelete(allSettings[position])
+            val alert: AlertDialog.Builder = AlertDialog.Builder(context)
+            alert.setTitle("Delete Settings")
+            alert.setMessage("Are you sure you want to delete?")
+            alert.setPositiveButton(
+                android.R.string.yes
+            ) { _, _ ->
+                longClickDeleteInterface.onPressDelete(allSettings[position])
+            }
+            alert.setNegativeButton(
+                android.R.string.no
+            ) { dialog, _ ->
+                dialog.cancel()
+            }
+            alert.show()
             return@setOnLongClickListener true
         }
     }
@@ -44,11 +67,11 @@ class RVAdapter(private val context: Context, private val longClickDeleteInterfa
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val ringTV: TextView = itemView.findViewById(R.id.ringTV)
-        val mediaTV: TextView  = itemView.findViewById(R.id.mediaTV)
-        val notificationTV: TextView  = itemView.findViewById(R.id.notificationTV)
-        val brightnessTV: TextView  = itemView.findViewById(R.id.brightnessTV)
-        val timePeriodTV: TextView  = itemView.findViewById(R.id.timePeriodTV)
-        val soundProfileTV: TextView  = itemView.findViewById(R.id.soundProfileTV)
+        val mediaTV: TextView = itemView.findViewById(R.id.mediaTV)
+        val notificationTV: TextView = itemView.findViewById(R.id.notificationTV)
+        val brightnessTV: TextView = itemView.findViewById(R.id.brightnessTV)
+        val timePeriodTV: TextView = itemView.findViewById(R.id.timePeriodTV)
+        val soundProfileTV: TextView = itemView.findViewById(R.id.soundProfileTV)
     }
 
     interface LongClickDeleteInterface {
