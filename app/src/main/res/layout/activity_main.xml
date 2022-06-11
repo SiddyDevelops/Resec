@@ -192,6 +192,16 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/cardView" />
 
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                tools:listitem="@layout/setting_layout_item"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/addPrefSetting"/>
+
             <Button
                 android:id="@+id/brightBtn"
                 android:layout_width="wrap_content"
@@ -200,7 +210,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/addPrefSetting" />
+                app:layout_constraintTop_toBottomOf="@+id/recyclerView" />
 
             <SeekBar
                 android:id="@+id/volumeSeekBar"
@@ -212,17 +222,6 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/brightBtn" />
-
-            <Button
-                android:id="@+id/log"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Log"
-                android:layout_marginTop="20dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/volumeSeekBar" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

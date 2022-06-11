@@ -35,7 +35,7 @@
                 android:textSize="13sp" />
 
             <TextView
-                android:id="@+id/userNameTV"
+                android:id="@+id/soundProfileTV"
                 android:layout_width="wrap_content"
                 android:layout_gravity="center"
                 android:gravity="center"
@@ -72,6 +72,7 @@
                     android:orientation="vertical">
 
                     <TextView
+                        android:id="@+id/ringTV"
                         android:layout_width="wrap_content"
                         android:layout_weight="1"
                         android:layout_gravity="center"
@@ -115,6 +116,7 @@
                     android:orientation="vertical">
 
                     <TextView
+                        android:id="@+id/mediaTV"
                         android:layout_width="wrap_content"
                         android:layout_weight="1"
                         android:layout_gravity="center"
@@ -158,6 +160,7 @@
                     android:orientation="vertical">
 
                     <TextView
+                        android:id="@+id/notificationTV"
                         android:layout_width="wrap_content"
                         android:layout_weight="1"
                         android:layout_gravity="center"
@@ -208,6 +211,7 @@
                     android:orientation="vertical">
 
                     <TextView
+                        android:id="@+id/brightnessTV"
                         android:layout_width="wrap_content"
                         android:layout_weight="1"
                         android:layout_gravity="center"
@@ -251,6 +255,7 @@
                     android:orientation="vertical">
 
                     <TextView
+                        android:id="@+id/timePeriodTV"
                         android:layout_width="wrap_content"
                         android:layout_weight="1"
                         android:layout_gravity="center"

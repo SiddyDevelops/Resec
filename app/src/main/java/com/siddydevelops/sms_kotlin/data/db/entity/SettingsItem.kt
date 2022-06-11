@@ -15,7 +15,7 @@ data class SettingsItem(
     @ColumnInfo(name = "item_vol_media")
     val volMedia: String,
     @ColumnInfo(name = "item_vol_notification")
-    val VolNotification: String,
+    val volNotification: String,
     @ColumnInfo(name = "item_brightness")
     val brightness: String,
     @ColumnInfo(name = "item_start_time")
