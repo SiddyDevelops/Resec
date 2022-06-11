@@ -1,18 +1,16 @@
 package com.siddydevelops.sms_kotlin.ui
 
 import android.content.Context
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.SwitchCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.siddydevelops.sms_kotlin.R
 import com.siddydevelops.sms_kotlin.data.db.entity.SettingsItem
-
+import java.text.DecimalFormat
 
 class RVAdapter(
     private val context: Context,
@@ -21,6 +19,7 @@ class RVAdapter(
 ) : RecyclerView.Adapter<RVAdapter.ViewHolder>() {
 
     private val allSettings = ArrayList<SettingsItem>()
+    private val df = DecimalFormat("#.##")
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view =
@@ -30,10 +29,10 @@ class RVAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.soundProfileTV.text = allSettings[position].soundProfile
-        holder.ringTV.text = allSettings[position].volRing
-        holder.mediaTV.text = allSettings[position].volMedia
-        holder.notificationTV.text = allSettings[position].volNotification
-        holder.brightnessTV.text = allSettings[position].brightness
+        holder.ringTV.text = df.format(allSettings[position].volRing.toFloat())
+        holder.mediaTV.text = df.format(allSettings[position].volMedia.toFloat())
+        holder.notificationTV.text = df.format(allSettings[position].volNotification.toFloat())
+        holder.brightnessTV.text = df.format(allSettings[position].brightness.toFloat())
         holder.timePeriodTV.text = context.getString(
             R.string.time_period_text,
             allSettings[position].startTime,

@@ -207,7 +207,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
-            app:backgroundTint="#DFE6FF"
+            app:backgroundTint="@color/white_shade"
             app:fabAnimationMode="scale"
             app:fabAlignmentMode="end"
             app:menu="@menu/bottom_bar_items" />
