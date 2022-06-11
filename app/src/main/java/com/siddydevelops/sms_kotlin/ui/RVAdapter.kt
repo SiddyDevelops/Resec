@@ -45,6 +45,16 @@ class RVAdapter(
                 initiateSettingsInterface.changePreferenceSettings(allSettings[position])
             } else {
                 //Change to default here
+                initiateSettingsInterface.changePreferenceSettings(SettingsItem(
+                    "DEFAULT",
+                    "NORMAL",
+                    "15.0",
+                    "7.0",
+                    "3.",
+                    "40.0",
+                    "00:00 AM",
+                    "11:59 PM"
+                ))
             }
         }
 
