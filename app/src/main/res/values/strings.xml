@@ -30,4 +30,6 @@
     <string name="_0000">0000</string>
     <string name="time_period_text">%1$s - %2$s</string>
     <string name="floatingactionbutton">FloatingActionButton</string>
+    <string name="about">About</string>
+    <string name="settings">Settings</string>
 </resources>
