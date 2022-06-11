@@ -36,7 +36,7 @@ import com.vmadalin.easypermissions.EasyPermissions
 import com.vmadalin.easypermissions.dialogs.SettingsDialog
 import java.lang.ref.WeakReference
 
-class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
+class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks, RVAdapter.LongClickDeleteInterface {
 
     private lateinit var userId: EditText
     private lateinit var userPin: EditText
@@ -90,7 +90,7 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
         )[SettingsViewModel::class.java]
 
         recyclerView.layoutManager = LinearLayoutManager(this)
-        val rvAdapter = RVAdapter(this)
+        val rvAdapter = RVAdapter(this,this)
         recyclerView.adapter = rvAdapter
 
         viewModel.allSettings.observe(this, Observer { list ->
@@ -371,6 +371,11 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
                 endTimeBtn.visibility = View.INVISIBLE
             }
         }
+    }
+
+    override fun onPressDelete(settingsItem: SettingsItem) {
+        viewModel.deleteSetting(settingsItem)
+        Toast.makeText(this,"Settings has been deleted.",Toast.LENGTH_SHORT).show()
     }
 
     private fun setBrightness(brightness: Int) {
