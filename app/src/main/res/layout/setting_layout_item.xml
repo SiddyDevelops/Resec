@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    app:cardBackgroundColor="@color/white_shade"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="10dp"
+    app:cardBackgroundColor="@color/white_shade"
     app:cardCornerRadius="10dp"
     app:cardElevation="8dp">
 
@@ -14,6 +13,34 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:padding="5dp">
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <androidx.appcompat.widget.SwitchCompat
+                android:id="@+id/settingSwitch"
+                android:layout_alignParentStart="true"
+                android:layout_marginStart="20dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:thumb="@drawable/ic_circle"
+                app:track="@drawable/switch_track" />
+
+            <ImageView
+                android:id="@+id/deleteIV"
+                android:layout_marginEnd="20dp"
+                android:layout_centerVertical="true"
+                android:layout_alignParentEnd="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="?attr/selectableItemBackground"
+                android:src="@drawable/ic_baseline_delete_24" />
+
+        </RelativeLayout>
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -26,26 +53,26 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
+                android:fontFamily="@font/poppins_semi_bold"
                 android:foregroundGravity="center"
+                android:gravity="center"
                 android:includeFontPadding="false"
                 android:text="@string/sound_profile"
                 android:textColor="@color/black_shade"
-                android:fontFamily="@font/poppins_semi_bold"
-                android:gravity="center"
                 android:textSize="13sp" />
 
             <TextView
                 android:id="@+id/soundProfileTV"
                 android:layout_width="wrap_content"
-                android:layout_gravity="center"
-                android:gravity="center"
-                android:foregroundGravity="center"
                 android:layout_height="wrap_content"
-                android:includeFontPadding="false"
+                android:layout_gravity="center"
                 android:layout_marginStart="10dp"
                 android:fontFamily="@font/poppins_medium"
-                android:textColor="@color/bluish"
+                android:foregroundGravity="center"
+                android:gravity="center"
+                android:includeFontPadding="false"
                 android:text="@string/normal"
+                android:textColor="@color/bluish"
                 android:textSize="14sp"
                 android:textStyle="bold" />
 
@@ -58,13 +85,13 @@
 
             <androidx.cardview.widget.CardView
                 android:layout_width="0dp"
-                android:layout_weight="1"
                 android:layout_height="wrap_content"
-                app:contentPadding="5dp"
                 android:layout_margin="10dp"
-                app:cardCornerRadius="10dp"
+                android:layout_weight="1"
                 android:elevation="5dp"
-                app:cardBackgroundColor="@color/white">
+                app:cardBackgroundColor="@color/white"
+                app:cardCornerRadius="10dp"
+                app:contentPadding="5dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -74,14 +101,14 @@
                     <TextView
                         android:id="@+id/ringTV"
                         android:layout_width="wrap_content"
-                        android:layout_weight="1"
-                        android:layout_gravity="center"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/poppins_medium"
+                        android:gravity="center"
                         android:includeFontPadding="false"
                         android:text="@string/_0000"
-                        android:gravity="center"
                         android:textColor="@color/bluish"
-                        android:fontFamily="@font/poppins_medium"
                         android:textSize="14sp"
                         android:textStyle="bold" />
 
@@ -102,13 +129,13 @@
 
             <androidx.cardview.widget.CardView
                 android:layout_width="0dp"
-                android:layout_weight="1"
                 android:layout_height="wrap_content"
-                app:contentPadding="5dp"
                 android:layout_margin="10dp"
-                app:cardCornerRadius="10dp"
+                android:layout_weight="1"
                 android:elevation="5dp"
-                app:cardBackgroundColor="@color/white">
+                app:cardBackgroundColor="@color/white"
+                app:cardCornerRadius="10dp"
+                app:contentPadding="5dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -118,14 +145,14 @@
                     <TextView
                         android:id="@+id/mediaTV"
                         android:layout_width="wrap_content"
-                        android:layout_weight="1"
-                        android:layout_gravity="center"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/poppins_medium"
+                        android:gravity="center"
                         android:includeFontPadding="false"
                         android:text="@string/_0000"
-                        android:gravity="center"
                         android:textColor="@color/bluish"
-                        android:fontFamily="@font/poppins_medium"
                         android:textSize="14sp"
                         android:textStyle="bold" />
 
@@ -146,13 +173,13 @@
 
             <androidx.cardview.widget.CardView
                 android:layout_width="0dp"
-                android:layout_weight="1"
                 android:layout_height="wrap_content"
-                app:contentPadding="5dp"
                 android:layout_margin="10dp"
-                app:cardCornerRadius="10dp"
+                android:layout_weight="1"
                 android:elevation="5dp"
-                app:cardBackgroundColor="@color/white">
+                app:cardBackgroundColor="@color/white"
+                app:cardCornerRadius="10dp"
+                app:contentPadding="5dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -162,14 +189,14 @@
                     <TextView
                         android:id="@+id/notificationTV"
                         android:layout_width="wrap_content"
-                        android:layout_weight="1"
-                        android:layout_gravity="center"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/poppins_medium"
+                        android:gravity="center"
                         android:includeFontPadding="false"
                         android:text="@string/_0000"
-                        android:gravity="center"
                         android:textColor="@color/bluish"
-                        android:fontFamily="@font/poppins_medium"
                         android:textSize="14sp"
                         android:textStyle="bold" />
 
@@ -197,13 +224,13 @@
 
             <androidx.cardview.widget.CardView
                 android:layout_width="0dp"
-                android:layout_weight="1"
                 android:layout_height="wrap_content"
-                app:contentPadding="5dp"
                 android:layout_margin="10dp"
-                app:cardCornerRadius="10dp"
+                android:layout_weight="1"
                 android:elevation="5dp"
-                app:cardBackgroundColor="@color/white">
+                app:cardBackgroundColor="@color/white"
+                app:cardCornerRadius="10dp"
+                app:contentPadding="5dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -213,14 +240,14 @@
                     <TextView
                         android:id="@+id/brightnessTV"
                         android:layout_width="wrap_content"
-                        android:layout_weight="1"
-                        android:layout_gravity="center"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/poppins_medium"
+                        android:gravity="center"
                         android:includeFontPadding="false"
                         android:text="@string/_0000"
-                        android:gravity="center"
                         android:textColor="@color/bluish"
-                        android:fontFamily="@font/poppins_medium"
                         android:textSize="14sp"
                         android:textStyle="bold" />
 
@@ -241,13 +268,13 @@
 
             <androidx.cardview.widget.CardView
                 android:layout_width="0dp"
-                android:layout_weight="1"
                 android:layout_height="wrap_content"
-                app:contentPadding="5dp"
                 android:layout_margin="10dp"
-                app:cardCornerRadius="10dp"
+                android:layout_weight="1"
                 android:elevation="5dp"
-                app:cardBackgroundColor="@color/white">
+                app:cardBackgroundColor="@color/white"
+                app:cardCornerRadius="10dp"
+                app:contentPadding="5dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -257,14 +284,14 @@
                     <TextView
                         android:id="@+id/timePeriodTV"
                         android:layout_width="wrap_content"
-                        android:layout_weight="1"
-                        android:layout_gravity="center"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/poppins_medium"
+                        android:gravity="center"
                         android:includeFontPadding="false"
                         android:text="@string/time_buffer"
-                        android:gravity="center"
                         android:textColor="@color/bluish"
-                        android:fontFamily="@font/poppins_medium"
                         android:textSize="14sp"
                         android:textStyle="bold" />
 
