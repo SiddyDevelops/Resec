@@ -1,4 +1,6 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     style="@style/Widget.SMSKotlin.AppWidget.Container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -11,11 +13,84 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:layout_margin="8dp"
         android:textColor="@color/bluish"
         android:fontFamily="@font/poppins_semi_bold"
         android:contentDescription="@string/appwidget_text"
         android:text="@string/appwidget_text"
         android:textSize="15sp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/appwidget_text"
+        android:background="@drawable/bg_linear_layout">
+
+        <RelativeLayout
+            android:padding="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <Switch
+                android:id="@+id/settingSwitch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_marginStart="10dp"
+                android:theme="@style/SCBSwitch"
+                android:thumb="@drawable/ic_circle_bluish"
+                tools:ignore="UseSwitchCompatOrMaterialXml" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:fontFamily="@font/poppins_semi_bold"
+                    android:foregroundGravity="center"
+                    android:gravity="center"
+                    android:includeFontPadding="false"
+                    android:text="@string/sound_profile"
+                    android:textColor="@color/black_shade"
+                    android:textSize="13sp" />
+
+                <TextView
+                    android:id="@+id/soundProfileTV"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="10dp"
+                    android:fontFamily="@font/poppins_medium"
+                    android:foregroundGravity="center"
+                    android:gravity="center"
+                    android:includeFontPadding="false"
+                    android:text="@string/normal"
+                    android:textColor="@color/bluish"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+
+            <ImageView
+                android:id="@+id/deleteIV"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:background="@drawable/ic_delete"
+                android:contentDescription="@string/deleteicon" />
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
 </RelativeLayout>

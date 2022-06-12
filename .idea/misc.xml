@@ -5,10 +5,12 @@
       <map>
         <entry key="app/src/main/res/drawable-nodpi/bg_widget.xml" value="0.1985" />
         <entry key="app/src/main/res/drawable/bg_et.xml" value="0.1985" />
+        <entry key="app/src/main/res/drawable/bg_linear_layout.xml" value="0.1985" />
         <entry key="app/src/main/res/drawable/ic_add.xml" value="0.285" />
         <entry key="app/src/main/res/drawable/ic_baseline_delete_24.xml" value="0.1985" />
         <entry key="app/src/main/res/drawable/ic_baseline_remove_circle_24.xml" value="0.1985" />
         <entry key="app/src/main/res/drawable/ic_circle.xml" value="0.1985" />
+        <entry key="app/src/main/res/drawable/ic_circle_bluish.xml" value="0.1985" />
         <entry key="app/src/main/res/drawable/ic_sound_mute.xml" value="0.285" />
         <entry key="app/src/main/res/drawable/ic_sound_normal.xml" value="0.285" />
         <entry key="app/src/main/res/drawable/ic_sound_vibrate.xml" value="0.285" />
@@ -16,11 +18,12 @@
         <entry key="app/src/main/res/drawable/ic_visibility.xml" value="0.1985" />
         <entry key="app/src/main/res/drawable/ic_visibility_off.xml" value="0.1985" />
         <entry key="app/src/main/res/drawable/switch_track.xml" value="0.1985" />
+        <entry key="app/src/main/res/drawable/switch_track_widget.xml" value="0.1985" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.23278985507246377" />
         <entry key="app/src/main/res/layout/custom_dialog_layout.xml" value="0.264" />
         <entry key="app/src/main/res/layout/custom_notification_layout.xml" value="0.264" />
-        <entry key="app/src/main/res/layout/resec_app_widget.xml" value="0.17572463768115942" />
-        <entry key="app/src/main/res/layout/setting_layout_item.xml" value="0.536" />
+        <entry key="app/src/main/res/layout/resec_app_widget.xml" value="0.264" />
+        <entry key="app/src/main/res/layout/setting_layout_item.xml" value="0.4" />
         <entry key="app/src/main/res/menu/bottom_bar_items.xml" value="0.28564814814814815" />
         <entry key="app/src/main/res/xml/policies.xml" value="0.17572463768115942" />
       </map>
