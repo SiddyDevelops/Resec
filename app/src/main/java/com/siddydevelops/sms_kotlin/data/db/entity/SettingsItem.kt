@@ -7,8 +7,8 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "preference_settings", indices = [Index(value = ["item_start_time"], unique = true)])
 data class SettingsItem(
-    @ColumnInfo(name = "item_name")
-    val name: String,
+    @ColumnInfo(name = "item_activity")
+    val active: Boolean,
     @ColumnInfo(name = "item_sound_profile")
     val soundProfile: String,
     @ColumnInfo(name = "item_vol_ring")

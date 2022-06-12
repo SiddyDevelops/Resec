@@ -15,7 +15,8 @@ import java.text.DecimalFormat
 class RVAdapter(
     private val context: Context,
     private val longClickDeleteInterface: LongClickDeleteInterface,
-    private val initiateSettingsInterface: InitiateSettingsInterface
+    private val initiateSettingsInterface: InitiateSettingsInterface,
+    private val updateSettingsInterface: UpdateSettingsInterface
 ) : RecyclerView.Adapter<RVAdapter.ViewHolder>() {
 
     private val allSettings = ArrayList<SettingsItem>()
@@ -28,6 +29,10 @@ class RVAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        if(allSettings[position].active) {
+            holder.settingSwitch.isChecked = true
+            initiateSettingsInterface.changePreferenceSettings(allSettings[position])
+        }
         holder.soundProfileTV.text = allSettings[position].soundProfile
         holder.ringTV.text = df.format(allSettings[position].volRing.toFloat())
         holder.mediaTV.text = df.format(allSettings[position].volMedia.toFloat())
@@ -42,10 +47,20 @@ class RVAdapter(
         holder.settingSwitch.setOnClickListener {
             if(holder.settingSwitch.isChecked) {
                 initiateSettingsInterface.changePreferenceSettings(allSettings[position])
+                updateSettingsInterface.updatePreferenceSettings(
+                    SettingsItem(true,
+                        allSettings[position].soundProfile,
+                        allSettings[position].volRing,
+                        allSettings[position].volMedia,
+                        allSettings[position].volNotification,
+                        allSettings[position].brightness,
+                        allSettings[position].startTime,
+                        allSettings[position].endTime)
+                )
             } else {
                 //Change to default here
                 initiateSettingsInterface.changePreferenceSettings(SettingsItem(
-                    "DEFAULT",
+                    false,
                     "NORMAL",
                     "15.0",
                     "7.0",
@@ -54,6 +69,16 @@ class RVAdapter(
                     "00:00 AM",
                     "11:59 PM"
                 ))
+                updateSettingsInterface.updatePreferenceSettings(
+                    SettingsItem(false,
+                        allSettings[position].soundProfile,
+                        allSettings[position].volRing,
+                        allSettings[position].volMedia,
+                        allSettings[position].volNotification,
+                        allSettings[position].brightness,
+                        allSettings[position].startTime,
+                        allSettings[position].endTime)
+                )
             }
         }
 
@@ -89,5 +114,9 @@ class RVAdapter(
 
     interface InitiateSettingsInterface {
         fun changePreferenceSettings(settingsItem: SettingsItem)
+    }
+
+    interface UpdateSettingsInterface {
+        fun updatePreferenceSettings(settingsItem: SettingsItem)
     }
 }

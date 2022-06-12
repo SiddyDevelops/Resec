@@ -40,7 +40,11 @@ import com.vmadalin.easypermissions.dialogs.SettingsDialog
 import java.lang.ref.WeakReference
 
 
-class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks, RVAdapter.LongClickDeleteInterface, RVAdapter.InitiateSettingsInterface {
+class MainActivity : AppCompatActivity(),
+    EasyPermissions.PermissionCallbacks,
+    RVAdapter.LongClickDeleteInterface,
+    RVAdapter.InitiateSettingsInterface,
+    RVAdapter.UpdateSettingsInterface {
 
     private lateinit var userId: EditText
     private lateinit var userPin: EditText
@@ -91,7 +95,7 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks, R
         )[SettingsViewModel::class.java]
 
         recyclerView.layoutManager = LinearLayoutManager(this)
-        val rvAdapter = RVAdapter(this,this,this)
+        val rvAdapter = RVAdapter(this, this, this,this)
         recyclerView.adapter = rvAdapter
 
         viewModel.allSettings.observe(this, Observer { list ->
@@ -176,10 +180,10 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks, R
                         Toast.makeText(this, "Please select end time.", Toast.LENGTH_SHORT).show()
                     }
                     else -> {
-                        if(checkRadioButton?.text.toString() == "NORMAL") {
+                        if (checkRadioButton?.text.toString() == "NORMAL") {
                             viewModel.addSetting(
                                 SettingsItem(
-                                    "STORE01",
+                                    false,
                                     checkRadioButton?.text.toString(),
                                     ringSlider.value.toString(),
                                     mediaSlider.value.toString(),
@@ -192,7 +196,7 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks, R
                         } else {
                             viewModel.addSetting(
                                 SettingsItem(
-                                    "STORE01",
+                                    false,
                                     checkRadioButton?.text.toString(),
                                     "0.00",
                                     mediaSlider.value.toString(),
@@ -204,10 +208,10 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks, R
                             )
                         }
                         Toast.makeText(
-                                    applicationContext,
-                                    "Settings saved successfully!",
-                                    Toast.LENGTH_SHORT
-                                ).show()
+                            applicationContext,
+                            "Settings saved successfully!",
+                            Toast.LENGTH_SHORT
+                        ).show()
                         alertDialog.dismiss()
                     }
                 }
@@ -382,37 +386,71 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks, R
     }
 
     override fun onPressDelete(settingsItem: SettingsItem) {
+        Log.i("Delete:","${settingsItem.active}")
         viewModel.deleteSetting(settingsItem)
-        Toast.makeText(this,"Settings has been deleted.",Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, "Settings has been deleted.", Toast.LENGTH_SHORT).show()
     }
 
     override fun changePreferenceSettings(settingsItem: SettingsItem) {
         // Change Sound Profile
         val audioManager: AudioManager = getSystemService(Service.AUDIO_SERVICE) as AudioManager
-        when(settingsItem.soundProfile) {
+        when (settingsItem.soundProfile) {
             "NORMAL" -> {
                 audioManager.ringerMode = AudioManager.RINGER_MODE_NORMAL
                 // Change Volume
-                audioManager.setStreamVolume(AudioManager.STREAM_RING, settingsItem.volRing.toFloat().toInt(), 0)
-                audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, settingsItem.volMedia.toFloat().toInt(), 0)
-                audioManager.setStreamVolume(AudioManager.STREAM_NOTIFICATION, settingsItem.volNotification.toFloat().toInt(),0)
+                audioManager.setStreamVolume(
+                    AudioManager.STREAM_RING,
+                    settingsItem.volRing.toFloat().toInt(),
+                    0
+                )
+                audioManager.setStreamVolume(
+                    AudioManager.STREAM_MUSIC,
+                    settingsItem.volMedia.toFloat().toInt(),
+                    0
+                )
+                audioManager.setStreamVolume(
+                    AudioManager.STREAM_NOTIFICATION,
+                    settingsItem.volNotification.toFloat().toInt(),
+                    0
+                )
             }
             "VIBRATE" -> {
                 audioManager.ringerMode = AudioManager.RINGER_MODE_VIBRATE
                 // Change Volume
-                audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, settingsItem.volMedia.toFloat().toInt(), 0)
-                audioManager.setStreamVolume(AudioManager.STREAM_NOTIFICATION, settingsItem.volNotification.toFloat().toInt(),0)
+                audioManager.setStreamVolume(
+                    AudioManager.STREAM_MUSIC,
+                    settingsItem.volMedia.toFloat().toInt(),
+                    0
+                )
+                audioManager.setStreamVolume(
+                    AudioManager.STREAM_NOTIFICATION,
+                    settingsItem.volNotification.toFloat().toInt(),
+                    0
+                )
             }
             "SILENT" -> {
                 audioManager.ringerMode = AudioManager.RINGER_MODE_SILENT
                 // Change Volume
-                audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, settingsItem.volMedia.toFloat().toInt(), 0)
-                audioManager.setStreamVolume(AudioManager.STREAM_NOTIFICATION, settingsItem.volNotification.toFloat().toInt(),0)
+                audioManager.setStreamVolume(
+                    AudioManager.STREAM_MUSIC,
+                    settingsItem.volMedia.toFloat().toInt(),
+                    0
+                )
+                audioManager.setStreamVolume(
+                    AudioManager.STREAM_NOTIFICATION,
+                    settingsItem.volNotification.toFloat().toInt(),
+                    0
+                )
             }
         }
 
         // Change Brightness
         setBrightness(settingsItem.brightness.toFloat().toInt())
+    }
+
+    override fun updatePreferenceSettings(settingsItem: SettingsItem) {
+        Log.i("Update:","${settingsItem.active}")
+        viewModel.addSetting(settingsItem)
     }
 
     private fun setBrightness(brightness: Int) {
