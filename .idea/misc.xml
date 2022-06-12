@@ -4,6 +4,7 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="app/src/main/res/drawable-nodpi/bg_widget.xml" value="0.1985" />
+        <entry key="app/src/main/res/drawable/bg_card_repli.xml" value="0.1985" />
         <entry key="app/src/main/res/drawable/bg_et.xml" value="0.1985" />
         <entry key="app/src/main/res/drawable/bg_linear_layout.xml" value="0.1985" />
         <entry key="app/src/main/res/drawable/ic_add.xml" value="0.285" />
