@@ -26,7 +26,7 @@
 
     <style name="Theme.SMSKotlin.AppWidgetContainer" parent="Theme.SMSKotlin.AppWidgetContainerParent">
         <!-- Apply padding to avoid the content of the widget colliding with the rounded corners -->
-        <item name="appWidgetPadding">16dp</item>
+        <item name="appWidgetPadding">10dp</item>
     </style>
 
     <style name="SCBSwitch" parent="Theme.SMSKotlin">
@@ -37,6 +37,6 @@
         <item name="colorSwitchThumbNormal">#f1f1f1</item>
 
         <!-- inactive track color (30% transparency) -->
-        <item name="android:colorForeground">#000000</item>
+        <item name="android:colorForeground">#C9C6C6</item>
     </style>
 </resources>
