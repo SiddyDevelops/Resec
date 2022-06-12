@@ -13,12 +13,14 @@
         <entry key="app/src/main/res/drawable/ic_baseline_remove_circle_24.xml" value="0.1985" />
         <entry key="app/src/main/res/drawable/ic_circle.xml" value="0.1985" />
         <entry key="app/src/main/res/drawable/ic_circle_bluish.xml" value="0.1985" />
+        <entry key="app/src/main/res/drawable/ic_next.xml" value="0.1985" />
         <entry key="app/src/main/res/drawable/ic_sound_mute.xml" value="0.285" />
         <entry key="app/src/main/res/drawable/ic_sound_normal.xml" value="0.285" />
         <entry key="app/src/main/res/drawable/ic_sound_vibrate.xml" value="0.285" />
         <entry key="app/src/main/res/drawable/ic_user.xml" value="0.1985" />
         <entry key="app/src/main/res/drawable/ic_visibility.xml" value="0.1985" />
         <entry key="app/src/main/res/drawable/ic_visibility_off.xml" value="0.1985" />
+        <entry key="app/src/main/res/drawable/ripple_effect.xml" value="0.1985" />
         <entry key="app/src/main/res/drawable/switch_track.xml" value="0.1985" />
         <entry key="app/src/main/res/drawable/switch_track_widget.xml" value="0.1985" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.23278985507246377" />

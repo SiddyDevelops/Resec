@@ -27,7 +27,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
-            android:layout_centerVertical="true"
             android:contentDescription="@string/appwidget_text"
             android:fontFamily="@font/poppins_semi_bold"
             android:includeFontPadding="false"
@@ -36,8 +35,8 @@
             android:textSize="15sp" />
 
         <ImageView
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
             android:background="@drawable/ic_next"
@@ -111,7 +110,6 @@
 
             <ImageView
                 android:id="@+id/deleteIV"
-                android:foreground="@drawable/ripple_effect"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
