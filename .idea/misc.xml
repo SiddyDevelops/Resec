@@ -23,11 +23,14 @@
         <entry key="app/src/main/res/drawable/ripple_effect.xml" value="0.1985" />
         <entry key="app/src/main/res/drawable/switch_track.xml" value="0.1985" />
         <entry key="app/src/main/res/drawable/switch_track_widget.xml" value="0.1985" />
+        <entry key="app/src/main/res/layout-v23/resec_app_widget.xml" value="0.17572463768115942" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.23278985507246377" />
         <entry key="app/src/main/res/layout/custom_dialog_layout.xml" value="0.264" />
         <entry key="app/src/main/res/layout/custom_notification_layout.xml" value="0.264" />
+        <entry key="app/src/main/res/layout/list_item_layout.xml" value="0.17572463768115942" />
         <entry key="app/src/main/res/layout/resec_app_widget.xml" value="0.264" />
         <entry key="app/src/main/res/layout/setting_layout_item.xml" value="0.4" />
+        <entry key="app/src/main/res/layout/widget_item_layout.xml" value="0.17572463768115942" />
         <entry key="app/src/main/res/menu/bottom_bar_items.xml" value="0.28564814814814815" />
         <entry key="app/src/main/res/xml/policies.xml" value="0.17572463768115942" />
       </map>
