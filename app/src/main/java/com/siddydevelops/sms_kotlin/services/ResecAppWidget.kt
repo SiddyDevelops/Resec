@@ -5,7 +5,6 @@ import android.appwidget.AppWidgetProvider
 import android.content.Context
 import android.content.Intent
 import android.widget.RemoteViews
-import com.siddydevelops.sms_kotlin.R
 
 
 /**
@@ -42,7 +41,7 @@ internal fun updateAppWidget(
     val views = RemoteViews(context.packageName, com.siddydevelops.sms_kotlin.R.layout.resec_app_widget)
     views.setTextViewText(com.siddydevelops.sms_kotlin.R.id.appwidget_text, widgetText)
 
-    val intent = Intent(context, WidgetRemoteViewsService::class.java)
+    val intent = Intent(context, AppWidgetRemoteViewsService::class.java)
     views.setRemoteAdapter(com.siddydevelops.sms_kotlin.R.id.widgetListView, intent)
     appWidgetManager.updateAppWidget(appWidgetId, views)
 
