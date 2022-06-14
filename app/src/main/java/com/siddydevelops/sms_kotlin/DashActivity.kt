@@ -9,7 +9,6 @@ import android.app.admin.DevicePolicyManager
 import android.content.*
 import android.media.AudioManager
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
 import android.text.method.PasswordTransformationMethod
@@ -19,11 +18,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.Window
 import android.widget.*
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat
-import androidx.lifecycle.Observer
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -43,8 +40,6 @@ import com.vmadalin.easypermissions.EasyPermissions
 import com.vmadalin.easypermissions.dialogs.SettingsDialog
 import java.lang.ref.WeakReference
 import java.text.SimpleDateFormat
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -113,10 +108,10 @@ class DashActivity : AppCompatActivity(),
         val rvAdapter = RVAdapter(this, this, this,this)
         recyclerView.adapter = rvAdapter
 
-        viewModel.allSettings.observe(this, Observer { list ->
+        viewModel.allSettings.observe(this) { list ->
             rvAdapter.updateList(list)
             generatePrefList(list)
-        })
+        }
 
         addPrefSetting.setOnClickListener {
             addNewPreferenceSettings()
@@ -129,7 +124,7 @@ class DashActivity : AppCompatActivity(),
             editor.apply()
             SetNotification(this, getString(R.string.resec_state_active))
             stateTV.text = getString(R.string.resec_state_active)
-            stateTV.setTextColor(resources.getColor(R.color.green))
+            stateTV.setTextColor(ContextCompat.getColor(applicationContext,R.color.green))
             stateBtn.visibility = View.GONE
         }
 
@@ -187,11 +182,11 @@ class DashActivity : AppCompatActivity(),
 
         pinVisibility.setOnClickListener {
             if (pinVisibility.tag == "visi") {
-                pinVisibility.setImageDrawable(getDrawable(R.drawable.ic_visibility_off))
+                pinVisibility.setImageDrawable(ContextCompat.getDrawable(applicationContext,R.drawable.ic_visibility_off))
                 pinVisibility.tag = "invisi"
                 userPin.transformationMethod = null
             } else {
-                pinVisibility.setImageDrawable(getDrawable(R.drawable.ic_visibility))
+                pinVisibility.setImageDrawable(ContextCompat.getDrawable(applicationContext,R.drawable.ic_visibility))
                 pinVisibility.tag = "visi"
                 userPin.transformationMethod = PasswordTransformationMethod()
             }
@@ -341,7 +336,7 @@ class DashActivity : AppCompatActivity(),
             cResolver, Settings.System.SCREEN_BRIGHTNESS, 0
         ).toFloat()
 
-        radioGroup?.setOnCheckedChangeListener { p0, id ->
+        radioGroup?.setOnCheckedChangeListener { _, id ->
             checkRadioButton = dialogView.findViewById(id)
         }
 
@@ -557,10 +552,10 @@ class DashActivity : AppCompatActivity(),
 
     private val mServiceReceiver: IncomingSMS = object : IncomingSMS() {
         override fun onReceive(context: Context?, intent: Intent) {
-            val IncomingSms = intent.getStringExtra("incomingSms") //
+            val incomingSms = intent.getStringExtra("incomingSms") //
 
             val phoneNumber = intent.getStringExtra("incomingPhoneNumber")
-            Log.d("DATA->", "${IncomingSms},$phoneNumber")
+            Log.d("DATA->", "${incomingSms},$phoneNumber")
         }
     }
 
