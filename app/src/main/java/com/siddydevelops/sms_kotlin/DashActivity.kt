@@ -101,6 +101,9 @@ class DashActivity : AppCompatActivity(),
             ViewModelProvider.AndroidViewModelFactory.getInstance(application)
         )[SettingsViewModel::class.java]
 
+        // Test AutomateTasking
+        automateSettings(18,20)
+
         sharedPreferences = getSharedPreferences("USER_STORE", Context.MODE_PRIVATE)
         w = window
         cResolver = contentResolver
@@ -224,17 +227,18 @@ class DashActivity : AppCompatActivity(),
         }
     }
 
-    private fun automateSettings() {
+    private fun automateSettings(startTime: Int, endTime: Int) {
         alarmMgr = getSystemService(Context.ALARM_SERVICE) as AlarmManager
         alarmIntent = Intent(this, AutomateReceiver::class.java).let { intent ->
+            intent.putExtra("PrefSettingExtra","This is the settings passed")
             PendingIntent.getBroadcast(this, 0, intent, 0)
         }
 
         // Set the alarm to start at 20:00.
         val calendar: Calendar = Calendar.getInstance().apply {
             timeInMillis = System.currentTimeMillis()
-            set(Calendar.HOUR_OF_DAY, 20)
-            set(Calendar.MINUTE, 0)
+            set(Calendar.HOUR_OF_DAY, startTime)
+            set(Calendar.MINUTE, 54)
             set(Calendar.SECOND, 0)
         }
 
@@ -246,6 +250,10 @@ class DashActivity : AppCompatActivity(),
             1000 * 60 * 60 * 24,
             alarmIntent
         )
+
+        // Stopping Service
+        //alarmMgr!!.cancel(alarmIntent)
+
         /*
         AlarmManager mgrAlarm = (AlarmManager) context.getSystemService(ALARM_SERVICE);
         ArrayList<PendingIntent> intentArray = new ArrayList<PendingIntent>();
@@ -504,7 +512,6 @@ class DashActivity : AppCompatActivity(),
     }
 
     override fun updatePreferenceSettings(settingsItem: SettingsItem) {
-        Log.i("Update:","${settingsItem.active}")
         viewModel.addSetting(settingsItem)
     }
 

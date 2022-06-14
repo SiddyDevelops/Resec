@@ -17,7 +17,7 @@ class AutomateReceiver : BroadcastReceiver() {
     private var settingsItemList = ArrayList<SettingsItem>()
     private lateinit var dao: SettingsDAO
 
-    override fun onReceive(context: Context, p1: Intent?) {
+    override fun onReceive(context: Context, intent: Intent?) {
         // This will be called at Start-Time
         dao = getDatabase(context).getSettingDao()
         settingsRepository = SettingsRepository(dao)
@@ -25,6 +25,7 @@ class AutomateReceiver : BroadcastReceiver() {
         allSettings.observeForever { list ->
             updateList(list)
         }
+        Log.d("Intent",intent!!.getStringExtra("PrefSettingExtra").toString())
     }
 
     private fun updateList(newList: List<SettingsItem>) {
