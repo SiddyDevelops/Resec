@@ -3,7 +3,7 @@ package com.siddydevelops.sms_kotlin.data
 import android.content.Context
 import android.content.SharedPreferences
 import android.util.Log
-import com.siddydevelops.sms_kotlin.MainActivity
+import com.siddydevelops.sms_kotlin.DashActivity
 import com.siddydevelops.sms_kotlin.notifications.SetNotification
 import com.siddydevelops.sms_kotlin.utils.Constants
 import com.siddydevelops.sms_kotlin.utils.actions.*
@@ -27,14 +27,14 @@ class BroadcastUser(contextIn: Context, messageIn: String, phoneNumberIn: String
 
         sharedPreferences = context.getSharedPreferences("USER_STORE", Context.MODE_PRIVATE)
         val editor = sharedPreferences.edit()
-        activeBool = MainActivity.getResecState()
+        activeBool = DashActivity.getResecState()
 
         if(sharedPreferences.contains("UserID")) {
-            MainActivity.setMyUser(
+            DashActivity.setMyUser(
                 sharedPreferences.getString("UserID", "default")!!,
                 sharedPreferences.getString("UserPin", "default")!!
             )
-            MainActivity.setResecState(sharedPreferences.getBoolean("STATE",true))
+            DashActivity.setResecState(sharedPreferences.getBoolean("STATE",true))
             Log.d("STATE",activeBool.toString())
         }
 
@@ -58,11 +58,11 @@ class BroadcastUser(contextIn: Context, messageIn: String, phoneNumberIn: String
 
     private fun smsCommands() {
         if (message.contains("Resec.Contact")) {
-            contactBool = MainActivity.getContactState()
-            if (message == "Resec.Contacts<${MainActivity.getMyUser()?.userId}><${MainActivity.getMyUser()?.userPin}>") {
+            contactBool = DashActivity.getContactState()
+            if (message == "Resec.Contacts<${DashActivity.getMyUser()?.userId}><${DashActivity.getMyUser()?.userPin}>") {
                 SendSMS(phoneNumber, Constants.CONTACTS_COMMANDS)
                 toggleContact(true)
-                MainActivity.setContactState(true)
+                DashActivity.setContactState(true)
             }
             else if(message.contains("Resec.ContactName") && contactBool) {
                 GetContacts(context,'0',StringUtils.substringBetween(message,"<",">"),phoneNumber)
@@ -87,8 +87,8 @@ class BroadcastUser(contextIn: Context, messageIn: String, phoneNumberIn: String
                 Constants.INACTIVE -> {
                     SendSMS(phoneNumber,Constants.SEND_NACK)
                     SetNotification(context,"InActive")
-                    MainActivity.setResecState(false)
-                    MainActivity.setContactState(false)
+                    DashActivity.setResecState(false)
+                    DashActivity.setContactState(false)
                     toggleActive(false)
                     toggleContact(false)
                 }

@@ -8,8 +8,7 @@ import android.content.Intent
 import android.os.Build
 import android.widget.RemoteViews
 import androidx.core.app.NotificationCompat
-import androidx.core.graphics.red
-import com.siddydevelops.sms_kotlin.MainActivity
+import com.siddydevelops.sms_kotlin.DashActivity
 import com.siddydevelops.sms_kotlin.R
 
 
@@ -29,7 +28,7 @@ class SetNotification(context: Context,text: String) {
         remoteView.setOnClickPendingIntent(R.id.toggleBtn,pendingSwitchIntent)
 
         val channelId = "all_notifications" // Use same Channel ID
-        val intent = Intent(context, MainActivity::class.java)
+        val intent = Intent(context, DashActivity::class.java)
         val pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
         val builder = NotificationCompat.Builder(
             context,

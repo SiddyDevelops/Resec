@@ -5,7 +5,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.telephony.TelephonyManager
-import com.siddydevelops.sms_kotlin.MainActivity
+import com.siddydevelops.sms_kotlin.DashActivity
 import com.siddydevelops.sms_kotlin.data.BroadcastUser
 import com.siddydevelops.sms_kotlin.utils.Constants
 
@@ -21,8 +21,8 @@ class ToggleButtonListener : BroadcastReceiver() {
             val bu = BroadcastUser(context,Constants.INACTIVE,
                 tMgr.line1Number
             )
-            MainActivity.setResecState(false)
-            MainActivity.setContactState(false)
+            DashActivity.setResecState(false)
+            DashActivity.setContactState(false)
             editor.putBoolean("STATE",false)
             editor.apply()
             bu.toggleActive(false)

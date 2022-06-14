@@ -1,7 +1,9 @@
 package com.siddydevelops.sms_kotlin
 
 import android.Manifest
+import android.app.AlarmManager
 import android.app.NotificationManager
+import android.app.PendingIntent
 import android.app.Service
 import android.app.admin.DevicePolicyManager
 import android.content.*
@@ -40,7 +42,7 @@ import com.vmadalin.easypermissions.dialogs.SettingsDialog
 import java.lang.ref.WeakReference
 
 
-class MainActivity : AppCompatActivity(),
+class DashActivity : AppCompatActivity(),
     EasyPermissions.PermissionCallbacks,
     RVAdapter.LongClickDeleteInterface,
     RVAdapter.InitiateSettingsInterface,
@@ -55,6 +57,9 @@ class MainActivity : AppCompatActivity(),
     private lateinit var stateTV: TextView
 
     private lateinit var recyclerView: RecyclerView
+
+    private var alarmMgr: AlarmManager? = null
+    private lateinit var alarmIntent: PendingIntent
 
     private lateinit var dialogView: View
     private lateinit var startTimeBtn: View
@@ -94,6 +99,10 @@ class MainActivity : AppCompatActivity(),
             ViewModelProvider.AndroidViewModelFactory.getInstance(application)
         )[SettingsViewModel::class.java]
 
+        sharedPreferences = getSharedPreferences("USER_STORE", Context.MODE_PRIVATE)
+        w = window
+        cResolver = contentResolver
+
         recyclerView.layoutManager = LinearLayoutManager(this)
         val rvAdapter = RVAdapter(this, this, this,this)
         recyclerView.adapter = rvAdapter
@@ -103,119 +112,7 @@ class MainActivity : AppCompatActivity(),
         })
 
         addPrefSetting.setOnClickListener {
-            val builder: AlertDialog.Builder = AlertDialog.Builder(this)
-            val viewGroup = findViewById<ViewGroup>(android.R.id.content)
-            dialogView =
-                LayoutInflater.from(this).inflate(R.layout.custom_dialog_layout, viewGroup, false)
-            val radioGroup = dialogView.findViewById<RadioGroup>(R.id.radioGroup)
-            val soundNormal = dialogView.findViewById<RadioButton>(R.id.sound_normal)
-            val soundVibrate = dialogView.findViewById<RadioButton>(R.id.sound_vibrate)
-            val soundSilent = dialogView.findViewById<RadioButton>(R.id.sound_silent)
-            val ringSlider = dialogView.findViewById<Slider>(R.id.ringSlider)
-            val mediaSlider = dialogView.findViewById<Slider>(R.id.mediaSlider)
-            val notificationSlider = dialogView.findViewById<Slider>(R.id.notificationSlider)
-            val brightnessSlider = dialogView.findViewById<Slider>(R.id.brightnessSlider)
-            startTimeBtn = dialogView.findViewById<Button>(R.id.startTimeBtn)
-            endTimeBtn = dialogView.findViewById<Button>(R.id.endTimeBtn)
-            val saveSettingsBtn = dialogView.findViewById<Button>(R.id.saveSettingsBtn)
-
-            var checkRadioButton: RadioButton? = null
-
-            // Initializing view properties
-            startTime = null
-            endTime = null
-            val audioManager: AudioManager = getSystemService(Service.AUDIO_SERVICE) as AudioManager
-            when (audioManager.ringerMode) {
-                AudioManager.RINGER_MODE_SILENT -> {
-                    soundSilent.isChecked = true
-                    checkRadioButton = soundSilent
-                }
-                AudioManager.RINGER_MODE_VIBRATE -> {
-                    soundVibrate.isChecked = true
-                    checkRadioButton = soundVibrate
-                }
-                AudioManager.RINGER_MODE_NORMAL -> {
-                    soundNormal.isChecked = true
-                    checkRadioButton = soundNormal
-                }
-            }
-            ringSlider.valueTo = audioManager.getStreamMaxVolume(AudioManager.STREAM_RING).toFloat()
-            ringSlider.value = audioManager.getStreamVolume(AudioManager.STREAM_RING).toFloat()
-
-            mediaSlider.valueTo =
-                audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC).toFloat()
-            mediaSlider.value = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC).toFloat()
-
-            notificationSlider?.valueTo =
-                audioManager.getStreamMaxVolume(AudioManager.STREAM_NOTIFICATION).toFloat()
-            notificationSlider?.value =
-                audioManager.getStreamVolume(AudioManager.STREAM_NOTIFICATION).toFloat()
-
-            brightnessSlider?.value = Settings.System.getInt(
-                cResolver, Settings.System.SCREEN_BRIGHTNESS, 0
-            ).toFloat()
-
-            radioGroup?.setOnCheckedChangeListener { p0, id ->
-                checkRadioButton = dialogView.findViewById(id)
-            }
-
-            startTimeBtn.setOnClickListener {
-                setPickerTime("Select Start Time:")
-            }
-
-            endTimeBtn.setOnClickListener {
-                setPickerTime("Select End Time:")
-            }
-
-            builder.setView(dialogView)
-            val alertDialog: AlertDialog = builder.create()
-            alertDialog.show()
-
-            saveSettingsBtn?.setOnClickListener {
-                when {
-                    startTime == null -> {
-                        Toast.makeText(this, "Please select start time.", Toast.LENGTH_SHORT).show()
-                    }
-                    endTime == null -> {
-                        Toast.makeText(this, "Please select end time.", Toast.LENGTH_SHORT).show()
-                    }
-                    else -> {
-                        if (checkRadioButton?.text.toString() == "NORMAL") {
-                            viewModel.addSetting(
-                                SettingsItem(
-                                    false,
-                                    checkRadioButton?.text.toString(),
-                                    ringSlider.value.toString(),
-                                    mediaSlider.value.toString(),
-                                    notificationSlider.value.toString(),
-                                    brightnessSlider.value.toString(),
-                                    startTime.toString(),
-                                    endTime.toString()
-                                )
-                            )
-                        } else {
-                            viewModel.addSetting(
-                                SettingsItem(
-                                    false,
-                                    checkRadioButton?.text.toString(),
-                                    "0.00",
-                                    mediaSlider.value.toString(),
-                                    notificationSlider.value.toString(),
-                                    brightnessSlider.value.toString(),
-                                    startTime.toString(),
-                                    endTime.toString()
-                                )
-                            )
-                        }
-                        Toast.makeText(
-                            applicationContext,
-                            "Settings saved successfully!",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                        alertDialog.dismiss()
-                    }
-                }
-            }
+            addNewPreferenceSettings()
         }
 
         stateBtn.setOnClickListener {
@@ -228,8 +125,6 @@ class MainActivity : AppCompatActivity(),
             stateTV.setTextColor(resources.getColor(R.color.green))
             stateBtn.visibility = View.GONE
         }
-
-        sharedPreferences = getSharedPreferences("USER_STORE", Context.MODE_PRIVATE)
 
         if (sharedPreferences.contains("UserID")) {
             setMyUser(
@@ -258,7 +153,7 @@ class MainActivity : AppCompatActivity(),
                     editor.putString("UserPin", userPin.text.toString())
                     editor.apply()
                     Toast.makeText(
-                        this@MainActivity,
+                        this@DashActivity,
                         "Credentials Saved Successfully.",
                         Toast.LENGTH_SHORT
                     ).show()
@@ -295,9 +190,6 @@ class MainActivity : AppCompatActivity(),
             }
         }
 
-        w = window
-        cResolver = contentResolver
-
         if (Settings.System.canWrite(this)) {
             try {
                 // To handle the auto
@@ -319,13 +211,129 @@ class MainActivity : AppCompatActivity(),
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 val intent = Intent(Settings.ACTION_MANAGE_WRITE_SETTINGS)
                 intent.data = Uri.parse("package:$packageName")
-                startActivityForResult(intent, MainActivity.REQUEST_PERMISSION_CODE)
+                startActivityForResult(intent, DashActivity.REQUEST_PERMISSION_CODE)
             } else {
                 ActivityCompat.requestPermissions(
                     this,
                     arrayOf(Manifest.permission.WRITE_SETTINGS),
-                    MainActivity.REQUEST_PERMISSION_CODE
+                    DashActivity.REQUEST_PERMISSION_CODE
                 )
+            }
+        }
+    }
+
+    private fun addNewPreferenceSettings() {
+        val builder: AlertDialog.Builder = AlertDialog.Builder(this)
+        val viewGroup = findViewById<ViewGroup>(android.R.id.content)
+        dialogView =
+            LayoutInflater.from(this).inflate(R.layout.custom_dialog_layout, viewGroup, false)
+        val radioGroup = dialogView.findViewById<RadioGroup>(R.id.radioGroup)
+        val soundNormal = dialogView.findViewById<RadioButton>(R.id.sound_normal)
+        val soundVibrate = dialogView.findViewById<RadioButton>(R.id.sound_vibrate)
+        val soundSilent = dialogView.findViewById<RadioButton>(R.id.sound_silent)
+        val ringSlider = dialogView.findViewById<Slider>(R.id.ringSlider)
+        val mediaSlider = dialogView.findViewById<Slider>(R.id.mediaSlider)
+        val notificationSlider = dialogView.findViewById<Slider>(R.id.notificationSlider)
+        val brightnessSlider = dialogView.findViewById<Slider>(R.id.brightnessSlider)
+        startTimeBtn = dialogView.findViewById<Button>(R.id.startTimeBtn)
+        endTimeBtn = dialogView.findViewById<Button>(R.id.endTimeBtn)
+        val saveSettingsBtn = dialogView.findViewById<Button>(R.id.saveSettingsBtn)
+
+        var checkRadioButton: RadioButton? = null
+
+        // Initializing view properties
+        startTime = null
+        endTime = null
+        val audioManager: AudioManager = getSystemService(Service.AUDIO_SERVICE) as AudioManager
+        when (audioManager.ringerMode) {
+            AudioManager.RINGER_MODE_SILENT -> {
+                soundSilent.isChecked = true
+                checkRadioButton = soundSilent
+            }
+            AudioManager.RINGER_MODE_VIBRATE -> {
+                soundVibrate.isChecked = true
+                checkRadioButton = soundVibrate
+            }
+            AudioManager.RINGER_MODE_NORMAL -> {
+                soundNormal.isChecked = true
+                checkRadioButton = soundNormal
+            }
+        }
+        ringSlider.valueTo = audioManager.getStreamMaxVolume(AudioManager.STREAM_RING).toFloat()
+        ringSlider.value = audioManager.getStreamVolume(AudioManager.STREAM_RING).toFloat()
+
+        mediaSlider.valueTo =
+            audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC).toFloat()
+        mediaSlider.value = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC).toFloat()
+
+        notificationSlider?.valueTo =
+            audioManager.getStreamMaxVolume(AudioManager.STREAM_NOTIFICATION).toFloat()
+        notificationSlider?.value =
+            audioManager.getStreamVolume(AudioManager.STREAM_NOTIFICATION).toFloat()
+
+        brightnessSlider?.value = Settings.System.getInt(
+            cResolver, Settings.System.SCREEN_BRIGHTNESS, 0
+        ).toFloat()
+
+        radioGroup?.setOnCheckedChangeListener { p0, id ->
+            checkRadioButton = dialogView.findViewById(id)
+        }
+
+        startTimeBtn.setOnClickListener {
+            setPickerTime("Select Start Time:")
+        }
+
+        endTimeBtn.setOnClickListener {
+            setPickerTime("Select End Time:")
+        }
+
+        builder.setView(dialogView)
+        val alertDialog: AlertDialog = builder.create()
+        alertDialog.show()
+
+        saveSettingsBtn?.setOnClickListener {
+            when {
+                startTime == null -> {
+                    Toast.makeText(this, "Please select start time.", Toast.LENGTH_SHORT).show()
+                }
+                endTime == null -> {
+                    Toast.makeText(this, "Please select end time.", Toast.LENGTH_SHORT).show()
+                }
+                else -> {
+                    if (checkRadioButton?.text.toString() == "NORMAL") {
+                        viewModel.addSetting(
+                            SettingsItem(
+                                false,
+                                checkRadioButton?.text.toString(),
+                                ringSlider.value.toString(),
+                                mediaSlider.value.toString(),
+                                notificationSlider.value.toString(),
+                                brightnessSlider.value.toString(),
+                                startTime.toString(),
+                                endTime.toString()
+                            )
+                        )
+                    } else {
+                        viewModel.addSetting(
+                            SettingsItem(
+                                false,
+                                checkRadioButton?.text.toString(),
+                                "0.00",
+                                mediaSlider.value.toString(),
+                                notificationSlider.value.toString(),
+                                brightnessSlider.value.toString(),
+                                startTime.toString(),
+                                endTime.toString()
+                            )
+                        )
+                    }
+                    Toast.makeText(
+                        applicationContext,
+                        "Settings saved successfully!",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    alertDialog.dismiss()
+                }
             }
         }
     }
@@ -594,10 +602,10 @@ class MainActivity : AppCompatActivity(),
     companion object {
         private const val REQUEST_PERMISSION_CODE = 1
 
-        private lateinit var weakSelf: WeakReference<MainActivity>
+        private lateinit var weakSelf: WeakReference<DashActivity>
 
         @JvmStatic
-        fun get(): MainActivity {
+        fun get(): DashActivity {
             return weakSelf.get()!!
         }
 

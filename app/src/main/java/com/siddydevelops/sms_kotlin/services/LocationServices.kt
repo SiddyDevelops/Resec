@@ -5,19 +5,16 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.app.Service
-import android.content.Context
 import android.content.Intent
 import android.location.Address
 import android.location.Geocoder
-import android.media.AudioManager
 import android.os.Build
 import android.os.IBinder
 import android.util.Log
 import androidx.core.app.NotificationCompat
-import androidx.core.content.ContextCompat
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
-import com.siddydevelops.sms_kotlin.MainActivity
+import com.siddydevelops.sms_kotlin.DashActivity
 import com.siddydevelops.sms_kotlin.R
 import com.siddydevelops.sms_kotlin.utils.actions.SendSMS
 import java.util.*
@@ -34,7 +31,7 @@ class LocationServices : Service() {
         //do heavy work on a background thread
         val input = intent?.getStringExtra("inputExtra")
         createNotificationChannel()
-        val notificationIntent = Intent(this, MainActivity::class.java)
+        val notificationIntent = Intent(this, DashActivity::class.java)
         val pendingIntent = PendingIntent.getActivity(
             this,
             0, notificationIntent, 0
