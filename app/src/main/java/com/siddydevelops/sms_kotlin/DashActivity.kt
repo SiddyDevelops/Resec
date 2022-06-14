@@ -246,7 +246,23 @@ class DashActivity : AppCompatActivity(),
             1000 * 60 * 60 * 24,
             alarmIntent
         )
+        /*
+        AlarmManager mgrAlarm = (AlarmManager) context.getSystemService(ALARM_SERVICE);
+        ArrayList<PendingIntent> intentArray = new ArrayList<PendingIntent>();
 
+        for(i = 0; i < 10; ++i)
+        {
+            Intent intent = new Intent(context, OnAlarmReceiver.class);
+            // Loop counter `i` is used as a `requestCode`
+            PendingIntent pendingIntent = PendingIntent.getBroadcast(context, i, intent, 0);
+            // Single alarms in 1, 2, ..., 10 minutes (in `i` minutes)
+            mgrAlarm.set(AlarmManager.ELAPSED_REALTIME_WAKEUP,
+                SystemClock.elapsedRealtime() + 60000 * i,
+                pendingIntent);
+
+            intentArray.add(pendingIntent);
+        }
+         */
     }
 
     private fun addNewPreferenceSettings() {
