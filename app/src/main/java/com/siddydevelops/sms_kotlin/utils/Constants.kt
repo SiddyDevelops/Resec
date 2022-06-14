@@ -10,7 +10,7 @@ object Constants {
     const val MESSAGE_COMMANDS1 = "●<Resec.Lock>: Lock-Screen immediately."
     const val MESSAGE_COMMANDS2 = "●<Resec.Contacts<UserID><UserPIN>>"
     const val MESSAGE_COMMANDS3 = "●<Resec.Location>: Get device location."
-    const val MESSAGE_COMMANDS4 = "●<Resec.SoundStatus>: Check the status of sound profile(Silent, Mute, Normal)."
+    const val MESSAGE_COMMANDS4 = "●<Resec.SoundStatus>: Check the status of sound profile."
     const val MESSAGE_COMMANDS5 = "●<Resec.Inactive>: Terminate Resec services."
 
     const val SOUND_PROFILE_STATUS = "Resec.SoundStatus"

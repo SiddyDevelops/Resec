@@ -219,6 +219,10 @@ class MainActivity : AppCompatActivity(),
         }
 
         stateBtn.setOnClickListener {
+            setResecState(true)
+            val editor = sharedPreferences.edit()
+            editor.putBoolean("STATE",true)
+            editor.apply()
             SetNotification(this, getString(R.string.resec_state_active))
             stateTV.text = getString(R.string.resec_state_active)
             stateTV.setTextColor(resources.getColor(R.color.green))
@@ -598,12 +602,25 @@ class MainActivity : AppCompatActivity(),
         }
 
         private var user: User? = null
+        private var resecState: Boolean = false
+        private var contactState: Boolean = false
 
         fun setMyUser(userId: String, userPin: String) {
             user = User(userId, userPin)
         }
 
+        fun setResecState(state: Boolean) {
+            resecState = state
+        }
+
+        fun setContactState(state: Boolean) {
+            contactState = state
+        }
+
         fun getMyUser() = user
+
+        fun getResecState() = resecState
+        fun getContactState() = contactState
 
     }
 

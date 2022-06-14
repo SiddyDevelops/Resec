@@ -8,13 +8,14 @@ import com.siddydevelops.sms_kotlin.notifications.SetNotification
 import com.siddydevelops.sms_kotlin.utils.Constants
 import com.siddydevelops.sms_kotlin.utils.actions.*
 import org.apache.commons.lang3.StringUtils
+import kotlin.properties.Delegates
 
 class BroadcastUser(contextIn: Context, messageIn: String, phoneNumberIn: String) {
 
     private var context: Context
     private var message: String
     private var phoneNumber: String
-    private var activeBool = false
+    private var activeBool by Delegates.notNull<Boolean>()
     private var contactBool = false
 
     private var  sharedPreferences: SharedPreferences
@@ -25,16 +26,22 @@ class BroadcastUser(contextIn: Context, messageIn: String, phoneNumberIn: String
         phoneNumber = phoneNumberIn
 
         sharedPreferences = context.getSharedPreferences("USER_STORE", Context.MODE_PRIVATE)
+        val editor = sharedPreferences.edit()
+        activeBool = MainActivity.getResecState()
 
         if(sharedPreferences.contains("UserID")) {
             MainActivity.setMyUser(
                 sharedPreferences.getString("UserID", "default")!!,
                 sharedPreferences.getString("UserPin", "default")!!
             )
+            MainActivity.setResecState(sharedPreferences.getBoolean("STATE",true))
+            Log.d("STATE",activeBool.toString())
         }
 
         if(message == Constants.ACTIVE) {
             SendSMS(phoneNumber, Constants.SEND_ACK)
+            editor.putBoolean("STATE",true)
+            editor.apply()
             toggleActive(true)
             SetNotification(context,"Active")
         }
@@ -42,7 +49,7 @@ class BroadcastUser(contextIn: Context, messageIn: String, phoneNumberIn: String
         if(activeBool) {
             smsCommands()
         } else if(message == Constants.SEND_NACK) {
-            //doNothing
+            Unit
         } else{
             SendSMS(phoneNumber,Constants.SEND_NACK)
         }
@@ -51,14 +58,16 @@ class BroadcastUser(contextIn: Context, messageIn: String, phoneNumberIn: String
 
     private fun smsCommands() {
         if (message.contains("Resec.Contact")) {
+            contactBool = MainActivity.getContactState()
             if (message == "Resec.Contacts<${MainActivity.getMyUser()?.userId}><${MainActivity.getMyUser()?.userPin}>") {
                 SendSMS(phoneNumber, Constants.CONTACTS_COMMANDS)
                 toggleContact(true)
+                MainActivity.setContactState(true)
             }
-            if(message.contains("Resec.ContactName") && contactBool) {
+            else if(message.contains("Resec.ContactName") && contactBool) {
                 GetContacts(context,'0',StringUtils.substringBetween(message,"<",">"),phoneNumber)
             }
-            if(message.contains("Resec.Contacts") && contactBool) {
+            else if(message.contains("Resec.Contacts") && contactBool) {
                 GetContacts(context,message[15],"0",phoneNumber)
             }
             else {
@@ -75,11 +84,19 @@ class BroadcastUser(contextIn: Context, messageIn: String, phoneNumberIn: String
                     SendSMS(phoneNumber, Constants.MESSAGE_COMMANDS5)
                 }
                 Constants.HELP -> SendSMS(phoneNumber, Constants.MESSAGE_ABOUT)
-                Constants.INACTIVE -> SendSMS(phoneNumber,Constants.SEND_NACK)
+                Constants.INACTIVE -> {
+                    SendSMS(phoneNumber,Constants.SEND_NACK)
+                    SetNotification(context,"InActive")
+                    MainActivity.setResecState(false)
+                    MainActivity.setContactState(false)
+                    toggleActive(false)
+                    toggleContact(false)
+                }
                 Constants.SOUND_PROFILE_STATUS -> SoundProfile(context,phoneNumber,false)
                 Constants.SOUND_PROFILE_NORMAL -> SoundProfile(context,phoneNumber,true)
                 Constants.LOCATION_COMMAND -> GetDeviceLocation(context,phoneNumber)
                 Constants.LOCK_COMMAND -> LockScreen(context,phoneNumber)
+                Constants.ACTIVE -> Unit
                 else -> SendSMS(phoneNumber, Constants.TRY_AGAIN)
             }
         }
