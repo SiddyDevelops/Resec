@@ -43,6 +43,8 @@
             </intent-filter>
         </activity>
 
+        <receiver android:name=".services.AutomateReceiver" />
+
         <receiver
             android:name=".IncomingSMS"
             android:exported="true"

@@ -34,12 +34,14 @@ import com.google.android.material.timepicker.TimeFormat
 import com.siddydevelops.sms_kotlin.data.User
 import com.siddydevelops.sms_kotlin.data.db.entity.SettingsItem
 import com.siddydevelops.sms_kotlin.notifications.SetNotification
+import com.siddydevelops.sms_kotlin.services.AutomateReceiver
 import com.siddydevelops.sms_kotlin.ui.RVAdapter
 import com.siddydevelops.sms_kotlin.ui.SettingsViewModel
 import com.siddydevelops.sms_kotlin.utils.admin.DeviceAdmin
 import com.vmadalin.easypermissions.EasyPermissions
 import com.vmadalin.easypermissions.dialogs.SettingsDialog
 import java.lang.ref.WeakReference
+import java.util.*
 
 
 class DashActivity : AppCompatActivity(),
@@ -220,6 +222,31 @@ class DashActivity : AppCompatActivity(),
                 )
             }
         }
+    }
+
+    private fun automateSettings() {
+        alarmMgr = getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        alarmIntent = Intent(this, AutomateReceiver::class.java).let { intent ->
+            PendingIntent.getBroadcast(this, 0, intent, 0)
+        }
+
+        // Set the alarm to start at 20:00.
+        val calendar: Calendar = Calendar.getInstance().apply {
+            timeInMillis = System.currentTimeMillis()
+            set(Calendar.HOUR_OF_DAY, 20)
+            set(Calendar.MINUTE, 0)
+            set(Calendar.SECOND, 0)
+        }
+
+        // setRepeating() lets you specify a precise custom interval--in this case,
+        // 1 day.
+        alarmMgr?.setRepeating(
+            AlarmManager.RTC_WAKEUP,
+            calendar.timeInMillis,
+            1000 * 60 * 60 * 24,
+            alarmIntent
+        )
+
     }
 
     private fun addNewPreferenceSettings() {
