@@ -32,5 +32,11 @@ object Constants {
 
     const val MESSAGE_ABOUT = "Resec helps you to access your android application anytime remotely. Please type <Resec.Commands> to get list of available commands.>"
 
-
+    const val EXTRA_ACTIVE = "EXTRA_ACTIVE"
+    const val EXTRA_SOUND_PROFILE = "EXTRA_SOUND_PROFILE"
+    const val EXTRA_VOL_RING = "EXTRA_VOL_RING"
+    const val EXTRA_VOL_MEDIA = "EXTRA_VOL_MEDIA"
+    const val EXTRA_SOUND_NOTIFICATION = "EXTRA_SOUND_NOTIFICATION"
+    const val EXTRA_BRIGHTNESS = "EXTRA_BRIGHTNESS"
+    const val EXTRA_START_TIME = "EXTRA_START_TIME"
 }

@@ -37,12 +37,14 @@ import com.siddydevelops.sms_kotlin.notifications.SetNotification
 import com.siddydevelops.sms_kotlin.services.AutomateReceiver
 import com.siddydevelops.sms_kotlin.ui.RVAdapter
 import com.siddydevelops.sms_kotlin.ui.SettingsViewModel
+import com.siddydevelops.sms_kotlin.utils.Constants
 import com.siddydevelops.sms_kotlin.utils.admin.DeviceAdmin
 import com.vmadalin.easypermissions.EasyPermissions
 import com.vmadalin.easypermissions.dialogs.SettingsDialog
 import java.lang.ref.WeakReference
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import java.util.*
-
 
 class DashActivity : AppCompatActivity(),
     EasyPermissions.PermissionCallbacks,
@@ -80,7 +82,6 @@ class DashActivity : AppCompatActivity(),
     private lateinit var sharedPreferences: SharedPreferences
     private lateinit var viewModel: SettingsViewModel
 
-    @RequiresApi(Build.VERSION_CODES.M)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -102,7 +103,7 @@ class DashActivity : AppCompatActivity(),
         )[SettingsViewModel::class.java]
 
         // Test AutomateTasking
-        automateSettings(18,20)
+        //automateSettings(18,20)
 
         sharedPreferences = getSharedPreferences("USER_STORE", Context.MODE_PRIVATE)
         w = window
@@ -213,24 +214,26 @@ class DashActivity : AppCompatActivity(),
                 e.printStackTrace()
             }
         } else {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                val intent = Intent(Settings.ACTION_MANAGE_WRITE_SETTINGS)
-                intent.data = Uri.parse("package:$packageName")
-                startActivityForResult(intent, DashActivity.REQUEST_PERMISSION_CODE)
-            } else {
-                ActivityCompat.requestPermissions(
-                    this,
-                    arrayOf(Manifest.permission.WRITE_SETTINGS),
-                    DashActivity.REQUEST_PERMISSION_CODE
-                )
-            }
+            val intent = Intent(Settings.ACTION_MANAGE_WRITE_SETTINGS)
+            intent.data = Uri.parse("package:$packageName")
+            startActivityForResult(intent, DashActivity.REQUEST_PERMISSION_CODE)
         }
     }
 
-    private fun automateSettings(startTime: Int, endTime: Int) {
+    private fun automateSettings(startTime: Int, endTime: Int,settingsItem: SettingsItem) {
+
+        val formattedTimeHour = LocalDateTime.parse(settingsItem.startTime,
+            DateTimeFormatter.ofPattern("hh:mm a"))
+
         alarmMgr = getSystemService(Context.ALARM_SERVICE) as AlarmManager
         alarmIntent = Intent(this, AutomateReceiver::class.java).let { intent ->
-            intent.putExtra("PrefSettingExtra","This is the settings passed")
+            intent.putExtra(Constants.EXTRA_ACTIVE,settingsItem.active)
+            intent.putExtra(Constants.EXTRA_SOUND_PROFILE,settingsItem.soundProfile)
+            intent.putExtra(Constants.EXTRA_VOL_RING,settingsItem.volRing)
+            intent.putExtra(Constants.EXTRA_VOL_MEDIA,settingsItem.volMedia)
+            intent.putExtra(Constants.EXTRA_SOUND_NOTIFICATION,settingsItem.volNotification)
+            intent.putExtra(Constants.EXTRA_BRIGHTNESS,settingsItem.brightness)
+            intent.putExtra(Constants.EXTRA_START_TIME,settingsItem.startTime)
             PendingIntent.getBroadcast(this, 0, intent, 0)
         }
 
@@ -576,9 +579,7 @@ class DashActivity : AppCompatActivity(),
         ) {
             Toast.makeText(this, "All permissions are already granted!", Toast.LENGTH_LONG).show()
         } else {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                brightPermission = Settings.System.canWrite(this)
-            }
+            brightPermission = Settings.System.canWrite(this)
             val intent = Intent(DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN)
             intent.putExtra(
                 DevicePolicyManager.EXTRA_DEVICE_ADMIN, ComponentName(
@@ -605,12 +606,10 @@ class DashActivity : AppCompatActivity(),
             )
         }
         val n = applicationContext.getSystemService(NOTIFICATION_SERVICE) as NotificationManager
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (!n.isNotificationPolicyAccessGranted) {
-                // Ask the user to grant access
-                val intent = Intent(Settings.ACTION_NOTIFICATION_POLICY_ACCESS_SETTINGS)
-                startActivityForResult(intent, REQUEST_PERMISSION_CODE)
-            }
+        if (!n.isNotificationPolicyAccessGranted) {
+            // Ask the user to grant access
+            val intent = Intent(Settings.ACTION_NOTIFICATION_POLICY_ACCESS_SETTINGS)
+            startActivityForResult(intent, REQUEST_PERMISSION_CODE)
         }
     }
 
