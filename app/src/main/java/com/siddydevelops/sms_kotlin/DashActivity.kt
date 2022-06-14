@@ -42,9 +42,11 @@ import com.siddydevelops.sms_kotlin.utils.admin.DeviceAdmin
 import com.vmadalin.easypermissions.EasyPermissions
 import com.vmadalin.easypermissions.dialogs.SettingsDialog
 import java.lang.ref.WeakReference
+import java.text.SimpleDateFormat
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.*
+import kotlin.collections.ArrayList
 
 class DashActivity : AppCompatActivity(),
     EasyPermissions.PermissionCallbacks,
@@ -81,6 +83,7 @@ class DashActivity : AppCompatActivity(),
 
     private lateinit var sharedPreferences: SharedPreferences
     private lateinit var viewModel: SettingsViewModel
+    private val prefSettingsList = ArrayList<SettingsItem>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -102,9 +105,6 @@ class DashActivity : AppCompatActivity(),
             ViewModelProvider.AndroidViewModelFactory.getInstance(application)
         )[SettingsViewModel::class.java]
 
-        // Test AutomateTasking
-        //automateSettings(18,20)
-
         sharedPreferences = getSharedPreferences("USER_STORE", Context.MODE_PRIVATE)
         w = window
         cResolver = contentResolver
@@ -115,6 +115,7 @@ class DashActivity : AppCompatActivity(),
 
         viewModel.allSettings.observe(this, Observer { list ->
             rvAdapter.updateList(list)
+            generatePrefList(list)
         })
 
         addPrefSetting.setOnClickListener {
@@ -220,10 +221,25 @@ class DashActivity : AppCompatActivity(),
         }
     }
 
-    private fun automateSettings(startTime: Int, endTime: Int,settingsItem: SettingsItem) {
+    private fun generatePrefList(list: List<SettingsItem>) {
+        prefSettingsList.clear()
+        prefSettingsList.addAll(list)
+        Log.d("List",list.toString())
+        generateActivePrefList()
+    }
 
-        val formattedTimeHour = LocalDateTime.parse(settingsItem.startTime,
-            DateTimeFormatter.ofPattern("hh:mm a"))
+    private fun generateActivePrefList() {
+        Log.i("PrefCall",prefSettingsList.toString())
+        val formattedTimeHour = SimpleDateFormat("hh:mm a",Locale.US).parse(prefSettingsList[2].startTime)
+        val cal = Calendar.getInstance()
+        cal.time = formattedTimeHour!!
+        Log.d("Time: ","$formattedTimeHour + ${cal.get(Calendar.HOUR_OF_DAY)} + ${cal.get(Calendar.MINUTE)}")
+    }
+
+    private fun automateSettings(startTime: Int, endTime: Int,settingsItem: SettingsItem) {
+        val formattedTimeHour = SimpleDateFormat("hh:mm a",Locale.US).parse(settingsItem.startTime)
+        val cal = Calendar.getInstance()
+        cal.time = formattedTimeHour!!
 
         alarmMgr = getSystemService(Context.ALARM_SERVICE) as AlarmManager
         alarmIntent = Intent(this, AutomateReceiver::class.java).let { intent ->
@@ -240,22 +256,18 @@ class DashActivity : AppCompatActivity(),
         // Set the alarm to start at 20:00.
         val calendar: Calendar = Calendar.getInstance().apply {
             timeInMillis = System.currentTimeMillis()
-            set(Calendar.HOUR_OF_DAY, startTime)
-            set(Calendar.MINUTE, 54)
+            set(Calendar.HOUR_OF_DAY, cal.get(Calendar.HOUR_OF_DAY))
+            set(Calendar.MINUTE, cal.get(Calendar.MINUTE))
             set(Calendar.SECOND, 0)
         }
 
-        // setRepeating() lets you specify a precise custom interval--in this case,
-        // 1 day.
+        // setRepeating() lets you specify a precise custom interval--in this case,1 day.
         alarmMgr?.setRepeating(
             AlarmManager.RTC_WAKEUP,
             calendar.timeInMillis,
             1000 * 60 * 60 * 24,
             alarmIntent
         )
-
-        // Stopping Service
-        //alarmMgr!!.cancel(alarmIntent)
 
         /*
         AlarmManager mgrAlarm = (AlarmManager) context.getSystemService(ALARM_SERVICE);
