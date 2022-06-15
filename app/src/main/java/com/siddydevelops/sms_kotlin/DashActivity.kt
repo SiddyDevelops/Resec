@@ -104,7 +104,7 @@ class DashActivity : AppCompatActivity(),
         alarmMgr = getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
         recyclerView.layoutManager = LinearLayoutManager(this)
-        val rvAdapter = RVAdapter(this, this, this,this)
+        val rvAdapter = RVAdapter(this, this, this, this)
         recyclerView.adapter = rvAdapter
 
         viewModel.allSettings.observe(this) { list ->
@@ -116,20 +116,20 @@ class DashActivity : AppCompatActivity(),
             addNewPreferenceSettings()
         }
 
-        if(sharedPreferences.getBoolean("STATE",false)) {
+        if (sharedPreferences.getBoolean("STATE", false)) {
             stateTV.text = getString(R.string.resec_state_active)
-            stateTV.setTextColor(ContextCompat.getColor(applicationContext,R.color.green))
+            stateTV.setTextColor(ContextCompat.getColor(applicationContext, R.color.green))
             stateBtn.visibility = View.GONE
         }
 
         stateBtn.setOnClickListener {
             setResecState(true)
             val editor = sharedPreferences.edit()
-            editor.putBoolean("STATE",true)
+            editor.putBoolean("STATE", true)
             editor.apply()
             SetNotification(this, getString(R.string.resec_state_active))
             stateTV.text = getString(R.string.resec_state_active)
-            stateTV.setTextColor(ContextCompat.getColor(applicationContext,R.color.green))
+            stateTV.setTextColor(ContextCompat.getColor(applicationContext, R.color.green))
             stateBtn.visibility = View.GONE
         }
 
@@ -187,11 +187,21 @@ class DashActivity : AppCompatActivity(),
 
         pinVisibility.setOnClickListener {
             if (pinVisibility.tag == "visi") {
-                pinVisibility.setImageDrawable(ContextCompat.getDrawable(applicationContext,R.drawable.ic_visibility_off))
+                pinVisibility.setImageDrawable(
+                    ContextCompat.getDrawable(
+                        applicationContext,
+                        R.drawable.ic_visibility_off
+                    )
+                )
                 pinVisibility.tag = "invisi"
                 userPin.transformationMethod = null
             } else {
-                pinVisibility.setImageDrawable(ContextCompat.getDrawable(applicationContext,R.drawable.ic_visibility))
+                pinVisibility.setImageDrawable(
+                    ContextCompat.getDrawable(
+                        applicationContext,
+                        R.drawable.ic_visibility
+                    )
+                )
                 pinVisibility.tag = "visi"
                 userPin.transformationMethod = PasswordTransformationMethod()
             }
@@ -224,19 +234,20 @@ class DashActivity : AppCompatActivity(),
     private fun generatePrefList(list: List<SettingsItem>) {
         prefSettingsList.clear()
         prefSettingsList.addAll(list)
+        generateActivePrefList()
     }
 
     private fun generateActivePrefList() {
         val activeSettings = ArrayList<SettingsItem>()
-        for(settings in prefSettingsList) {
-            if(settings.active) {
+        for (settings in prefSettingsList) {
+            if (settings.active) {
                 activeSettings.add(settings)
             }
         }
         automateSettings(activeSettings)
     }
 
-    private fun cancelAutomateSettings(){
+    private fun cancelAutomateSettings() {
         if (intentArray.size > 0) {
             for (i in 0 until intentArray.size) {
                 alarmMgr!!.cancel(intentArray[i])
@@ -246,22 +257,25 @@ class DashActivity : AppCompatActivity(),
     }
 
     private fun automateSettings(activeSettings: List<SettingsItem>) {
-        for(i in activeSettings.indices)
-        {
-            Log.d("Added Item",activeSettings[0].toString())
-            val formattedTimeHour = SimpleDateFormat("hh:mm a",Locale.US).parse(activeSettings[i].startTime)
+        for (i in activeSettings.indices) {
+            Log.d("Added Item", activeSettings[i].toString())
+            val formattedTimeHour =
+                SimpleDateFormat("hh:mm a", Locale.US).parse(activeSettings[i].startTime)
             val cal = Calendar.getInstance()
             cal.time = formattedTimeHour!!
 
             alarmIntent = Intent(this, AutomateReceiver::class.java).let { intent ->
-                intent.putExtra(Constants.EXTRA_ACTIVE,activeSettings[i].active)
-                intent.putExtra(Constants.EXTRA_SOUND_PROFILE,activeSettings[i].soundProfile)
-                intent.putExtra(Constants.EXTRA_VOL_RING,activeSettings[i].volRing)
-                intent.putExtra(Constants.EXTRA_VOL_MEDIA,activeSettings[i].volMedia)
-                intent.putExtra(Constants.EXTRA_SOUND_NOTIFICATION,activeSettings[i].volNotification)
-                intent.putExtra(Constants.EXTRA_BRIGHTNESS,activeSettings[i].brightness)
-                intent.putExtra(Constants.EXTRA_START_TIME,activeSettings[i].startTime)
-                intent.putExtra(Constants.EXTRA_END_TIME,activeSettings[i].endTime)
+                intent.putExtra(Constants.EXTRA_ACTIVE, activeSettings[i].active)
+                intent.putExtra(Constants.EXTRA_SOUND_PROFILE, activeSettings[i].soundProfile)
+                intent.putExtra(Constants.EXTRA_VOL_RING, activeSettings[i].volRing)
+                intent.putExtra(Constants.EXTRA_VOL_MEDIA, activeSettings[i].volMedia)
+                intent.putExtra(
+                    Constants.EXTRA_SOUND_NOTIFICATION,
+                    activeSettings[i].volNotification
+                )
+                intent.putExtra(Constants.EXTRA_BRIGHTNESS, activeSettings[i].brightness)
+                intent.putExtra(Constants.EXTRA_START_TIME, activeSettings[i].startTime)
+                intent.putExtra(Constants.EXTRA_END_TIME, activeSettings[i].endTime)
                 PendingIntent.getBroadcast(this, i, intent, 0)
             }
 
@@ -395,6 +409,9 @@ class DashActivity : AppCompatActivity(),
                         Toast.LENGTH_SHORT
                     ).show()
                     alertDialog.dismiss()
+                    viewModel.allSettings.observe(this) { list ->
+                        generatePrefList(list)
+                    }
                 }
             }
         }
@@ -460,7 +477,7 @@ class DashActivity : AppCompatActivity(),
     }
 
     override fun onPressDelete(settingsItem: SettingsItem) {
-        Log.i("Delete:","${settingsItem.active}")
+        Log.i("Delete:", "${settingsItem.active}")
         viewModel.deleteSetting(settingsItem)
         Toast.makeText(this, "Settings has been deleted.", Toast.LENGTH_SHORT).show()
     }
@@ -522,13 +539,11 @@ class DashActivity : AppCompatActivity(),
         setBrightness(settingsItem.brightness.toFloat().toInt())
     }
 
-    override fun updatePreferenceSettings(state: Boolean,startTime: String) {
-        viewModel.updateSettingState(state,startTime)
-        if(state) {
-            generateActivePrefList()
-        } else {
-            cancelAutomateSettings()
-            generateActivePrefList()
+    override fun updatePreferenceSettings(state: Boolean, startTime: String) {
+        viewModel.updateSettingState(state, startTime)
+        cancelAutomateSettings()
+        viewModel.allSettings.observe(this) { list ->
+            generatePrefList(list)
         }
     }
 
