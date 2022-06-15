@@ -1,10 +1,7 @@
 package com.siddydevelops.sms_kotlin
 
 import android.Manifest
-import android.app.AlarmManager
-import android.app.NotificationManager
-import android.app.PendingIntent
-import android.app.Service
+import android.app.*
 import android.app.admin.DevicePolicyManager
 import android.content.*
 import android.media.AudioManager
@@ -41,7 +38,7 @@ import com.vmadalin.easypermissions.dialogs.SettingsDialog
 import java.lang.ref.WeakReference
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.collections.ArrayList
+
 
 class DashActivity : AppCompatActivity(),
     EasyPermissions.PermissionCallbacks,
@@ -115,6 +112,12 @@ class DashActivity : AppCompatActivity(),
 
         addPrefSetting.setOnClickListener {
             addNewPreferenceSettings()
+        }
+
+        if(sharedPreferences.getBoolean("STATE",false)) {
+            stateTV.text = getString(R.string.resec_state_active)
+            stateTV.setTextColor(ContextCompat.getColor(applicationContext,R.color.green))
+            stateBtn.visibility = View.GONE
         }
 
         stateBtn.setOnClickListener {

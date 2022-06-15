@@ -86,6 +86,10 @@ class BroadcastUser(contextIn: Context, messageIn: String, phoneNumberIn: String
                 Constants.HELP -> SendSMS(phoneNumber, Constants.MESSAGE_ABOUT)
                 Constants.INACTIVE -> {
                     SendSMS(phoneNumber,Constants.SEND_NACK)
+                    //Background mein Kam nhi karega
+                    val editor = sharedPreferences.edit()
+                    editor.putBoolean("STATE",false)
+                    editor.apply()
                     SetNotification(context,"InActive")
                     DashActivity.setResecState(false)
                     DashActivity.setContactState(false)

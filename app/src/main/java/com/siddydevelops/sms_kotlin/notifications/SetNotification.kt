@@ -52,20 +52,18 @@ class SetNotification(context: Context,text: String) {
     }
 
     private fun createNotificationChannel(context: Context,text: String) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val channelId = "all_notifications"
-            val mChannel = NotificationChannel(
-                channelId,
-                "General Notifications",
-                NotificationManager.IMPORTANCE_DEFAULT
-            )
-            mChannel.description = "This is default channel used for all other notifications"
-            val notificationManager =
-                context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-            notificationManager.createNotificationChannel(mChannel)
-            if(text == "InActive") {
-                notificationManager.cancelAll()
-            }
+        val channelId = "all_notifications"
+        val mChannel = NotificationChannel(
+            channelId,
+            "General Notifications",
+            NotificationManager.IMPORTANCE_DEFAULT
+        )
+        mChannel.description = "This is default channel used for all other notifications"
+        val notificationManager =
+            context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        notificationManager.createNotificationChannel(mChannel)
+        if(text == "InActive") {
+            notificationManager.cancelAll()
         }
     }
 
