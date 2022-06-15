@@ -24,5 +24,7 @@ class SettingsViewModel(application: Application): AndroidViewModel(application)
 
     fun updateSetting(settingsItem: SettingsItem) = viewModelScope.launch(Dispatchers.IO) { repository.update(settingsItem) }
 
+    fun updateSettingState(state: Boolean,startTime: String) = viewModelScope.launch(Dispatchers.IO) { repository.updateState(state,startTime) }
+
     fun deleteSetting(settingsItem: SettingsItem) = viewModelScope.launch(Dispatchers.IO) { repository.delete(settingsItem) }
 }

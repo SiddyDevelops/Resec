@@ -15,6 +15,9 @@ interface SettingsDAO {
     @Delete
     suspend fun delete(settingsItem: SettingsItem)
 
+    @Query("UPDATE preference_settings SET item_activity=:state WHERE item_start_time = :startTime")
+    fun updateState(state: Boolean, startTime: String)
+
     @Query("SELECT * FROM preference_settings")
     fun getAllSettings(): LiveData<List<SettingsItem>>
 }

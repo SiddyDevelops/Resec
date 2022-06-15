@@ -227,11 +227,13 @@ class DashActivity : AppCompatActivity(),
     }
 
     private fun generateActivePrefList() {
-        Log.i("PrefCall",prefSettingsList.toString())
-        val formattedTimeHour = SimpleDateFormat("hh:mm a",Locale.US).parse(prefSettingsList[2].startTime)
-        val cal = Calendar.getInstance()
-        cal.time = formattedTimeHour!!
-        Log.d("Time: ","$formattedTimeHour + ${cal.get(Calendar.HOUR_OF_DAY)} + ${cal.get(Calendar.MINUTE)}")
+        val activeSettings = ArrayList<SettingsItem>()
+        for(settings in prefSettingsList) {
+            if(settings.active) {
+                activeSettings.add(settings)
+            }
+        }
+        //Log.d("ActiveList",activeSettings.toString())
     }
 
     private fun automateSettings(startTime: Int, endTime: Int,settingsItem: SettingsItem) {
@@ -524,8 +526,8 @@ class DashActivity : AppCompatActivity(),
         setBrightness(settingsItem.brightness.toFloat().toInt())
     }
 
-    override fun updatePreferenceSettings(settingsItem: SettingsItem) {
-        viewModel.addSetting(settingsItem)
+    override fun updatePreferenceSettings(state: Boolean,startTime: String) {
+        viewModel.updateSettingState(state,startTime)
     }
 
     private fun setBrightness(brightness: Int) {

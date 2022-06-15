@@ -1,5 +1,6 @@
 package com.siddydevelops.sms_kotlin.data.db.entity
 
+import androidx.annotation.NonNull
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.Index
@@ -19,11 +20,11 @@ data class SettingsItem(
     val volNotification: String,
     @ColumnInfo(name = "item_brightness")
     val brightness: String,
+    @NonNull
+    @PrimaryKey
     @ColumnInfo(name = "item_start_time")
     val startTime: String,
     @ColumnInfo(name = "item_end_time")
     val endTime: String,
 ) {
-    @PrimaryKey(autoGenerate = true)
-    var id: Int = 0
 }

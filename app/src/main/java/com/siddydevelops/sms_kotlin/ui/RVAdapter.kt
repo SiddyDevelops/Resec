@@ -1,6 +1,7 @@
 package com.siddydevelops.sms_kotlin.ui
 
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -45,18 +46,10 @@ class RVAdapter(
         )
 
         holder.settingSwitch.setOnClickListener {
+            Log.d("Item Clicked",allSettings[position].startTime)
             if(holder.settingSwitch.isChecked) {
                 initiateSettingsInterface.changePreferenceSettings(allSettings[position])
-                updateSettingsInterface.updatePreferenceSettings(
-                    SettingsItem(true,
-                        allSettings[position].soundProfile,
-                        allSettings[position].volRing,
-                        allSettings[position].volMedia,
-                        allSettings[position].volNotification,
-                        allSettings[position].brightness,
-                        allSettings[position].startTime,
-                        allSettings[position].endTime)
-                )
+                updateSettingsInterface.updatePreferenceSettings(true,allSettings[position].startTime)
             } else {
                 //Change to default here
                 initiateSettingsInterface.changePreferenceSettings(SettingsItem(
@@ -67,18 +60,8 @@ class RVAdapter(
                     "3.",
                     "40.0",
                     "00:00 AM",
-                    "11:59 PM"
-                ))
-                updateSettingsInterface.updatePreferenceSettings(
-                    SettingsItem(false,
-                        allSettings[position].soundProfile,
-                        allSettings[position].volRing,
-                        allSettings[position].volMedia,
-                        allSettings[position].volNotification,
-                        allSettings[position].brightness,
-                        allSettings[position].startTime,
-                        allSettings[position].endTime)
-                )
+                    "11:59 PM" ))
+                updateSettingsInterface.updatePreferenceSettings(false,allSettings[position].startTime)
             }
         }
 
@@ -117,6 +100,6 @@ class RVAdapter(
     }
 
     interface UpdateSettingsInterface {
-        fun updatePreferenceSettings(settingsItem: SettingsItem)
+        fun updatePreferenceSettings(state: Boolean,startTime: String)
     }
 }

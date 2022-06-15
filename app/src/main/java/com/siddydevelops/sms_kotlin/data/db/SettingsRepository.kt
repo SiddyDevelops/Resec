@@ -14,6 +14,10 @@ class SettingsRepository(private val settingsDAO: SettingsDAO) {
         settingsDAO.update(settingsItem)
     }
 
+    suspend fun updateState(state: Boolean,startTime: String) {
+        settingsDAO.updateState(state,startTime)
+    }
+
     suspend fun delete(settingsItem: SettingsItem) {
         settingsDAO.delete(settingsItem)
     }
