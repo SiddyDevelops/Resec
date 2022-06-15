@@ -246,8 +246,9 @@ class DashActivity : AppCompatActivity(),
     }
 
     private fun automateSettings(activeSettings: List<SettingsItem>) {
-        for(i in 0..activeSettings.size)
+        for(i in activeSettings.indices)
         {
+            Log.d("Added Item",activeSettings[0].toString())
             val formattedTimeHour = SimpleDateFormat("hh:mm a",Locale.US).parse(activeSettings[i].startTime)
             val cal = Calendar.getInstance()
             cal.time = formattedTimeHour!!
@@ -260,6 +261,7 @@ class DashActivity : AppCompatActivity(),
                 intent.putExtra(Constants.EXTRA_SOUND_NOTIFICATION,activeSettings[i].volNotification)
                 intent.putExtra(Constants.EXTRA_BRIGHTNESS,activeSettings[i].brightness)
                 intent.putExtra(Constants.EXTRA_START_TIME,activeSettings[i].startTime)
+                intent.putExtra(Constants.EXTRA_END_TIME,activeSettings[i].endTime)
                 PendingIntent.getBroadcast(this, i, intent, 0)
             }
 
