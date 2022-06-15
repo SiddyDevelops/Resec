@@ -522,6 +522,12 @@ class DashActivity : AppCompatActivity(),
 
     override fun updatePreferenceSettings(state: Boolean,startTime: String) {
         viewModel.updateSettingState(state,startTime)
+        if(state) {
+            generateActivePrefList()
+        } else {
+            cancelAutomateSettings()
+            generateActivePrefList()
+        }
     }
 
     private fun setBrightness(brightness: Int) {
