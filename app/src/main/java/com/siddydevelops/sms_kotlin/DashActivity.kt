@@ -76,6 +76,7 @@ class DashActivity : AppCompatActivity(),
     private lateinit var sharedPreferences: SharedPreferences
     private lateinit var viewModel: SettingsViewModel
     private val prefSettingsList = ArrayList<SettingsItem>()
+    private val intentArray = ArrayList<PendingIntent>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -100,6 +101,7 @@ class DashActivity : AppCompatActivity(),
         sharedPreferences = getSharedPreferences("USER_STORE", Context.MODE_PRIVATE)
         w = window
         cResolver = contentResolver
+        alarmMgr = getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
         recyclerView.layoutManager = LinearLayoutManager(this)
         val rvAdapter = RVAdapter(this, this, this,this)
@@ -222,8 +224,6 @@ class DashActivity : AppCompatActivity(),
     private fun generatePrefList(list: List<SettingsItem>) {
         prefSettingsList.clear()
         prefSettingsList.addAll(list)
-        Log.d("List",list.toString())
-        generateActivePrefList()
     }
 
     private fun generateActivePrefList() {
@@ -233,59 +233,53 @@ class DashActivity : AppCompatActivity(),
                 activeSettings.add(settings)
             }
         }
-        //Log.d("ActiveList",activeSettings.toString())
+        automateSettings(activeSettings)
     }
 
-    private fun automateSettings(startTime: Int, endTime: Int,settingsItem: SettingsItem) {
-        val formattedTimeHour = SimpleDateFormat("hh:mm a",Locale.US).parse(settingsItem.startTime)
-        val cal = Calendar.getInstance()
-        cal.time = formattedTimeHour!!
-
-        alarmMgr = getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        alarmIntent = Intent(this, AutomateReceiver::class.java).let { intent ->
-            intent.putExtra(Constants.EXTRA_ACTIVE,settingsItem.active)
-            intent.putExtra(Constants.EXTRA_SOUND_PROFILE,settingsItem.soundProfile)
-            intent.putExtra(Constants.EXTRA_VOL_RING,settingsItem.volRing)
-            intent.putExtra(Constants.EXTRA_VOL_MEDIA,settingsItem.volMedia)
-            intent.putExtra(Constants.EXTRA_SOUND_NOTIFICATION,settingsItem.volNotification)
-            intent.putExtra(Constants.EXTRA_BRIGHTNESS,settingsItem.brightness)
-            intent.putExtra(Constants.EXTRA_START_TIME,settingsItem.startTime)
-            PendingIntent.getBroadcast(this, 0, intent, 0)
+    private fun cancelAutomateSettings(){
+        if (intentArray.size > 0) {
+            for (i in 0 until intentArray.size) {
+                alarmMgr!!.cancel(intentArray[i])
+            }
+            intentArray.clear()
         }
+    }
 
-        // Set the alarm to start at 20:00.
-        val calendar: Calendar = Calendar.getInstance().apply {
-            timeInMillis = System.currentTimeMillis()
-            set(Calendar.HOUR_OF_DAY, cal.get(Calendar.HOUR_OF_DAY))
-            set(Calendar.MINUTE, cal.get(Calendar.MINUTE))
-            set(Calendar.SECOND, 0)
-        }
-
-        // setRepeating() lets you specify a precise custom interval--in this case,1 day.
-        alarmMgr?.setRepeating(
-            AlarmManager.RTC_WAKEUP,
-            calendar.timeInMillis,
-            1000 * 60 * 60 * 24,
-            alarmIntent
-        )
-
-        /*
-        AlarmManager mgrAlarm = (AlarmManager) context.getSystemService(ALARM_SERVICE);
-        ArrayList<PendingIntent> intentArray = new ArrayList<PendingIntent>();
-
-        for(i = 0; i < 10; ++i)
+    private fun automateSettings(activeSettings: List<SettingsItem>) {
+        for(i in 0..activeSettings.size)
         {
-            Intent intent = new Intent(context, OnAlarmReceiver.class);
-            // Loop counter `i` is used as a `requestCode`
-            PendingIntent pendingIntent = PendingIntent.getBroadcast(context, i, intent, 0);
-            // Single alarms in 1, 2, ..., 10 minutes (in `i` minutes)
-            mgrAlarm.set(AlarmManager.ELAPSED_REALTIME_WAKEUP,
-                SystemClock.elapsedRealtime() + 60000 * i,
-                pendingIntent);
+            val formattedTimeHour = SimpleDateFormat("hh:mm a",Locale.US).parse(activeSettings[i].startTime)
+            val cal = Calendar.getInstance()
+            cal.time = formattedTimeHour!!
 
-            intentArray.add(pendingIntent);
+            alarmIntent = Intent(this, AutomateReceiver::class.java).let { intent ->
+                intent.putExtra(Constants.EXTRA_ACTIVE,activeSettings[i].active)
+                intent.putExtra(Constants.EXTRA_SOUND_PROFILE,activeSettings[i].soundProfile)
+                intent.putExtra(Constants.EXTRA_VOL_RING,activeSettings[i].volRing)
+                intent.putExtra(Constants.EXTRA_VOL_MEDIA,activeSettings[i].volMedia)
+                intent.putExtra(Constants.EXTRA_SOUND_NOTIFICATION,activeSettings[i].volNotification)
+                intent.putExtra(Constants.EXTRA_BRIGHTNESS,activeSettings[i].brightness)
+                intent.putExtra(Constants.EXTRA_START_TIME,activeSettings[i].startTime)
+                PendingIntent.getBroadcast(this, i, intent, 0)
+            }
+
+            // Set the alarm to start at START-TIME
+            val calendar: Calendar = Calendar.getInstance().apply {
+                timeInMillis = System.currentTimeMillis()
+                set(Calendar.HOUR_OF_DAY, cal.get(Calendar.HOUR_OF_DAY))
+                set(Calendar.MINUTE, cal.get(Calendar.MINUTE))
+                set(Calendar.SECOND, 0)
+            }
+
+            // setRepeating() lets you specify a precise custom interval--in this case,1 day.
+            alarmMgr?.setRepeating(
+                AlarmManager.RTC_WAKEUP,
+                calendar.timeInMillis,
+                1000 * 60 * 60 * 24,
+                alarmIntent
+            )
+            intentArray.add(alarmIntent)
         }
-         */
     }
 
     private fun addNewPreferenceSettings() {
