@@ -21,6 +21,7 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import at.markushi.ui.CircleButton
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.slider.Slider
 import com.google.android.material.timepicker.MaterialTimePicker
@@ -312,7 +313,7 @@ class DashActivity : AppCompatActivity(),
         val notificationSlider = dialogView.findViewById<Slider>(R.id.notificationSlider)
         val brightnessSlider = dialogView.findViewById<Slider>(R.id.brightnessSlider)
         startTimeBtn = dialogView.findViewById<Button>(R.id.startTimeBtn)
-        val saveSettingsBtn = dialogView.findViewById<Button>(R.id.saveSettingsBtn)
+        val saveSettingsBtn = dialogView.findViewById<CircleButton>(R.id.saveSettingsBtn)
 
         var checkRadioButton: RadioButton? = null
 

@@ -21,6 +21,7 @@
         <entry key="app/src/main/res/drawable/ic_visibility.xml" value="0.1985" />
         <entry key="app/src/main/res/drawable/ic_visibility_off.xml" value="0.1985" />
         <entry key="app/src/main/res/drawable/ripple_effect.xml" value="0.1985" />
+        <entry key="app/src/main/res/drawable/round_button.xml" value="0.1985" />
         <entry key="app/src/main/res/drawable/switch_track.xml" value="0.1985" />
         <entry key="app/src/main/res/drawable/switch_track_widget.xml" value="0.1985" />
         <entry key="app/src/main/res/layout-v23/resec_app_widget.xml" value="0.17572463768115942" />

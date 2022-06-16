@@ -209,16 +209,14 @@
 
         </LinearLayout>
 
-        <Button
+        <at.markushi.ui.CircleButton
             android:id="@+id/saveSettingsBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:drawableLeft="@drawable/ic_add"
-            android:layout_marginStart="10dp"
-            android:layout_marginEnd="10dp"
-            android:textSize="12sp"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:src="@drawable/ic_add"
+            app:cb_color="@color/bluish"
             android:layout_gravity="center"
-            android:text="@string/add_pref" />
+            app:cb_pressedRingWidth="8dip" />
 
     </LinearLayout>
 
