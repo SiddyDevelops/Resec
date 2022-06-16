@@ -1,4 +1,4 @@
-package com.siddydevelops.sms_kotlin
+package com.siddydevelops.sms_kotlin.main
 
 import android.Manifest
 import android.app.*
@@ -24,6 +24,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.slider.Slider
 import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat
+import com.siddydevelops.sms_kotlin.R
 import com.siddydevelops.sms_kotlin.data.User
 import com.siddydevelops.sms_kotlin.data.db.entity.SettingsItem
 import com.siddydevelops.sms_kotlin.notifications.SetNotification
@@ -241,7 +242,7 @@ class DashActivity : AppCompatActivity(),
         } else {
             val intent = Intent(Settings.ACTION_MANAGE_WRITE_SETTINGS)
             intent.data = Uri.parse("package:$packageName")
-            startActivityForResult(intent, DashActivity.REQUEST_PERMISSION_CODE)
+            startActivityForResult(intent, REQUEST_PERMISSION_CODE)
         }
 
         changePreferenceSettings()

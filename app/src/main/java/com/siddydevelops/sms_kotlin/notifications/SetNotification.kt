@@ -5,10 +5,9 @@ import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
-import android.os.Build
 import android.widget.RemoteViews
 import androidx.core.app.NotificationCompat
-import com.siddydevelops.sms_kotlin.DashActivity
+import com.siddydevelops.sms_kotlin.main.DashActivity
 import com.siddydevelops.sms_kotlin.R
 
 

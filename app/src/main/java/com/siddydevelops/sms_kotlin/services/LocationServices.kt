@@ -13,7 +13,7 @@ import android.util.Log
 import androidx.core.app.NotificationCompat
 import com.google.android.gms.location.*
 import com.google.android.gms.location.LocationServices
-import com.siddydevelops.sms_kotlin.DashActivity
+import com.siddydevelops.sms_kotlin.main.DashActivity
 import com.siddydevelops.sms_kotlin.R
 import com.siddydevelops.sms_kotlin.utils.actions.SendSMS
 import java.util.*

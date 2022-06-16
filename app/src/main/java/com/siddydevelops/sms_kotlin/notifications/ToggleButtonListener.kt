@@ -5,7 +5,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.telephony.TelephonyManager
-import com.siddydevelops.sms_kotlin.DashActivity
+import com.siddydevelops.sms_kotlin.main.DashActivity
 import com.siddydevelops.sms_kotlin.data.BroadcastUser
 import com.siddydevelops.sms_kotlin.utils.Constants
 

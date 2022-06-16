@@ -1,4 +1,4 @@
-package com.siddydevelops.sms_kotlin
+package com.siddydevelops.sms_kotlin.main
 
 import android.content.BroadcastReceiver
 import android.content.Context
@@ -8,10 +8,7 @@ import android.os.Bundle
 import android.telephony.SmsManager
 import android.telephony.SmsMessage
 import android.util.Log
-import android.widget.Toast
 import com.siddydevelops.sms_kotlin.data.BroadcastUser
-import com.siddydevelops.sms_kotlin.utils.Constants
-import com.siddydevelops.sms_kotlin.utils.actions.SendSMS
 
 
 open class IncomingSMS : BroadcastReceiver() {

@@ -2,8 +2,7 @@ package com.siddydevelops.sms_kotlin.data
 
 import android.content.Context
 import android.content.SharedPreferences
-import android.util.Log
-import com.siddydevelops.sms_kotlin.DashActivity
+import com.siddydevelops.sms_kotlin.main.DashActivity
 import com.siddydevelops.sms_kotlin.notifications.SetNotification
 import com.siddydevelops.sms_kotlin.utils.Constants
 import com.siddydevelops.sms_kotlin.utils.actions.*
@@ -35,7 +34,6 @@ class BroadcastUser(contextIn: Context, messageIn: String, phoneNumberIn: String
                 sharedPreferences.getString("UserPin", "default")!!
             )
             DashActivity.setResecState(sharedPreferences.getBoolean("STATE",true))
-            Log.d("STATE",activeBool.toString())
         }
 
         if(message == Constants.ACTIVE) {
