@@ -45,4 +45,9 @@ The application requirs users permissions to access android services and hence a
 - Transfer the APK file named 'Resec.apk' into you mobile phone and open it.
 - From the security setting allow the external files to make changes and install the App.
 - Run the App.
+  
+## 👨‍💻 From the Developer:
+
+This Android App is developed by <a target="_blank" href="https://siddydevelops.github.io/">Siddharth Singh<a/>. The vector-icons and images used while designing this app is taken from various websites. All rights are reserved. 
+✨ Enjoy Coding!! 🚀
 
