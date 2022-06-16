@@ -1,6 +1,6 @@
 
 <p align="center">
-  <img height=200px src="https://raw.githubusercontent.com/SiddyDevelops/Resec/master/Screenshots/resec_logo.png?token=GHSAT0AAAAAABTLHSYBTIUWJU56VUUFPZCOYVLF6GA" />
+  <img height=200px src="https://user-images.githubusercontent.com/72121163/174082479-84398bcf-02e0-4792-bade-2c8460395630.png" />
 <p/>
 
 # Resec
@@ -30,7 +30,7 @@ The application requirs users permissions to access android services and hence a
 - Location: To send location of device when asked for.
 - Admin-Access: To remotely connect application with second device. Also to lock device when inititated.
 
-## Screenshots:
+## 📱Screenshots:
 <p align="center">
   <img width="160" height="375" src="https://raw.githubusercontent.com/SiddyDevelops/Resec/master/Screenshots/Dash.jpg?token=GHSAT0AAAAAABTLHSYAECQTYBK7PYKEWYRSYVLGKYQ">
   <img width="160" height="375" src="https://raw.githubusercontent.com/SiddyDevelops/Resec/master/Screenshots/PrefSettings.jpg?token=GHSAT0AAAAAABTLHSYBHBDACR3Y23CSO6FIYVLGKZQ">  
