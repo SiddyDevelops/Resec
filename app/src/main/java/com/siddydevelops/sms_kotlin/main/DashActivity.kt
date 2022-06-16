@@ -14,6 +14,7 @@ import android.view.*
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -22,6 +23,7 @@ import at.markushi.ui.CircleButton
 import com.google.android.material.bottomappbar.BottomAppBar
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.slider.Slider
+import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat
 import com.siddydevelops.sms_kotlin.R
@@ -55,7 +57,7 @@ class DashActivity : AppCompatActivity(),
     private lateinit var stateTV: TextView
 
     private lateinit var bottomAppBar: BottomAppBar
-
+    private lateinit var contextView: ConstraintLayout
     private lateinit var dialog: Dialog
 
     private lateinit var recyclerView: RecyclerView
@@ -95,6 +97,7 @@ class DashActivity : AppCompatActivity(),
         addPrefSetting = findViewById(R.id.addPrefSetting)
         recyclerView = findViewById(R.id.recyclerView)
         bottomAppBar = findViewById(R.id.bottomAppBar)
+        contextView = findViewById(R.id.context_view)
 
         viewModel = ViewModelProvider(
             this,
@@ -174,11 +177,7 @@ class DashActivity : AppCompatActivity(),
                     editor.putString("UserID", userId.text.toString())
                     editor.putString("UserPin", userPin.text.toString())
                     editor.apply()
-                    Toast.makeText(
-                        this@DashActivity,
-                        "Credentials Saved Successfully.",
-                        Toast.LENGTH_SHORT
-                    ).show()
+                    Snackbar.make(contextView,"Credentials Saved Successfully.",Snackbar.LENGTH_SHORT).show()
                     uidBtnAction = true
                     saveBtn.text = getString(R.string.edit)
                     userId.isClickable = false
@@ -186,7 +185,7 @@ class DashActivity : AppCompatActivity(),
                     userId.isFocusable = false
                     userPin.isFocusable = false
                 } else {
-                    Toast.makeText(this, "Please fill all the fields.", Toast.LENGTH_SHORT).show()
+                    Snackbar.make(contextView,"Please fill all the fields.",Snackbar.LENGTH_SHORT).show()
                 }
             } else {
                 uidBtnAction = false
@@ -265,7 +264,7 @@ class DashActivity : AppCompatActivity(),
         val instagram = dialog.findViewById<ImageView>(R.id.instagramIV)
         mePhoto.clipToOutline = true
         closeButton.setOnClickListener {
-            Toast.makeText(this, "Thank you for using my App.", Toast.LENGTH_SHORT).show()
+            Snackbar.make(contextView,"Thank you for using my App.",Snackbar.LENGTH_SHORT).show()
             dialog.dismiss()
         }
         github.setOnClickListener {
@@ -470,11 +469,7 @@ class DashActivity : AppCompatActivity(),
                             )
                         )
                     }
-                    Toast.makeText(
-                        applicationContext,
-                        "Settings saved successfully!",
-                        Toast.LENGTH_SHORT
-                    ).show()
+                    Snackbar.make(contextView,"Settings saved successfully!",Snackbar.LENGTH_SHORT).show()
                     alertDialog.dismiss()
                     viewModel.allSettings.observe(this) { list ->
                         generatePrefList(list)
@@ -538,7 +533,7 @@ class DashActivity : AppCompatActivity(),
     override fun onPressDelete(settingsItem: SettingsItem) {
         viewModel.deleteSetting(settingsItem)
         changePreferenceSettings()
-        Toast.makeText(this, "Settings has been deleted.", Toast.LENGTH_SHORT).show()
+        Snackbar.make(contextView,"Settings has been deleted.",Snackbar.LENGTH_SHORT).show()
     }
 
     override fun changePreferenceSettings() {
@@ -606,7 +601,7 @@ class DashActivity : AppCompatActivity(),
                 Manifest.permission.READ_PHONE_NUMBERS
             )
         ) {
-            Toast.makeText(this, "All permissions are already granted!", Toast.LENGTH_LONG).show()
+            Toast.makeText(this, "All permissions are already granted!", Toast.LENGTH_SHORT).show()
         } else {
             brightPermission = Settings.System.canWrite(this)
             val intent = Intent(DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN)
@@ -674,7 +669,7 @@ class DashActivity : AppCompatActivity(),
     }
 
     override fun onPermissionsGranted(requestCode: Int, perms: List<String>) {
-        Toast.makeText(this, "All permissions are granted!", Toast.LENGTH_LONG).show()
+        Toast.makeText(this, "All permissions are granted!", Toast.LENGTH_SHORT).show()
     }
 
     companion object {
