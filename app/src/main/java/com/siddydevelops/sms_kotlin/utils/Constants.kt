@@ -1,5 +1,7 @@
 package com.siddydevelops.sms_kotlin.utils
 
+import com.siddydevelops.sms_kotlin.data.db.entity.SettingsItem
+
 
 object Constants {
     const val ACTIVE = "Resec"
@@ -31,6 +33,16 @@ object Constants {
     const val INVALID_CREDS = "Credentials provided are invalid. Please ensure Resec services are active."
 
     const val MESSAGE_ABOUT = "Resec helps you to access your android application anytime remotely. Please type <Resec.Commands> to get list of available commands.>"
+
+    val DEFAULT_SETTINGS = SettingsItem(
+        false,
+        "NORMAL",
+        "15.0",
+        "7.0",
+        "3.",
+        "40.0",
+        "00:00 AM",
+        "11:59 PM" )
 
     const val EXTRA_ACTIVE = "EXTRA_ACTIVE"
     const val EXTRA_SOUND_PROFILE = "EXTRA_SOUND_PROFILE"

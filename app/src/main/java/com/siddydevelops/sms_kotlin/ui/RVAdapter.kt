@@ -11,6 +11,7 @@ import androidx.appcompat.widget.SwitchCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.siddydevelops.sms_kotlin.R
 import com.siddydevelops.sms_kotlin.data.db.entity.SettingsItem
+import com.siddydevelops.sms_kotlin.utils.Constants
 import java.text.DecimalFormat
 
 class RVAdapter(
@@ -32,7 +33,6 @@ class RVAdapter(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         if(allSettings[position].active) {
             holder.settingSwitch.isChecked = true
-            initiateSettingsInterface.changePreferenceSettings(allSettings[position])
         }
         holder.soundProfileTV.text = allSettings[position].soundProfile
         holder.ringTV.text = df.format(allSettings[position].volRing.toFloat())
@@ -46,23 +46,12 @@ class RVAdapter(
         )
 
         holder.settingSwitch.setOnClickListener {
-            Log.d("Item Clicked",allSettings[position].startTime)
             if(holder.settingSwitch.isChecked) {
-                initiateSettingsInterface.changePreferenceSettings(allSettings[position])
                 updateSettingsInterface.updatePreferenceSettings(true,allSettings[position].startTime)
             } else {
-                //Change to default here
-                initiateSettingsInterface.changePreferenceSettings(SettingsItem(
-                    false,
-                    "NORMAL",
-                    "15.0",
-                    "7.0",
-                    "3.",
-                    "40.0",
-                    "00:00 AM",
-                    "11:59 PM" ))
                 updateSettingsInterface.updatePreferenceSettings(false,allSettings[position].startTime)
             }
+            initiateSettingsInterface.changePreferenceSettings()
         }
 
         holder.deleteIV.setOnClickListener {
@@ -96,7 +85,7 @@ class RVAdapter(
     }
 
     interface InitiateSettingsInterface {
-        fun changePreferenceSettings(settingsItem: SettingsItem)
+        fun changePreferenceSettings()
     }
 
     interface UpdateSettingsInterface {

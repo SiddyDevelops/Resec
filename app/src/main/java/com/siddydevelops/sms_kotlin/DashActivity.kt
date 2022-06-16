@@ -296,6 +296,7 @@ class DashActivity : AppCompatActivity(),
             )
             intentArray.add(alarmIntent)
         }
+        Log.d("ActiveList", activeSettings.toString())
     }
 
     private fun addNewPreferenceSettings() {
@@ -482,61 +483,11 @@ class DashActivity : AppCompatActivity(),
         Toast.makeText(this, "Settings has been deleted.", Toast.LENGTH_SHORT).show()
     }
 
-    override fun changePreferenceSettings(settingsItem: SettingsItem) {
-        // Change Sound Profile
-        val audioManager: AudioManager = getSystemService(Service.AUDIO_SERVICE) as AudioManager
-        when (settingsItem.soundProfile) {
-            "NORMAL" -> {
-                audioManager.ringerMode = AudioManager.RINGER_MODE_NORMAL
-                // Change Volume
-                audioManager.setStreamVolume(
-                    AudioManager.STREAM_RING,
-                    settingsItem.volRing.toFloat().toInt(),
-                    0
-                )
-                audioManager.setStreamVolume(
-                    AudioManager.STREAM_MUSIC,
-                    settingsItem.volMedia.toFloat().toInt(),
-                    0
-                )
-                audioManager.setStreamVolume(
-                    AudioManager.STREAM_NOTIFICATION,
-                    settingsItem.volNotification.toFloat().toInt(),
-                    0
-                )
-            }
-            "VIBRATE" -> {
-                audioManager.ringerMode = AudioManager.RINGER_MODE_VIBRATE
-                // Change Volume
-                audioManager.setStreamVolume(
-                    AudioManager.STREAM_MUSIC,
-                    settingsItem.volMedia.toFloat().toInt(),
-                    0
-                )
-                audioManager.setStreamVolume(
-                    AudioManager.STREAM_NOTIFICATION,
-                    settingsItem.volNotification.toFloat().toInt(),
-                    0
-                )
-            }
-            "SILENT" -> {
-                audioManager.ringerMode = AudioManager.RINGER_MODE_SILENT
-                // Change Volume
-                audioManager.setStreamVolume(
-                    AudioManager.STREAM_MUSIC,
-                    settingsItem.volMedia.toFloat().toInt(),
-                    0
-                )
-                audioManager.setStreamVolume(
-                    AudioManager.STREAM_NOTIFICATION,
-                    settingsItem.volNotification.toFloat().toInt(),
-                    0
-                )
-            }
+    override fun changePreferenceSettings() {
+        cancelAutomateSettings()
+        viewModel.allSettings.observe(this) { list ->
+            generatePrefList(list)
         }
-
-        // Change Brightness
-        setBrightness(settingsItem.brightness.toFloat().toInt())
     }
 
     override fun updatePreferenceSettings(state: Boolean, startTime: String) {
@@ -545,15 +496,6 @@ class DashActivity : AppCompatActivity(),
         viewModel.allSettings.observe(this) { list ->
             generatePrefList(list)
         }
-    }
-
-    private fun setBrightness(brightness: Int) {
-        Settings.System.putInt(
-            cResolver, Settings.System.SCREEN_BRIGHTNESS, brightness
-        )
-        val layoutPars = w.attributes
-        layoutPars.screenBrightness = brightness / 255f
-        w.attributes = layoutPars
     }
 
     override fun onPause() {
