@@ -22,6 +22,13 @@ Resec Commands are as follows:
 - <Resec.Location>: Get device location.
 - <Resec.SoundStatus>: Check the status of sound profile.
 - <Resec.Inactive>: Terminate Resec services.
+  
+### Security Configurations:
+The application requirs users permissions to access android services and hence asks for run time permissions. The permissions required are as follows:
+- SMS: To read commands and activate services.
+- Contacts: To access contact list.
+- Location: To send location of device when asked for.
+- Admin-Access: To remotely connect application with second device. Also to lock device when inititated.
 
 ## Screenshots:
 <p align="center">
