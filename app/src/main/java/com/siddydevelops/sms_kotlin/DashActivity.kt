@@ -10,10 +10,7 @@ import android.os.Bundle
 import android.provider.Settings
 import android.text.method.PasswordTransformationMethod
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.view.Window
+import android.view.*
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -22,6 +19,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import at.markushi.ui.CircleButton
+import com.google.android.material.bottomappbar.BottomAppBar
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.slider.Slider
 import com.google.android.material.timepicker.MaterialTimePicker
@@ -55,6 +53,10 @@ class DashActivity : AppCompatActivity(),
     private lateinit var pinVisibility: ImageView
     private lateinit var stateTV: TextView
 
+    private lateinit var bottomAppBar: BottomAppBar
+
+    private lateinit var dialog: Dialog
+
     private lateinit var recyclerView: RecyclerView
 
     private var alarmMgr: AlarmManager? = null
@@ -79,7 +81,7 @@ class DashActivity : AppCompatActivity(),
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_dash)
 
         checkPermissions()
 
@@ -91,6 +93,7 @@ class DashActivity : AppCompatActivity(),
         stateTV = findViewById(R.id.stateTV)
         addPrefSetting = findViewById(R.id.addPrefSetting)
         recyclerView = findViewById(R.id.recyclerView)
+        bottomAppBar = findViewById(R.id.bottomAppBar)
 
         viewModel = ViewModelProvider(
             this,
@@ -113,6 +116,18 @@ class DashActivity : AppCompatActivity(),
 
         addPrefSetting.setOnClickListener {
             addNewPreferenceSettings()
+        }
+
+        bottomAppBar.setOnMenuItemClickListener { menuItem ->
+            when (menuItem.itemId) {
+                R.id.navigation_about -> {
+                    aboutDialog()
+                    dialog.show()
+                    Log.d("Dialog","Clicked")
+                    true
+                }
+                else -> false
+            }
         }
 
         if (sharedPreferences.getBoolean("STATE", false)) {
@@ -230,6 +245,67 @@ class DashActivity : AppCompatActivity(),
         }
 
         changePreferenceSettings()
+    }
+
+    private fun aboutDialog() {
+        dialog = Dialog(this)
+        dialog.setContentView(R.layout.about_dialog)
+        dialog.window!!.setBackgroundDrawable(getDrawable(R.drawable.inset_bg))
+        dialog.window!!.setLayout(
+            ViewGroup.LayoutParams.MATCH_PARENT,
+            ViewGroup.LayoutParams.WRAP_CONTENT
+        )
+        dialog.setCancelable(false)
+        dialog.window!!.attributes.windowAnimations = R.style.animation_for_dia
+        val closeButton = dialog.findViewById<Button>(R.id.dialogButton)
+        val mePhoto = dialog.findViewById<ImageView>(R.id.mePhoto)
+        val github = dialog.findViewById<ImageView>(R.id.githubIV)
+        val linkedin = dialog.findViewById<ImageView>(R.id.linkIV)
+        val instagram = dialog.findViewById<ImageView>(R.id.instagramIV)
+        mePhoto.clipToOutline = true
+        closeButton.setOnClickListener {
+            Toast.makeText(this, "Thank you for using my App.", Toast.LENGTH_SHORT).show()
+            dialog.dismiss()
+        }
+        github.setOnClickListener {
+            Toast.makeText(this, "Hold On!", Toast.LENGTH_SHORT).show()
+            val url = "https://github.com/SiddyDevelops"
+            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            intent.setPackage("com.android.chrome")
+            try {
+                startActivity(intent)
+            } catch (e: Exception) {
+                intent.setPackage(null)
+                startActivity(intent)
+            }
+        }
+        instagram.setOnClickListener {
+            Toast.makeText(this, "Hold On!", Toast.LENGTH_SHORT).show()
+            val url = "https://www.instagram.com/_siddy_08_/"
+            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            intent.setPackage("com.android.chrome")
+            try {
+                startActivity(intent)
+            } catch (e: Exception) {
+                intent.setPackage(null)
+                startActivity(intent)
+            }
+        }
+        linkedin.setOnClickListener {
+            Toast.makeText(this, "Hold On!", Toast.LENGTH_SHORT).show()
+            val url = "https://www.linkedin.com/in/siddharth-singh-08/"
+            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            intent.setPackage("com.android.chrome")
+            try {
+                startActivity(intent)
+            } catch (e: Exception) {
+                intent.setPackage(null)
+                startActivity(intent)
+            }
+        }
     }
 
     private fun generatePrefList(list: List<SettingsItem>) {

@@ -3,14 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/navigation_settings"
-        android:orderInCategory="200"
-        android:title="@string/settings"
-        app:showAsAction="never" />
-
-    <item
-        android:id="@+id/navigation_info"
+        android:id="@+id/navigation_about"
         android:orderInCategory="200"
         android:title="@string/about"
-        app:showAsAction="never" />
+        android:icon="@drawable/ic_info"
+        app:showAsAction="always" />
 </menu>

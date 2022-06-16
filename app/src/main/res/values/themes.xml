@@ -39,4 +39,10 @@
         <!-- inactive track color (30% transparency) -->
         <item name="android:colorForeground">#C9C6C6</item>
     </style>
+
+    <style name="animation_for_dia">
+        <item name="android:windowEnterAnimation">@android:anim/fade_in</item>
+        <item name="android:windowExitAnimation">@android:anim/fade_out</item>
+    </style>
+
 </resources>

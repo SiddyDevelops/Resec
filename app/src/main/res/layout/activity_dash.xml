@@ -203,14 +203,14 @@
         app:layout_constraintBottom_toBottomOf="parent">
 
         <com.google.android.material.bottomappbar.BottomAppBar
-            android:id="@+id/simple_bottom_app_bar"
+            android:id="@+id/bottomAppBar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
             app:backgroundTint="@color/white_shade"
             app:fabAnimationMode="scale"
             app:fabAlignmentMode="end"
-            app:menu="@menu/bottom_bar_items" />
+            app:menu="@menu/bottom_bar_items"/>
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/addPrefSetting"
@@ -218,7 +218,7 @@
             android:layout_height="wrap_content"
             android:backgroundTint="@color/white"
             android:src="@drawable/ic_add"
-            app:layout_anchor="@+id/simple_bottom_app_bar"
+            app:layout_anchor="@+id/bottomAppBar"
             android:contentDescription="@string/floatingactionbutton" />
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>

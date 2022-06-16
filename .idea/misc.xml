@@ -4,6 +4,8 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="app/src/main/res/drawable-nodpi/bg_widget.xml" value="0.1985" />
+        <entry key="app/src/main/res/drawable-nodpi/ic_github.xml" value="0.1985" />
+        <entry key="app/src/main/res/drawable-nodpi/inset_bg.xml" value="0.1985" />
         <entry key="app/src/main/res/drawable/bg_card_repli.xml" value="0.1985" />
         <entry key="app/src/main/res/drawable/bg_et.xml" value="0.1985" />
         <entry key="app/src/main/res/drawable/bg_linear_layout.xml" value="0.1985" />
@@ -13,6 +15,7 @@
         <entry key="app/src/main/res/drawable/ic_baseline_remove_circle_24.xml" value="0.1985" />
         <entry key="app/src/main/res/drawable/ic_circle.xml" value="0.1985" />
         <entry key="app/src/main/res/drawable/ic_circle_bluish.xml" value="0.1985" />
+        <entry key="app/src/main/res/drawable/ic_info.xml" value="0.1985" />
         <entry key="app/src/main/res/drawable/ic_next.xml" value="0.1985" />
         <entry key="app/src/main/res/drawable/ic_sound_mute.xml" value="0.285" />
         <entry key="app/src/main/res/drawable/ic_sound_normal.xml" value="0.285" />
@@ -20,10 +23,12 @@
         <entry key="app/src/main/res/drawable/ic_user.xml" value="0.1985" />
         <entry key="app/src/main/res/drawable/ic_visibility.xml" value="0.1985" />
         <entry key="app/src/main/res/drawable/ic_visibility_off.xml" value="0.1985" />
+        <entry key="app/src/main/res/drawable/icon_bg.xml" value="0.1985" />
         <entry key="app/src/main/res/drawable/ripple_effect.xml" value="0.1985" />
         <entry key="app/src/main/res/drawable/round_button.xml" value="0.1985" />
         <entry key="app/src/main/res/drawable/switch_track.xml" value="0.1985" />
         <entry key="app/src/main/res/drawable/switch_track_widget.xml" value="0.1985" />
+        <entry key="app/src/main/res/layout-v23/about_dialog.xml" value="0.264" />
         <entry key="app/src/main/res/layout-v23/resec_app_widget.xml" value="0.17572463768115942" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.23278985507246377" />
         <entry key="app/src/main/res/layout/custom_dialog_layout.xml" value="0.264" />
