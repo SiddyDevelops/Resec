@@ -328,6 +328,7 @@ class DashActivity : AppCompatActivity(),
         if (intentArray.size > 0) {
             for (i in 0 until intentArray.size) {
                 alarmMgr!!.cancel(intentArray[i])
+                Log.d("Cancel Ayto",intentArray[i].toString())
             }
             intentArray.clear()
         }
@@ -354,6 +355,7 @@ class DashActivity : AppCompatActivity(),
                 intent.putExtra(Constants.EXTRA_START_TIME, activeSettings[i].startTime)
                 PendingIntent.getBroadcast(this, i, intent, 0)
             }
+            intentArray.add(alarmIntent)
 
             // Set the alarm to start at START-TIME
             val calendar: Calendar = Calendar.getInstance().apply {
@@ -364,13 +366,12 @@ class DashActivity : AppCompatActivity(),
             }
 
             // setRepeating() lets you specify a precise custom interval--in this case,1 day.
-            alarmMgr?.setRepeating(
+            alarmMgr?.setInexactRepeating(
                 AlarmManager.RTC_WAKEUP,
                 calendar.timeInMillis,
                 1000 * 60 * 60 * 24,
                 alarmIntent
             )
-            intentArray.add(alarmIntent)
         }
         Log.d("ActiveList", activeSettings.toString())
     }

@@ -31,6 +31,7 @@ class AutomateReceiver : BroadcastReceiver() {
     }
 
     private fun initiateSettings(context: Context,settingsItem: SettingsItem) {
+        Log.d("ItemToFunction:",settingsItem.toString())
         // Change Sound Profile
         val audioManager: AudioManager = context.getSystemService(Service.AUDIO_SERVICE) as AudioManager
         when (settingsItem.soundProfile) {
