@@ -41,8 +41,7 @@ object Constants {
         "7.0",
         "3.",
         "40.0",
-        "00:00 AM",
-        "11:59 PM" )
+        "00:00 AM")
 
     const val EXTRA_ACTIVE = "EXTRA_ACTIVE"
     const val EXTRA_SOUND_PROFILE = "EXTRA_SOUND_PROFILE"

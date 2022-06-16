@@ -23,8 +23,6 @@ data class SettingsItem(
     @NonNull
     @PrimaryKey
     @ColumnInfo(name = "item_start_time")
-    val startTime: String,
-    @ColumnInfo(name = "item_end_time")
-    val endTime: String,
+    val startTime: String
 ) {
 }

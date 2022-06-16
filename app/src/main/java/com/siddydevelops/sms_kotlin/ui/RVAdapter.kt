@@ -41,8 +41,7 @@ class RVAdapter(
         holder.brightnessTV.text = df.format(allSettings[position].brightness.toFloat())
         holder.timePeriodTV.text = context.getString(
             R.string.time_period_text,
-            allSettings[position].startTime,
-            allSettings[position].endTime
+            allSettings[position].startTime
         )
 
         holder.settingSwitch.setOnClickListener {

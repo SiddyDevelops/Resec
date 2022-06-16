@@ -25,8 +25,7 @@ class AutomateReceiver : BroadcastReceiver() {
             intent.getStringExtra(Constants.EXTRA_VOL_MEDIA)!!,
             intent.getStringExtra(Constants.EXTRA_SOUND_NOTIFICATION)!!,
             intent.getStringExtra(Constants.EXTRA_BRIGHTNESS)!!,
-            intent.getStringExtra(Constants.EXTRA_START_TIME)!!,
-            intent.getStringExtra(Constants.EXTRA_END_TIME)!!
+            intent.getStringExtra(Constants.EXTRA_START_TIME)!!
         )
         initiateSettings(context,settingsItem)
     }

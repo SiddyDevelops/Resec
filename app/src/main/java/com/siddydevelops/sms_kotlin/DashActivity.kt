@@ -61,7 +61,6 @@ class DashActivity : AppCompatActivity(),
 
     private lateinit var dialogView: View
     private lateinit var startTimeBtn: View
-    private lateinit var endTimeBtn: View
 
     private var brightness: Int = 0
     private lateinit var cResolver: ContentResolver
@@ -71,7 +70,6 @@ class DashActivity : AppCompatActivity(),
     private var uidBtnAction = false
 
     private var startTime: String? = null
-    private var endTime: String? = null
 
     private lateinit var sharedPreferences: SharedPreferences
     private lateinit var viewModel: SettingsViewModel
@@ -277,7 +275,6 @@ class DashActivity : AppCompatActivity(),
                 )
                 intent.putExtra(Constants.EXTRA_BRIGHTNESS, activeSettings[i].brightness)
                 intent.putExtra(Constants.EXTRA_START_TIME, activeSettings[i].startTime)
-                intent.putExtra(Constants.EXTRA_END_TIME, activeSettings[i].endTime)
                 PendingIntent.getBroadcast(this, i, intent, 0)
             }
 
@@ -315,14 +312,12 @@ class DashActivity : AppCompatActivity(),
         val notificationSlider = dialogView.findViewById<Slider>(R.id.notificationSlider)
         val brightnessSlider = dialogView.findViewById<Slider>(R.id.brightnessSlider)
         startTimeBtn = dialogView.findViewById<Button>(R.id.startTimeBtn)
-        endTimeBtn = dialogView.findViewById<Button>(R.id.endTimeBtn)
         val saveSettingsBtn = dialogView.findViewById<Button>(R.id.saveSettingsBtn)
 
         var checkRadioButton: RadioButton? = null
 
         // Initializing view properties
         startTime = null
-        endTime = null
         val audioManager: AudioManager = getSystemService(Service.AUDIO_SERVICE) as AudioManager
         when (audioManager.ringerMode) {
             AudioManager.RINGER_MODE_SILENT -> {
@@ -359,11 +354,7 @@ class DashActivity : AppCompatActivity(),
         }
 
         startTimeBtn.setOnClickListener {
-            setPickerTime("Select Start Time:")
-        }
-
-        endTimeBtn.setOnClickListener {
-            setPickerTime("Select End Time:")
+            setPickerTime()
         }
 
         builder.setView(dialogView)
@@ -375,9 +366,6 @@ class DashActivity : AppCompatActivity(),
                 startTime == null -> {
                     Toast.makeText(this, "Please select start time.", Toast.LENGTH_SHORT).show()
                 }
-                endTime == null -> {
-                    Toast.makeText(this, "Please select end time.", Toast.LENGTH_SHORT).show()
-                }
                 else -> {
                     if (checkRadioButton?.text.toString() == "NORMAL") {
                         viewModel.addSetting(
@@ -388,8 +376,7 @@ class DashActivity : AppCompatActivity(),
                                 mediaSlider.value.toString(),
                                 notificationSlider.value.toString(),
                                 brightnessSlider.value.toString(),
-                                startTime.toString(),
-                                endTime.toString()
+                                startTime.toString()
                             )
                         )
                     } else {
@@ -401,8 +388,7 @@ class DashActivity : AppCompatActivity(),
                                 mediaSlider.value.toString(),
                                 notificationSlider.value.toString(),
                                 brightnessSlider.value.toString(),
-                                startTime.toString(),
-                                endTime.toString()
+                                startTime.toString()
                             )
                         )
                     }
@@ -420,16 +406,15 @@ class DashActivity : AppCompatActivity(),
         }
     }
 
-    private fun setPickerTime(titleText: String) {
+    private fun setPickerTime() {
         val startTimeTV = dialogView.findViewById<TextView>(R.id.startTimeTV)
-        val endTimeTV = dialogView.findViewById<TextView>(R.id.endTimeTV)
 
         val picker =
             MaterialTimePicker.Builder()
                 .setTimeFormat(TimeFormat.CLOCK_12H)
                 .setHour(12)
                 .setMinute(10)
-                .setTitleText(titleText)
+                .setTitleText("Select Start Time:")
                 .build()
         picker.show(supportFragmentManager, "TIME_PICKER")
         picker.addOnPositiveButtonClickListener {
@@ -465,17 +450,10 @@ class DashActivity : AppCompatActivity(),
                     }
                 }
             }
-            if (titleText == "Select Start Time:") {
-                startTime = formattedTime
-                startTimeTV.visibility = View.VISIBLE
-                startTimeTV.text = startTime.toString()
-                startTimeBtn.visibility = View.INVISIBLE
-            } else if (titleText == "Select End Time:") {
-                endTime = formattedTime
-                endTimeTV.visibility = View.VISIBLE
-                endTimeTV.text = endTime.toString()
-                endTimeBtn.visibility = View.INVISIBLE
-            }
+            startTime = formattedTime
+            startTimeTV.visibility = View.VISIBLE
+            startTimeTV.text = startTime.toString()
+            startTimeBtn.visibility = View.INVISIBLE
         }
     }
 
