@@ -229,6 +229,8 @@ class DashActivity : AppCompatActivity(),
             intent.data = Uri.parse("package:$packageName")
             startActivityForResult(intent, DashActivity.REQUEST_PERMISSION_CODE)
         }
+
+        changePreferenceSettings()
     }
 
     private fun generatePrefList(list: List<SettingsItem>) {
