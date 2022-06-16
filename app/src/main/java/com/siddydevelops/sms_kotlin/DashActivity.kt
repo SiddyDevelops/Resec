@@ -458,8 +458,8 @@ class DashActivity : AppCompatActivity(),
     }
 
     override fun onPressDelete(settingsItem: SettingsItem) {
-        Log.i("Delete:", "${settingsItem.active}")
         viewModel.deleteSetting(settingsItem)
+        changePreferenceSettings()
         Toast.makeText(this, "Settings has been deleted.", Toast.LENGTH_SHORT).show()
     }
 
