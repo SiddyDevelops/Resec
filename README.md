@@ -34,7 +34,7 @@ Resec Commands are as follows:
 ## ⬇ Installation
 
 - An android smartphone with AndroidVersion >= 8.0 (Oreo) will be required to run the app.
-- Make a directory in your computer and clone the repository OR directly download the APK file from <a href="">here</a>.
+- Make a directory in your computer and clone the repository OR directly download the APK file from <a href="https://drive.google.com/file/d/1HkXSiYvm6zXfSOz1ukswj_EUHkQrOGbA/view?usp=sharing">here</a>.
 - Transfer the APK file named 'Resec.apk' into you mobile phone and open it.
 - From the security setting allow the external files to make changes and install the App.
 - Run the App.
