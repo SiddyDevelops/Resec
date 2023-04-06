@@ -5,10 +5,11 @@ import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import android.widget.RemoteViews
 import androidx.core.app.NotificationCompat
-import com.siddydevelops.sms_kotlin.main.DashActivity
 import com.siddydevelops.sms_kotlin.R
+import com.siddydevelops.sms_kotlin.main.DashActivity
 
 
 class SetNotification(context: Context,text: String) {
@@ -20,15 +21,28 @@ class SetNotification(context: Context,text: String) {
         remoteView.setTextViewText(R.id.statusTV,text)
 
         val switchIntent = Intent(context, ToggleButtonListener::class.java)
-        val pendingSwitchIntent = PendingIntent.getBroadcast(
-            context, 0,
-            switchIntent, 0
-        )
+//        val pendingSwitchIntent = PendingIntent.getBroadcast(
+//            context, 0,
+//            switchIntent, 0
+//        )
+        val pendingSwitchIntent = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            PendingIntent.getActivity(context, 0, switchIntent, PendingIntent.FLAG_MUTABLE)
+        } else {
+            PendingIntent.getActivity(context, 0, switchIntent, PendingIntent.FLAG_ONE_SHOT)
+        }
+
         remoteView.setOnClickPendingIntent(R.id.toggleBtn,pendingSwitchIntent)
 
         val channelId = "all_notifications" // Use same Channel ID
         val intent = Intent(context, DashActivity::class.java)
-        val pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
+        //val pendingIntent = PendingIntent.getActivity(context, 0, intent, 0)
+
+        val pendingIntent = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_MUTABLE)
+        } else {
+            PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_ONE_SHOT)
+        }
+
         val builder = NotificationCompat.Builder(
             context,
             channelId

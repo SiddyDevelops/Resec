@@ -55,7 +55,7 @@ class LocationServices : Service() {
                     Log.d("Location:","$location")
                     if(location != null) {
                         Log.d("Location:","${location.latitude}+${location.longitude}")
-                        address = geocoder.getFromLocation(location.latitude,location.longitude,1)
+                        address = geocoder.getFromLocation(location.latitude,location.longitude,1)!!
                         SendSMS(phoneNumber!!,"Your device location:\n${address[0].subThoroughfare}, ${address[0].subLocality}, ${address[0].locality}, ${address[0].adminArea}, ${address[0].postalCode}")
                         SendSMS(phoneNumber,"\n" +
                                 "Click this link to follow:\n" +
